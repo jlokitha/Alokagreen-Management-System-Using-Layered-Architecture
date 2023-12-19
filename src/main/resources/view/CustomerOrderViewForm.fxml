@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="675.0" prefWidth="1269.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.lokitha.alokagreen.controller.CustomerOrderViewFormController">
+    <children>
+      <Button layoutX="-95.0" layoutY="35.0" mnemonicParsing="false" text="Button" />
+        <Line endY="330.0" layoutX="312.0" layoutY="337.0" startY="-330.0" stroke="#727374" />
+        <Label layoutX="30.0" layoutY="61.0" text="Order ID" textFill="#727374">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </Label>
+        <AnchorPane layoutX="336.0" layoutY="24.0" prefHeight="540.0" prefWidth="910.0" style="-fx-background-color: yellow;">
+            <children>
+                <ScrollPane layoutY="60.0" prefHeight="480.0" prefWidth="910.0">
+                    <content>
+                        <VBox fx:id="vBox" prefHeight="478.0" prefWidth="908.0" style="-fx-background-color: white;" />
+                    </content>
+                </ScrollPane>
+                <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="910.0" style="-fx-background-color: #C7FFDE;">
+                    <children>
+                        <Label prefHeight="20.0" prefWidth="140.0" text="Stock ID">
+                            <HBox.margin>
+                                <Insets left="60.0" />
+                            </HBox.margin>
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="21.0" layoutY="30.0" prefHeight="20.0" prefWidth="183.0" text="Description">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="65.0" layoutY="30.0" prefHeight="20.0" prefWidth="193.0" text="Qauntity">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="109.0" layoutY="30.0" prefHeight="20.0" prefWidth="168.0" text="Unit Price">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="153.0" layoutY="30.0" prefHeight="20.0" prefWidth="164.0" text="Total">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </HBox>
+            </children>
+        </AnchorPane>
+        <JFXButton fx:id="btnCancel" layoutX="966.0" layoutY="597.0" onAction="#btnCancelOnAction" onMouseEntered="#btnCancelOnMouseEntered" onMouseExited="#btnCancelOnMouseExited" prefHeight="50.0" prefWidth="246.0" style="-fx-background-radius: 15; -fx-border-color: #139547; -fx-border-width: 2; -fx-border-radius: 15;" text="CANCEL" textFill="#139547">
+            <font>
+                <Font name="System Bold" size="16.0" />
+            </font>
+        </JFXButton>
+        <Label layoutX="357.0" layoutY="586.0" text="Total Amount">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </Label>
+        <Label layoutX="357.0" layoutY="620.0" text="Rs.">
+            <font>
+                <Font size="22.0" />
+            </font>
+        </Label>
+        <Label fx:id="labelTotal" layoutX="393.0" layoutY="620.0" text="0.00">
+            <font>
+                <Font size="22.0" />
+            </font>
+        </Label>
+      <Label layoutX="30.0" layoutY="181.0" text="Customer ID" textFill="#727374">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="30.0" layoutY="303.0" text="Customer Name" textFill="#727374">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="30.0" layoutY="425.0" text="Ordered Date" textFill="#727374">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="30.0" layoutY="547.0" text="Ordered Time" textFill="#727374">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblOrderId" layoutX="30.0" layoutY="91.0" prefHeight="40.0" prefWidth="246.0" style="-fx-border-color: #727374; -fx-border-width: 0 0 1 0;" text="Order ID">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblCustId" layoutX="30.0" layoutY="211.0" prefHeight="40.0" prefWidth="246.0" style="-fx-border-color: #727374; -fx-border-width: 0 0 1 0;" text="Customer ID">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblCustName" layoutX="30.0" layoutY="333.0" prefHeight="40.0" prefWidth="246.0" style="-fx-border-color: #727374; -fx-border-width: 0 0 1 0;" text="Customer Name">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblOrderDate" layoutX="30.0" layoutY="455.0" prefHeight="40.0" prefWidth="246.0" style="-fx-border-color: #727374; -fx-border-width: 0 0 1 0;" text="Ordered Date">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblOrderTme" layoutX="30.0" layoutY="577.0" prefHeight="40.0" prefWidth="246.0" style="-fx-border-color: #727374; -fx-border-width: 0 0 1 0;" text="Ordered Time">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+    </children>
+</AnchorPane>

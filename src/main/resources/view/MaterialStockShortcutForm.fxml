@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="80.0" prefWidth="400.0" minHeight="80.0" minWidth="400.0" style="-fx-border-color: #727374; -fx-border-radius: 5; -fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.lokitha.alokagreen.controller.MaterialStockShortcutFormController">
+   <children>
+      <Line endX="32.0" layoutX="20.0" layoutY="40.0" rotate="90.0" startX="-32.0" stroke="#139547" strokeWidth="3.0" />
+      <Line endX="32.0" layoutX="29.0" layoutY="40.0" rotate="90.0" startX="-32.0" stroke="#139547" strokeWidth="3.0" />
+      <Line endX="32.0" layoutX="327.0" layoutY="40.0" rotate="90.0" startX="-32.0" />
+      <ImageView fx:id="imgAddOrder" fitHeight="45.0" fitWidth="45.0" layoutX="341.0" layoutY="18.0" onMouseClicked="#imgAddOrderOnMouseClicked" onMouseEntered="#imgAddOrderOnMouseEntered" onMouseExited="#imgAddOrderOnMouseExited" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../assets/icon/shortcut_add_btn.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="lblDesc" layoutX="48.0" layoutY="9.0" text="Label">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblQty" layoutX="48.0" layoutY="35.0" text="Label">
+         <font>
+            <Font name="System Bold" size="28.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

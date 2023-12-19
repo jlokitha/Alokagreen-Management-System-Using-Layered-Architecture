@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="675.0" prefWidth="1269.0" style="-fx-background-color: #F7F7F7;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.lokitha.alokagreen.controller.SupplierOrderAddFormController">
+    <children>
+        <Line endY="330.0" layoutX="312.0" layoutY="337.0" startY="-330.0" stroke="#727374" />
+        <Label layoutX="33.0" layoutY="55.0" text="SUPPLIER DETAIL">
+            <font>
+                <Font size="16.0" />
+            </font>
+        </Label>
+        <Label layoutX="33.0" layoutY="230.0" text="MATERIAL DETAIL">
+            <font>
+                <Font size="16.0" />
+            </font>
+        </Label>
+        <JFXComboBox fx:id="cmbSupName" focusColor="#139547" layoutX="33.0" layoutY="89.0" onAction="#cmbSupNameOnAction" onMouseClicked="#cmbSupNameONMouseClicked" prefHeight="40.0" prefWidth="200.0" promptText="Supplier Name" unFocusColor="#727374" />
+        <JFXComboBox fx:id="cmbMDesc" focusColor="#139547" layoutX="33.0" layoutY="264.0" onAction="#cmbMaterialDescOnAction" onMouseClicked="#cmbDescOnMouseClicked" prefHeight="40.0" prefWidth="246.0" promptText="Material Description" unFocusColor="#727374" />
+        <JFXTextField fx:id="txtSupId" editable="false" focusColor="#139547" layoutX="33.0" layoutY="152.0" prefHeight="40.0" prefWidth="246.0" promptText="Supplier ID" unFocusColor="#727374">
+         <font>
+            <Font size="16.0" />
+         </font></JFXTextField>
+        <JFXTextField fx:id="txtMId" editable="false" focusColor="#139547" layoutX="33.0" layoutY="327.0" prefHeight="40.0" prefWidth="246.0" promptText="Material ID" unFocusColor="#727374">
+         <font>
+            <Font size="16.0" />
+         </font></JFXTextField>
+        <JFXTextField fx:id="txtMQty" focusColor="#139547" layoutX="33.0" layoutY="380.0" onAction="#txtQtyOnAction" onMouseClicked="#txtQtyOnMouseClicked" prefHeight="40.0" prefWidth="246.0" promptText="Material Qauntity" unFocusColor="#727374">
+         <font>
+            <Font size="16.0" />
+         </font></JFXTextField>
+        <JFXTextField fx:id="txtMUnitPrice" focusColor="#139547" layoutX="33.0" layoutY="441.0" onAction="#txtUnitPriceOnAction" onMouseClicked="#txtUnitPriceOnMouseClicked" prefHeight="40.0" prefWidth="246.0" promptText="Unit Price" unFocusColor="#727374">
+         <font>
+            <Font size="16.0" />
+         </font></JFXTextField>
+        <JFXButton fx:id="btnAddItem" layoutX="33.0" layoutY="580.0" onAction="#btnAddItemOnAction" onMouseEntered="#btnAddItemOnMouseEntered" onMouseExited="#btnAddItemOnMouseExited" prefHeight="50.0" prefWidth="246.0" style="-fx-background-color: #139547; -fx-background-radius: 15;" text="ADD ITEM" textFill="WHITE">
+            <font>
+                <Font name="System Bold" size="16.0" />
+            </font>
+        </JFXButton>
+        <AnchorPane layoutX="336.0" layoutY="24.0" prefHeight="540.0" prefWidth="910.0" style="-fx-background-color: yellow;">
+            <children>
+                <ScrollPane layoutY="60.0" prefHeight="480.0" prefWidth="910.0">
+                    <content>
+                        <VBox fx:id="vBox" prefHeight="478.0" prefWidth="908.0" style="-fx-background-color: white;" />
+                    </content>
+                </ScrollPane>
+                <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="910.0" style="-fx-background-color: #C7FFDE;">
+                    <children>
+                        <Label prefHeight="20.0" prefWidth="115.0" text="Item ID">
+                            <HBox.margin>
+                                <Insets left="11.0" />
+                            </HBox.margin>
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="21.0" layoutY="30.0" prefHeight="20.0" prefWidth="175.0" text="Description">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="65.0" layoutY="30.0" prefHeight="20.0" prefWidth="175.0" text="Qauntity">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="109.0" layoutY="30.0" prefHeight="20.0" prefWidth="168.0" text="Unit Price">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="153.0" layoutY="30.0" prefHeight="20.0" prefWidth="184.0" text="Total">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="197.0" layoutY="30.0" text="Action">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </HBox>
+            </children>
+        </AnchorPane>
+        <JFXButton fx:id="btnOrder" layoutX="966.0" layoutY="597.0" onAction="#btnOrderOnAction" onMouseEntered="#btnOrderOnMouseEntered" onMouseExited="#btnOrderOnMouseExited" prefHeight="50.0" prefWidth="246.0" style="-fx-background-color: #139547; -fx-background-radius: 15;" text="ORDER" textFill="WHITE">
+            <font>
+                <Font name="System Bold" size="16.0" />
+            </font>
+        </JFXButton>
+        <JFXButton fx:id="btnCancel" layoutX="677.0" layoutY="597.0" onAction="#btnCancelOnAction" onMouseEntered="#btnCancelOnMouseEntered" onMouseExited="#btnCancelOnMouseExited" prefHeight="50.0" prefWidth="246.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-border-color: #727374; -fx-border-width: 2; -fx-border-radius: 15;" text="CANCEL" textFill="#727374">
+            <font>
+                <Font name="System Bold" size="16.0" />
+            </font>
+        </JFXButton>
+        <Label layoutX="357.0" layoutY="586.0" text="Total Amount">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </Label>
+        <Label layoutX="357.0" layoutY="620.0" text="Rs.">
+            <font>
+                <Font size="22.0" />
+            </font>
+        </Label>
+      <ImageView fx:id="imgAddSupplier" fitHeight="40.0" fitWidth="40.0" layoutX="247.0" layoutY="90.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../assets/icon/in_order_add.png" />
+         </image>
+      </ImageView>
+      <JFXButton layoutX="247.0" layoutY="90.0" onAction="#btnAddSupplierOnAction" onMouseEntered="#btnAddSupplierOnMouseEntered" onMouseExited="#btnAddSupplierOnMouseExited" prefHeight="40.0" prefWidth="40.0" text=" " />
+      <Label fx:id="labelTotal" layoutX="393.0" layoutY="620.0" text="0.00">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Label>
+      <DatePicker fx:id="datepickerExp" editable="false" layoutX="33.0" layoutY="507.0" onMouseClicked="#dpOnMouseClicked" prefHeight="40.0" prefWidth="246.0" promptText="Expiration Date" />
+      <Label fx:id="lblSupId" layoutX="33.0" layoutY="134.0" prefWidth="200.0" textFill="RED">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblDesc" layoutX="33.0" layoutY="309.0" prefWidth="246.0" textFill="RED">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblQty" layoutX="33.0" layoutY="424.0" prefWidth="246.0" textFill="RED">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblUnitPrice" layoutX="34.0" layoutY="485.0" prefWidth="246.0" textFill="RED">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblExpDate" layoutX="34.0" layoutY="549.0" prefWidth="246.0" textFill="RED">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+    </children>
+</AnchorPane>

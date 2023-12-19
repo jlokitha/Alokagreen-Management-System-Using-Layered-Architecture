@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="608.0" prefWidth="600.0" style="-fx-background-radius: 20; -fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.lokitha.alokagreen.controller.ProductStockViewFormController">
+    <children>
+      <Button layoutX="-94.0" layoutY="90.0" mnemonicParsing="false" text="Button" />
+        <Line endX="478.0" layoutX="118.0" layoutY="89.0" startX="-115.0" />
+        <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="30.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../assets/icon/stock_pop_up.png" />
+            </image>
+        </ImageView>
+        <Label layoutX="99.0" layoutY="32.0" text="About Product Stock">
+            <font>
+                <Font size="25.0" />
+            </font>
+        </Label>
+        <JFXButton fx:id="btnCancel" layoutX="20.0" layoutY="521.0" onAction="#btnCancelOnAction" onMouseEntered="#btnCancelOnMouseEntered" onMouseExited="#btnCancelOnMouseExited" prefHeight="60.0" prefWidth="560.0" style="-fx-border-color: #139547; -fx-border-radius: 15; -fx-border-width: 2;" text="CANCEL" textFill="#139547">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </JFXButton>
+        <Label layoutX="20.0" layoutY="117.0" text="Stock ID">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </Label>
+        <Label layoutX="310.0" layoutY="117.0" text="Product ID">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </Label>
+        <Label layoutX="20.0" layoutY="219.0" text="Product Description">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </Label>
+        <Label layoutX="310.0" layoutY="219.0" text="Unit Price">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </Label>
+        <Label layoutX="20.0" layoutY="321.0" text="Harvested Qauntity">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </Label>
+        <Label layoutX="310.0" layoutY="321.0" text="Qauntity Remained">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </Label>
+      <Label layoutX="20.0" layoutY="423.0" text="Harvested Date">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="310.0" layoutY="423.0" text="Expiration Date">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblStockId" layoutX="20.0" layoutY="144.0" prefHeight="40.0" prefWidth="270.0" style="-fx-border-color: #727374; -fx-border-width: 0 0 1 0;" text="Stock ID">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblPId" layoutX="310.0" layoutY="144.0" prefHeight="40.0" prefWidth="270.0" style="-fx-border-color: #727374; -fx-border-width: 0 0 1 0;" text="Product ID">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblPDesc" layoutX="20.0" layoutY="246.0" prefHeight="40.0" prefWidth="270.0" style="-fx-border-color: #727374; -fx-border-width: 0 0 1 0;" text="Product Description">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblUnitPrice" layoutX="310.0" layoutY="246.0" prefHeight="40.0" prefWidth="270.0" style="-fx-border-color: #727374; -fx-border-width: 0 0 1 0;" text="Unit Price">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblHQty" layoutX="20.0" layoutY="348.0" prefHeight="40.0" prefWidth="270.0" style="-fx-border-color: #727374; -fx-border-width: 0 0 1 0;" text="Harvested Qauntity">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblRemaining" layoutX="310.0" layoutY="348.0" prefHeight="40.0" prefWidth="270.0" style="-fx-border-color: #727374; -fx-border-width: 0 0 1 0;" text="Qauntity Remained">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblHDate" layoutX="20.0" layoutY="450.0" prefHeight="40.0" prefWidth="270.0" style="-fx-border-color: #727374; -fx-border-width: 0 0 1 0;" text="Harvested Date">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label fx:id="lbExpDate" layoutX="310.0" layoutY="450.0" prefHeight="40.0" prefWidth="270.0" style="-fx-border-color: #727374; -fx-border-width: 0 0 1 0;" text="Expiration Date">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+    </children>
+</AnchorPane>

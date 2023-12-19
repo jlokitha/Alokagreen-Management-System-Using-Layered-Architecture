@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="908.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.lokitha.alokagreen.controller.SupplierOrderViewTableRowFormController">
+   <children>
+      <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="908.0" style="-fx-background-color: white; -fx-border-color: #A8A9AB; -fx-border-width: 0 0 1 0;">
+         <children>
+            <Label fx:id="lblStockId" prefHeight="20.0" prefWidth="140.0" text="Stock ID">
+               <HBox.margin>
+                  <Insets left="60.0" />
+               </HBox.margin>
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblDesc" layoutX="21.0" layoutY="30.0" prefHeight="20.0" prefWidth="183.0" text="Description">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblQty" layoutX="65.0" layoutY="30.0" prefHeight="20.0" prefWidth="193.0" text="Qauntity">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblUnitPrice" layoutX="109.0" layoutY="30.0" prefHeight="20.0" prefWidth="168.0" text="Unit Price">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblTotal" layoutX="153.0" layoutY="30.0" prefHeight="20.0" prefWidth="164.0" text="Total">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

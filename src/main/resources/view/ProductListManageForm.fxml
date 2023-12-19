@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="980.0" prefWidth="1670.0" style="-fx-background-color: #E8E8E8;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.lokitha.alokagreen.controller.ProductListManageFormController">
+   <children>
+      <AnchorPane layoutX="59.0" layoutY="59.0" prefHeight="868.0" prefWidth="1551.0" style="-fx-background-color: white; -fx-background-radius: 20;">
+         <children>
+            <JFXButton prefHeight="79.0" prefWidth="214.0" style="-fx-border-color: #139547; -fx-border-width: 0 0 2 -0;" text="Product List" textFill="#2bb361">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </JFXButton>
+            <JFXButton layoutX="216.0" onAction="#btnMaterialListOnAction" prefHeight="79.0" prefWidth="199.0" text="Material List" textFill="#87898b">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </JFXButton>
+            <Line endX="1415.0" layoutX="135.0" layoutY="79.0" startX="-135.0" stroke="#87898b" />
+            <AnchorPane layoutY="167.0" prefHeight="700.0" prefWidth="1551.0">
+               <children>
+                  <HBox alignment="CENTER_LEFT" layoutY="1.0" prefHeight="70.0" prefWidth="1551.0" style="-fx-background-color: #CEFFE1;">
+                     <children>
+                        <Label prefHeight="30.0" prefWidth="354.0" text="Product ID">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="100.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label layoutX="572.0" layoutY="33.0" prefHeight="25.0" prefWidth="408.0" text="Description">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="851.0" layoutY="33.0" prefHeight="25.0" prefWidth="392.0" text="Unit Price">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="1099.0" layoutY="33.0" prefHeight="25.0" prefWidth="212.0" text="Action">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="30.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                     <padding>
+                        <Insets bottom="12.0" left="20.0" top="12.0" />
+                     </padding>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </HBox>
+                  <ScrollPane focusTraversable="false" layoutY="72.0" prefHeight="628.0" prefWidth="1551.0" style="-fx-border-color: white;">
+                     <content>
+                        <VBox fx:id="vbox" alignment="TOP_CENTER" prefHeight="624.0" prefWidth="1547.0" style="-fx-background-color: white; -fx-border-color: white;" />
+                     </content>
+                  </ScrollPane>
+               </children>
+            </AnchorPane>
+            <JFXButton fx:id="btnAdd" focusTraversable="false" layoutX="1270.0" layoutY="93.0" onAction="#btnAddProductOnAction" onMouseEntered="#btnAddOnMouseEntered" onMouseExited="#btnAddOnMouseExited" prefHeight="60.0" prefWidth="250.0" style="-fx-background-radius: 20; -fx-background-color: white; -fx-border-color: #727374; -fx-border-radius: 20;" text=" ">
+               <graphic>
+                  <GridPane prefHeight="60.0" prefWidth="197.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="110.0" minWidth="10.0" prefWidth="61.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="188.0" minWidth="10.0" prefWidth="136.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <ImageView fx:id="imgAdd" fitHeight="50.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../assets/icon/add.png" />
+                           </image>
+                        </ImageView>
+                        <Label fx:id="lblAdd" focusTraversable="false" text="Add Product" textFill="#727374" GridPane.columnIndex="1">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </GridPane>
+               </graphic>
+            </JFXButton>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

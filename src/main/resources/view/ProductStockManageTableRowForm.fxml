@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="70.0" prefWidth="1547.0" style="-fx-background-color: white; -fx-border-color: #A8A9AB; -fx-border-width: 0 0 1 0;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.lokitha.alokagreen.controller.ProductStockManageTableRowFormController">
+   <children>
+      <Label fx:id="lblId" layoutX="102.0" layoutY="23.0" text="Id">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblDesc" layoutX="294.0" layoutY="23.0" text="Description">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblQty" layoutX="569.0" layoutY="23.0" text="Quantity">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblUnitPrice" layoutX="834.0" layoutY="23.0" text="Unit Price">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblExpDate" layoutX="1073.0" layoutY="20.0" prefHeight="30.0" prefWidth="150.0" style="-fx-background-color: white; -fx-background-radius: 20;" text="Status" textAlignment="CENTER">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <ImageView fx:id="imgView" fitHeight="30.0" fitWidth="30.0" layoutX="1344.0" layoutY="21.0" onMouseClicked="#imgViewOnMouseClicked" onMouseEntered="#imgViewOnMouseEntered" onMouseExited="#imgViewOnMouseExited" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../assets/icon/view_default.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="imgUpdate" fitHeight="30.0" fitWidth="30.0" layoutX="1390.0" layoutY="21.0" onMouseClicked="#imgUpdateOnMouseClicked" onMouseEntered="#imgUpdateOnMouseEntered" onMouseExited="#imgUpdateOnMouseExited" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../assets/icon/update.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

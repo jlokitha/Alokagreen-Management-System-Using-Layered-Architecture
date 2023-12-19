@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="1545.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.lokitha.alokagreen.controller.SpoiledReportManageTableRowFormController">
+   <children>
+      <HBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="1545.0" style="-fx-background-color: white; -fx-border-color: #A8A9AB; -fx-border-width: 0 0 1 0;">
+         <children>
+            <Label fx:id="lblItemId" prefHeight="30.0" prefWidth="230.0" text="Item ID">
+               <font>
+                  <Font size="20.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="80.0" />
+               </HBox.margin>
+            </Label>
+            <Label fx:id="lblDesc" layoutX="30.0" layoutY="33.0" prefHeight="25.0" prefWidth="290.0" text="Description">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblQty" layoutX="249.0" layoutY="33.0" prefHeight="25.0" prefWidth="250.0" text="Qauntity">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblDate" layoutX="572.0" layoutY="33.0" prefHeight="25.0" prefWidth="264.0" text="Date">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblTime" layoutX="1099.0" layoutY="33.0" prefHeight="25.0" prefWidth="188.0" text="Time">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <ImageView fx:id="imgUpdate" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#imgUpdateOnMouseClicked" onMouseEntered="#imgUpdateOnMouseEntered" onMouseExited="#imgUpdateOnMouseExited" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/icon/update.png" />
+               </image>
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin>
+            </ImageView>
+         </children>
+         <padding>
+            <Insets bottom="12.0" left="20.0" top="12.0" />
+         </padding>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </HBox>
+   </children>
+</AnchorPane>

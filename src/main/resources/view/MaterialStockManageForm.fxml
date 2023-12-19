@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="980.0" prefWidth="1670.0" style="-fx-background-color: #E8E8E8;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.lokitha.alokagreen.controller.MaterialStockManageFormController">
+   <children>
+      <AnchorPane layoutX="59.0" layoutY="60.0" prefHeight="868.0" prefWidth="1551.0" style="-fx-background-color: white; -fx-background-radius: 20;">
+         <children>
+            <JFXButton focusTraversable="false" onAction="#btnProductStockOnAction" prefHeight="79.0" prefWidth="190.0" text="Product Stock" textFill="#87898b">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </JFXButton>
+            <JFXButton focusTraversable="false" layoutX="191.0" onAction="#btnSpoiledReportOnAction" prefHeight="79.0" prefWidth="190.0" text="Spoiled Report" textFill="#87898b">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </JFXButton>
+            <Line endX="1415.0" layoutX="135.0" layoutY="79.0" startX="-135.0" stroke="#87898b" />
+            <AnchorPane layoutY="142.0" prefHeight="726.0" prefWidth="1551.0">
+               <children>
+                  <HBox alignment="CENTER_LEFT" layoutY="3.0" prefHeight="70.0" prefWidth="1551.0" style="-fx-background-color: #CEFFE1;">
+                     <children>
+                        <Label focusTraversable="false" prefHeight="30.0" prefWidth="210.0" text="Stock ID">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="90.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label focusTraversable="false" layoutX="30.0" layoutY="33.0" prefHeight="25.0" prefWidth="308.0" text="Description">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="45.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label focusTraversable="false" layoutX="249.0" layoutY="33.0" prefHeight="25.0" prefWidth="265.0" text="Qauntity">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="39.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label focusTraversable="false" layoutX="851.0" layoutY="33.0" prefHeight="25.0" prefWidth="268.0" text="Status">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="50.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label focusTraversable="false" layoutX="1099.0" layoutY="33.0" prefHeight="25.0" prefWidth="82.0" text="Action">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="40.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                     <padding>
+                        <Insets bottom="12.0" left="20.0" top="12.0" />
+                     </padding>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </HBox>
+                  <ScrollPane focusTraversable="false" layoutY="72.0" prefHeight="654.0" prefWidth="1551.0" style="-fx-border-color: white;">
+                     <content>
+                        <VBox fx:id="vbox" alignment="TOP_CENTER" prefHeight="650.0" prefWidth="1547.0" style="-fx-background-color: white;" />
+                     </content>
+                  </ScrollPane>
+               </children>
+            </AnchorPane>
+            <JFXButton focusTraversable="false" layoutX="382.0" prefHeight="79.0" prefWidth="190.0" style="-fx-border-color: #139547; -fx-border-width: 0 0 2 0;" text="Material Stock" textFill="#2bb361">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </JFXButton>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

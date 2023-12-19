@@ -1,0 +1,110 @@
+package lk.lokitha.alokagreen.controller;
+
+import com.jfoenix.controls.JFXButton;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
+import lk.lokitha.alokagreen.dto.MaterialStockDto;
+import lk.lokitha.alokagreen.model.*;
+import lk.lokitha.alokagreen.util.Navigation;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class MaterialStockViewFormController implements Initializable {
+
+    @FXML
+    public JFXButton btnCancel;
+
+    @FXML
+    private Label lblStatus;
+
+    @FXML
+    private Label lblStockId;
+
+    @FXML
+    private Label lblSupId;
+
+    @FXML
+    private Label lblSupName;
+
+    @FXML
+    private Label lblMId;
+
+    @FXML
+    private Label lblMDesc;
+
+    @FXML
+    private Label lblUnitPrice;
+
+    @FXML
+    private Label lblBoughtQty;
+
+    @FXML
+    private Label lblRemaining;
+
+    @FXML
+    private Label lblExpDate;
+
+    @FXML
+    private Label lblBoughtDate;
+
+    public static String id;
+
+    @FXML
+    void btnCancelOnAction(ActionEvent event) {
+        Navigation.closePane();
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        MaterialStockDto data = MaterialStockModel.getDetail(id);
+        String desc = MaterialModel.getDescOfId(data.getMaterial_Code());
+        String orderId = SupplierOrderDetailModel.getOrderId(data.getStock_Id());
+        String supplierId = SupplierOrderModel.getSupplierId(orderId);
+        String name = SupplierModel.getNameOfId(supplierId);
+
+        if (data.getStatus().equals("Expired")) {
+            lblStatus.setText(data.getStatus());
+            lblStatus.setStyle("-fx-text-fill: #FF0E0E;");
+        } else {
+            lblStatus.setText(data.getStatus());
+            lblStatus.setStyle("-fx-text-fill: #139547;");
+        }
+
+        lblStockId.setText(data.getStock_Id());
+        lblSupId.setText(supplierId);
+        lblSupName.setText(name);
+        lblMId.setText(data.getMaterial_Code());
+        lblMDesc.setText(desc);
+        lblUnitPrice.setText(String.valueOf(data.getUnit_Price()));
+        lblBoughtQty.setText(String.valueOf(data.getQty()));
+        lblRemaining.setText(String.valueOf(data.getQty_On_Hand()));
+        lblBoughtDate.setText(data.getDate());
+        lblExpDate.setText(data.getExp_Date());
+    }
+
+    @FXML
+    public void btnCancelOnMouseEntered(MouseEvent mouseEvent) {
+        btnCancel.setStyle(
+                "-fx-background-color: #C7FFDE;" +
+                        "-fx-background-radius: 15px;" +
+                        "-fx-border-color: #139547;" +
+                        "-fx-border-width: 2px;" +
+                        "-fx-border-radius: 15px;" +
+                        "-fx-text-fill:  #139547;");
+    }
+
+    @FXML
+    public void btnCancelOnMouseExited(MouseEvent mouseEvent) {
+        btnCancel.setStyle(
+                "-fx-background-color: #FFFFFF;" +
+                        "-fx-background-radius: 15px;" +
+                        "-fx-border-color: #727374;" +
+                        "-fx-border-width: 2px;" +
+                        "-fx-border-radius: 15px;" +
+                        "-fx-text-fill:  #727374;");
+    }
+}
