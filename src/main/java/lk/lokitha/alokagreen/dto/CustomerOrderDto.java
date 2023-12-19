@@ -1,12 +1,10 @@
 package lk.lokitha.alokagreen.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@AllArgsConstructor
 @Data
 
 public class CustomerOrderDto {
@@ -20,5 +18,13 @@ public class CustomerOrderDto {
 
     public CustomerOrderDto() {
         items = new HashMap<>();
+    }
+
+    public CustomerOrderDto(String customer_Order_Id, String customer_Id, double total_Amount, String date, String time) {
+        Customer_Order_Id = customer_Order_Id;
+        this.customer_Id = customer_Id;
+        this.total_Amount = total_Amount;
+        this.date = date;
+        this.time = time;
     }
 }
