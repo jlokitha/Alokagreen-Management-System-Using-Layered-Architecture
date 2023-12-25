@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.sql.Time;
+import java.util.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,6 +16,6 @@ public class Salary {
     private double totalSalary;
     private int workedDayCount;
     private double bonus;
-    private LocalDate date;
-    private LocalTime time;
+    private Date date;
+    private Time time;
 }

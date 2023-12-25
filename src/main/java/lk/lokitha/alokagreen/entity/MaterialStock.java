@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,7 +16,7 @@ public class MaterialStock {
     private int qtyOnHand;
     private int qty;
     private double unitPrice;
-    private LocalDate date;
-    private LocalDate expDate;
+    private Date date;
+    private Date expDate;
     private String status;
 }

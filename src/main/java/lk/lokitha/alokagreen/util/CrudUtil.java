@@ -1,9 +1,11 @@
 package lk.lokitha.alokagreen.util;
 
+import lk.lokitha.alokagreen.dao.SuperDAO;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public interface CrudUtil<T> {
+public interface CrudUtil<T> extends SuperDAO {
     boolean save(final T entity) throws SQLException;
 
     boolean delete(final String id) throws SQLException;

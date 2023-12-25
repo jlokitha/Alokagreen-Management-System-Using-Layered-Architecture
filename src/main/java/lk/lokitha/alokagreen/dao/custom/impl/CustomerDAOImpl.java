@@ -2,6 +2,7 @@ package lk.lokitha.alokagreen.dao.custom.impl;
 
 import lk.lokitha.alokagreen.dao.custom.CustomerDAO;
 import lk.lokitha.alokagreen.dto.CustomerDto;
+import lk.lokitha.alokagreen.entity.Customer;
 import lk.lokitha.alokagreen.util.SQLUtil;
 
 import java.sql.ResultSet;
@@ -11,9 +12,9 @@ import java.util.ArrayList;
 public class CustomerDAOImpl implements CustomerDAO {
 
     @Override
-    public boolean saveCustomer(final CustomerDto dto) throws SQLException {
+    public boolean save(final Customer dto) throws SQLException {
         return SQLUtil.execute("INSERT INTO customer VALUES(?, ?, ?, ?, ?, ?, ?)",
-                dto.getCustomer_Id(),
+                dto.getCustomerId(),
                 dto.getName(),
                 dto.getMobile(),
                 dto.getEmail(),
@@ -98,18 +99,18 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     @Override
-    public CustomerDto getData(final String id) throws SQLException {
+    public Customer getData(final String id) throws SQLException {
         ResultSet rst = SQLUtil.execute( "SELECT * FROM customer WHERE customer_Id = ?" );
 
         while (rst.next()) {
-            return new CustomerDto(
+            return new Customer(
                     rst.getString(1),
                     rst.getString(2),
                     rst.getString(3),
                     rst.getString(4),
                     rst.getString(5),
-                    rst.getString(6),
-                    rst.getString(7)
+                    rst.getDate(6),
+                    rst.getTime(7)
             );
         }
 
@@ -117,7 +118,7 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     @Override
-    public boolean updateCustomer(final CustomerDto dto) throws SQLException {
+    public boolean update(final Customer dto) throws SQLException {
             String sql = "UPDATE customer SET name=?, mobile=?, email=?, address=? WHERE customer_Id = ?";
 
             return SQLUtil.execute( sql,
@@ -125,12 +126,12 @@ public class CustomerDAOImpl implements CustomerDAO {
                     dto.getMobile(),
                     dto.getEmail(),
                     dto.getAddress(),
-                    dto.getCustomer_Id()
+                    dto.getCustomerId()
             );
     }
 
     @Override
-    public boolean deleteCustomer(final String id) throws SQLException {
+    public boolean delete(final String id) throws SQLException {
         return SQLUtil.execute( "DELETE FROM customer WHERE customer_Id = ?", id );
     }
 }

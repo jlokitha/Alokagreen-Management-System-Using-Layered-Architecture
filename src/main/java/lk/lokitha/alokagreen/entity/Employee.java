@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,5 +20,5 @@ public class Employee {
     private String mobile;
     private String email;
     private String role;
-    private LocalDate date;
+    private Date date;
 }

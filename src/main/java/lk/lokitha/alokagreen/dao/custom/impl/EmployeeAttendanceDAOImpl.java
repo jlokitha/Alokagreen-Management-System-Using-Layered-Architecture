@@ -2,6 +2,7 @@ package lk.lokitha.alokagreen.dao.custom.impl;
 
 import lk.lokitha.alokagreen.dao.custom.EmployeeAttendanceDAO;
 import lk.lokitha.alokagreen.dto.EmployeeAttendanceDto;
+import lk.lokitha.alokagreen.entity.Attendance;
 import lk.lokitha.alokagreen.util.SQLUtil;
 
 import java.sql.ResultSet;
@@ -10,12 +11,12 @@ import java.util.ArrayList;
 
 public class EmployeeAttendanceDAOImpl implements EmployeeAttendanceDAO {
     @Override
-    public boolean saveEmployeeAttendance(final EmployeeAttendanceDto dto) throws SQLException {
+    public boolean save(final Attendance entity) throws SQLException {
         return SQLUtil.execute( "INSERT INTO attendance VALUES(?, ?, ?, ?)",
-                dto.getAttendance_Id(),
-                dto.getEmployee_Id(),
-                dto.getDate(),
-                dto.getTime()
+                entity.getAttendanceId(),
+                entity.getEmployeeId(),
+                entity.getDate(),
+                entity.getTime()
         );
     }
 
@@ -46,15 +47,15 @@ public class EmployeeAttendanceDAOImpl implements EmployeeAttendanceDAO {
     }
 
     @Override
-    public EmployeeAttendanceDto getData(final String id) throws SQLException {
+    public Attendance getData(final String id) throws SQLException {
         ResultSet rst = SQLUtil.execute( "SELECT * FROM attendance WHERE attendance_Id = ?", id);
 
         if (rst.next()) {
-            return new EmployeeAttendanceDto(
+            return new Attendance(
                     rst.getString( 1 ),
                     rst.getString( 2 ),
-                    rst.getString( 3 ),
-                    rst.getString( 4 )
+                    rst.getDate( 3 ),
+                    rst.getTime( 4 )
             );
         }
 
@@ -82,7 +83,7 @@ public class EmployeeAttendanceDAOImpl implements EmployeeAttendanceDAO {
     }
 
     @Override
-    public boolean deleteEmployeeAttendance(final String id) throws SQLException {
+    public boolean delete(final String id) throws SQLException {
         return SQLUtil.execute( "DELETE FROM attendance WHERE attendance_Id = ?", id );
     }
 
@@ -97,5 +98,10 @@ public class EmployeeAttendanceDAOImpl implements EmployeeAttendanceDAO {
         }
 
         return ids;
+    }
+
+    @Override
+    public boolean update(Attendance entity) throws SQLException {
+        return false;
     }
 }

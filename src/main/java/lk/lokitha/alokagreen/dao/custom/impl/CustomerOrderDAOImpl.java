@@ -2,6 +2,7 @@ package lk.lokitha.alokagreen.dao.custom.impl;
 
 import lk.lokitha.alokagreen.dao.custom.CustomerOrderDAO;
 import lk.lokitha.alokagreen.dto.CustomerOrderDto;
+import lk.lokitha.alokagreen.entity.CustomerOrder;
 import lk.lokitha.alokagreen.util.SQLUtil;
 
 import java.sql.ResultSet;
@@ -43,13 +44,13 @@ public class CustomerOrderDAOImpl implements CustomerOrderDAO {
     }
 
     @Override
-    public boolean saveCustomerOrder(final CustomerOrderDto dto) throws SQLException {
+    public boolean save(final CustomerOrder entity) throws SQLException {
         return SQLUtil.execute( "INSERT INTO customer_Order VALUES(?, ?, ?, ?, ?)",
-                dto.getCustomer_Order_Id(),
-                dto.getCustomer_Id(),
-                dto.getTotal_Amount(),
-                dto.getDate(),
-                dto.getTime()
+                entity.getCustomerOrderId(),
+                entity.getCustomerId(),
+                entity.getTotalAmount(),
+                entity.getDate(),
+                entity.getTime()
         );
     }
 
@@ -68,22 +69,22 @@ public class CustomerOrderDAOImpl implements CustomerOrderDAO {
     }
 
     @Override
-    public CustomerOrderDto getData(final String id) throws SQLException {
+    public CustomerOrder getData(final String id) throws SQLException {
         ResultSet rst = SQLUtil.execute( "SELECT * FROM customer_Order WHERE customer_Order_Id = ?" );
 
-        CustomerOrderDto cODto = null;
+        CustomerOrder entity = null;
 
         while (rst.next()) {
-            cODto = new CustomerOrderDto(
+            entity = new CustomerOrder(
                    rst.getString( 1 ),
                    rst.getString( 2 ),
                    rst.getDouble( 3 ),
-                   rst.getString( 4 ),
-                   rst.getString( 5 )
+                   rst.getDate( 4 ),
+                   rst.getTime( 5 )
             );
         }
 
-        return cODto;
+        return entity;
     }
 
     @Override
@@ -102,5 +103,15 @@ public class CustomerOrderDAOImpl implements CustomerOrderDAO {
         if (rst.next()) return rst.getDouble(1);
 
         return 0.00;
+    }
+
+    @Override
+    public boolean delete(String id) throws SQLException {
+        return false;
+    }
+
+    @Override
+    public boolean update(CustomerOrder entity) throws SQLException {
+        return false;
     }
 }

@@ -1,9 +1,7 @@
 package lk.lokitha.alokagreen.dao.custom.impl;
 
 import lk.lokitha.alokagreen.dao.custom.MaterialStockDAO;
-import lk.lokitha.alokagreen.dto.MaterialStockDto;
-import lk.lokitha.alokagreen.dto.tm.MaterialStockTm;
-import lk.lokitha.alokagreen.util.NewId;
+import lk.lokitha.alokagreen.entity.MaterialStock;
 import lk.lokitha.alokagreen.util.SQLUtil;
 
 import java.sql.ResultSet;
@@ -12,7 +10,7 @@ import java.util.ArrayList;
 
 public class MaterialStockDAOImpl implements MaterialStockDAO {
     @Override
-    public boolean updateMaterialStock(final String... data) throws SQLException {
+    public boolean updateMaterialStockQty(final String... data) throws SQLException {
         return SQLUtil.execute( "UPDATE material_Stock SET qty_On_Hand = qty_On_Hand - ? WHERE stock_Id = ?;",
                 data[1],
                 data[0]
@@ -20,16 +18,16 @@ public class MaterialStockDAOImpl implements MaterialStockDAO {
     }
 
     @Override
-    public boolean SaveMaterialStock(final String[] item, final String date) throws SQLException {
+    public boolean save(MaterialStock entity) throws SQLException {
         return SQLUtil.execute( "INSERT INTO material_Stock VALUES(?, ?, ?, ?, ?, ?, ?, ?)",
-                NewId.newMaterialStockCode(),
-                item[1],
-                item[2],
-                item[2],
-                item[3],
-                date,
-                item[4],
-                item[5]
+                entity.getStockId(),
+                entity.getMaterialCode(),
+                entity.getQtyOnHand(),
+                entity.getQty(),
+                entity.getUnitPrice(),
+                entity.getDate(),
+                entity.getExpDate(),
+                entity.getStatus()
         );
     }
 
@@ -60,35 +58,18 @@ public class MaterialStockDAOImpl implements MaterialStockDAO {
     }
 
     @Override
-    public MaterialStockTm getData(final String id) throws SQLException {
+    public MaterialStock getData(final String id) throws SQLException {
         ResultSet rst = SQLUtil.execute( "SELECT * FROM material_Stock WHERE stock_Id = ?", id );
 
         while (rst.next()) {
-            return new MaterialStockTm(
-                    rst.getString( 1 ),
-                    null,
-                    rst.getString( 3 ),
-                    rst.getString( 7 ),
-                    rst.getString( 8 )
-            );
-        }
-
-        return null;
-    }
-
-    @Override
-    public MaterialStockDto getDetail(final String id) throws SQLException {
-        ResultSet rst = SQLUtil.execute( "SELECT * FROM material_Stock WHERE stock_Id = ?", id );
-
-        while (rst.next()) {
-            return new MaterialStockDto(
+            return new MaterialStock(
                     rst.getString( 1 ),
                     rst.getString( 2 ),
                     rst.getInt( 3 ),
                     rst.getInt( 4 ),
                     rst.getDouble( 5 ),
-                    rst.getString( 6 ),
-                    rst.getString( 7 ),
+                    rst.getDate( 6 ),
+                    rst.getDate( 7 ),
                     rst.getString( 8 )
             );
         }
@@ -118,7 +99,12 @@ public class MaterialStockDAOImpl implements MaterialStockDAO {
     }
 
     @Override
-    public boolean deleteMaterialStock(final String id) throws SQLException {
+    public boolean delete(final String id) throws SQLException {
         return SQLUtil.execute( "DELETE FROM material_Stock WHERE stock_Id = ?", id );
+    }
+
+    @Override
+    public boolean update(MaterialStock entity) throws SQLException {
+        return false;
     }
 }

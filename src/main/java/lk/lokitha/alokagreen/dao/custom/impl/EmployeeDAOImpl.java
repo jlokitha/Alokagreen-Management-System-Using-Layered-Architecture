@@ -2,6 +2,7 @@ package lk.lokitha.alokagreen.dao.custom.impl;
 
 import lk.lokitha.alokagreen.dao.custom.EmployeeDAO;
 import lk.lokitha.alokagreen.dto.EmployeeDto;
+import lk.lokitha.alokagreen.entity.Employee;
 import lk.lokitha.alokagreen.util.SQLUtil;
 
 import java.sql.ResultSet;
@@ -10,19 +11,19 @@ import java.util.ArrayList;
 
 public class EmployeeDAOImpl implements EmployeeDAO {
     @Override
-    public boolean saveEmployee(final EmployeeDto dto) throws SQLException {
+    public boolean save(final Employee entity) throws SQLException {
         return SQLUtil.execute( "INSERT INTO employee VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                dto.getEmployee_Id(),
-                dto.getFirst_Name(),
-                dto.getLast_Name(),
-                dto.getNic(),
-                dto.getHouse_No(),
-                dto.getStreet(),
-                dto.getCity(),
-                dto.getMobile(),
-                dto.getEmail(),
-                dto.getRole(),
-                dto.getDate()
+                entity.getEmployeeId(),
+                entity.getFirstName(),
+                entity.getLastName(),
+                entity.getNic(),
+                entity.getHouseNo(),
+                entity.getStreet(),
+                entity.getCity(),
+                entity.getMobile(),
+                entity.getEmail(),
+                entity.getRole(),
+                entity.getDate()
         );
     }
 
@@ -65,31 +66,31 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     }
 
     @Override
-    public boolean updateEmployee(final EmployeeDto dto) throws SQLException {
+    public boolean update(final Employee entity) throws SQLException {
         String sql = "UPDATE employee " +
                 "SET first_Name=?, last_Name=?, nic=?, house_No=?, street=?, city=?, mobile=?, email=?, role=? " +
                 "WHERE employee_Id = ?";
 
         return SQLUtil.execute( sql,
-                dto.getFirst_Name(),
-                dto.getLast_Name(),
-                dto.getNic(),
-                dto.getHouse_No(),
-                dto.getStreet(),
-                dto.getCity(),
-                dto.getMobile(),
-                dto.getEmail(),
-                dto.getRole(),
-                dto.getEmployee_Id()
+                entity.getFirstName(),
+                entity.getLastName(),
+                entity.getNic(),
+                entity.getHouseNo(),
+                entity.getStreet(),
+                entity.getCity(),
+                entity.getMobile(),
+                entity.getEmail(),
+                entity.getRole(),
+                entity.getEmployeeId()
         );
     }
 
     @Override
-    public EmployeeDto getDetail(final String id) throws SQLException {
+    public Employee getData(final String id) throws SQLException {
         ResultSet rst = SQLUtil.execute( "SELECT * FROM employee WHERE employee_Id = ?", id );
 
         while (rst.next()) {
-            return new EmployeeDto(
+            return new Employee(
                     rst.getString( 1 ),
                     rst.getString( 2 ),
                     rst.getString( 3 ),
@@ -100,7 +101,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
                     rst.getString( 8 ),
                     rst.getString( 9 ),
                     rst.getString( 10 ),
-                    rst.getString( 11 )
+                    rst.getDate( 11 )
             );
         }
 
@@ -108,7 +109,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     }
 
     @Override
-    public boolean deleteEmployee(final String id) throws SQLException {
+    public boolean delete(final String id) throws SQLException {
         return SQLUtil.execute( "DELETE FROM employee WHERE employee_Id = ?", id );
     }
 

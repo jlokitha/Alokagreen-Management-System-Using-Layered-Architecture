@@ -2,6 +2,7 @@ package lk.lokitha.alokagreen.dao.custom.impl;
 
 import lk.lokitha.alokagreen.dao.custom.EmployeeSalaryDAO;
 import lk.lokitha.alokagreen.dto.EmployeeSalaryDto;
+import lk.lokitha.alokagreen.entity.Salary;
 import lk.lokitha.alokagreen.util.SQLUtil;
 
 import java.sql.ResultSet;
@@ -10,15 +11,15 @@ import java.util.ArrayList;
 
 public class EmployeeSalaryDAOImpl implements EmployeeSalaryDAO {
     @Override
-    public boolean saveEmpSalary(final EmployeeSalaryDto dto) throws SQLException {
+    public boolean save(final Salary entity) throws SQLException {
         return SQLUtil.execute( "INSERT INTO salary VALUES(?, ?, ?, ?, ?, ?, ?)",
-                dto.getSalary_Id(),
-                dto.getEmployee_Id(),
-                dto.getTotal_Salary(),
-                dto.getWorked_Days(),
-                dto.getBonus(),
-                dto.getDate(),
-                dto.getTime()
+                entity.getSalaryId(),
+                entity.getEmployeeId(),
+                entity.getTotalSalary(),
+                entity.getWorkedDayCount(),
+                entity.getBonus(),
+                entity.getDate(),
+                entity.getTime()
         );
     }
 
@@ -36,18 +37,18 @@ public class EmployeeSalaryDAOImpl implements EmployeeSalaryDAO {
     }
 
     @Override
-    public EmployeeSalaryDto getData(final String id) throws SQLException {
+    public Salary getData(final String id) throws SQLException {
         ResultSet rst = SQLUtil.execute( "SELECT * FROM salary WHERE salary_Id  = ?", id );
 
         if (rst.next()) {
-            return new EmployeeSalaryDto(
+            return new Salary(
                     rst.getString( 1 ),
                     rst.getString( 2 ),
                     rst.getDouble( 3 ),
                     rst.getInt( 4 ),
                     rst.getDouble( 5 ),
-                    rst.getString( 6 ),
-                    rst.getString( 7 )
+                    rst.getDate( 6 ),
+                    rst.getTime( 7 )
             );
         }
 
@@ -67,20 +68,20 @@ public class EmployeeSalaryDAOImpl implements EmployeeSalaryDAO {
     }
 
     @Override
-    public boolean updateEmpSalary(final EmployeeSalaryDto dto) throws SQLException {
+    public boolean update(final Salary entity) throws SQLException {
         String sql = "UPDATE salary SET employee_Id=?, total_Salary=?, work_Day_Count=?, bonus=? WHERE salary_Id = ?";
 
         return SQLUtil.execute( sql,
-                dto.getEmployee_Id(),
-                dto.getTotal_Salary(),
-                dto.getWorked_Days(),
-                dto.getBonus(),
-                dto.getSalary_Id()
+                entity.getEmployeeId(),
+                entity.getTotalSalary(),
+                entity.getWorkedDayCount(),
+                entity.getBonus(),
+                entity.getSalaryId()
         );
     }
 
     @Override
-    public boolean deleteSalary(final String id) throws SQLException {
+    public boolean delete(final String id) throws SQLException {
         return SQLUtil.execute( "DELETE FROM salary WHERE salary_Id = ?", id );
     }
 

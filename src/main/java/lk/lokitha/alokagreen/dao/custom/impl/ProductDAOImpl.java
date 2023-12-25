@@ -1,7 +1,7 @@
 package lk.lokitha.alokagreen.dao.custom.impl;
 
 import lk.lokitha.alokagreen.dao.custom.ProductDAO;
-import lk.lokitha.alokagreen.dto.ProductDto;
+import lk.lokitha.alokagreen.entity.ProductList;
 import lk.lokitha.alokagreen.util.SQLUtil;
 
 import java.sql.ResultSet;
@@ -10,11 +10,11 @@ import java.util.ArrayList;
 
 public class ProductDAOImpl implements ProductDAO {
     @Override
-    public boolean saveProduct(final ProductDto dto) throws SQLException {
+    public boolean save(final ProductList entity) throws SQLException {
         return SQLUtil.execute( "INSERT INTO product_List VALUES(?, ?, ?)",
-                dto.getProduct_Code(),
-                dto.getDescription(),
-                dto.getUnit_Price()
+                entity.getProductCode(),
+                entity.getDescription(),
+                entity.getUnitPrice()
         );
     }
 
@@ -81,11 +81,11 @@ public class ProductDAOImpl implements ProductDAO {
     }
 
     @Override
-    public ProductDto getData(final String id) throws SQLException {
+    public ProductList getData(final String id) throws SQLException {
         ResultSet rst = SQLUtil.execute( "SELECT * FROM product_List WHERE product_Code = ?", id);
 
         while (rst.next()) {
-            return new ProductDto(
+            return new ProductList(
                     rst.getString( 1 ),
                     rst.getString( 2 ),
                     rst.getDouble( 3 )
@@ -111,16 +111,16 @@ public class ProductDAOImpl implements ProductDAO {
     }
 
     @Override
-    public boolean updateProduct(final ProductDto dto) throws SQLException {
+    public boolean update(final ProductList entity) throws SQLException {
         return SQLUtil.execute( "UPDATE product_List SET description=?, unit_Price=? WHERE product_Code = ?",
-                dto.getDescription(),
-                dto.getUnit_Price(),
-                dto.getProduct_Code()
+                entity.getDescription(),
+                entity.getUnitPrice(),
+                entity.getProductCode()
         );
     }
 
     @Override
-    public boolean deleteProduct(final String id) throws SQLException {
+    public boolean delete(final String id) throws SQLException {
         return SQLUtil.execute( "DELETE FROM product_List WHERE product_Code = ?", id );
     }
 }
