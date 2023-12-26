@@ -6,11 +6,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.CustomerBO;
+import lk.lokitha.alokagreen.bo.custom.impl.CustomerBOImpl;
 import lk.lokitha.alokagreen.dto.CustomerDto;
 import lk.lokitha.alokagreen.model.CustomerModel;
 import lk.lokitha.alokagreen.util.Navigation;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class CustomerViewFormController implements Initializable {
@@ -34,6 +38,8 @@ public class CustomerViewFormController implements Initializable {
     private JFXButton btnCancel;
 
     public static String id;
+
+    private final CustomerBO customerBO = (CustomerBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.CUSTOMER );
 
     @FXML
     void btnCancelOnAction(ActionEvent event) {
@@ -64,7 +70,12 @@ public class CustomerViewFormController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        CustomerDto data = CustomerModel.getData(id);
+        CustomerDto data = null;
+        try {
+            data = customerBO.getCustomerData( id );
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         if (data != null) {
             lblCustId.setText(data.getCustomer_Id());

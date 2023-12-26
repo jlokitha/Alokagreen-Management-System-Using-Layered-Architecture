@@ -109,8 +109,8 @@ public class CustomerDAOImpl implements CustomerDAO {
                     rst.getString(3),
                     rst.getString(4),
                     rst.getString(5),
-                    rst.getDate(6),
-                    rst.getTime(7)
+                    rst.getString(6),
+                    rst.getString(7)
             );
         }
 

@@ -6,14 +6,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.CustomerBO;
+import lk.lokitha.alokagreen.bo.custom.impl.CustomerBOImpl;
 import lk.lokitha.alokagreen.dto.CustomerDto;
-import lk.lokitha.alokagreen.model.CustomerModel;
-import lk.lokitha.alokagreen.util.DateTime;
 import lk.lokitha.alokagreen.util.Navigation;
-import lk.lokitha.alokagreen.util.NewId;
 import lk.lokitha.alokagreen.util.Regex;
 
-import java.util.regex.Pattern;
+import java.sql.SQLException;
 
 public class CustomerAddFormController {
 
@@ -47,25 +47,28 @@ public class CustomerAddFormController {
     @FXML
     private JFXButton btnAdd;
 
+    private final CustomerBO customerBO = (CustomerBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.CUSTOMER );
+
     @FXML
     void btnAddOnAction(ActionEvent event) {
-
         if (validateCustomer()) {
-            CustomerDto customerDto = new CustomerDto();
+            try {
+                boolean isSaved = customerBO.saveCustomer( new CustomerDto(
+                        null,
+                        txtCustName.getText(),
+                        txtCustMobile.getText(),
+                        txtCustEmail.getText(),
+                        txtCustAddress.getText(),
+                        null,
+                        null
+                ) );
 
-            customerDto.setCustomer_Id(NewId.newCustomerId());
-            customerDto.setName(txtCustName.getText());
-            customerDto.setMobile(txtCustMobile.getText());
-            customerDto.setEmail(txtCustEmail.getText());
-            customerDto.setAddress(txtCustAddress.getText());
-            customerDto.setDate(DateTime.dateNow());
-            customerDto.setTime(DateTime.timeNow());
-
-            boolean isSaved = CustomerModel.saveCustomer(customerDto);
-
-            if (isSaved) {
-                Navigation.closePane();
-                CustomerManageFormController.controller.getAllId();
+                if (isSaved) {
+                    Navigation.closePane();
+                    CustomerManageFormController.controller.getAllId();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
     }

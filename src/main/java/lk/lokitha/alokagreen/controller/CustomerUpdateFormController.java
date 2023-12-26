@@ -7,12 +7,16 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.CustomerBO;
+import lk.lokitha.alokagreen.bo.custom.impl.CustomerBOImpl;
 import lk.lokitha.alokagreen.dto.CustomerDto;
 import lk.lokitha.alokagreen.model.CustomerModel;
 import lk.lokitha.alokagreen.util.Navigation;
 import lk.lokitha.alokagreen.util.Regex;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class CustomerUpdateFormController implements Initializable {
@@ -49,6 +53,8 @@ public class CustomerUpdateFormController implements Initializable {
 
     public static String id;
 
+    private final CustomerBO customerBO = (CustomerBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.CUSTOMER );
+
     @FXML
     void btnCancelOnAction(ActionEvent event) {
         Navigation.closePane();
@@ -57,19 +63,24 @@ public class CustomerUpdateFormController implements Initializable {
     @FXML
     void btnUpdateOnAction(ActionEvent event) {
         if ( validateCustomer() ) {
-            CustomerDto customerDto = new CustomerDto();
+            try {
+                boolean isSaved = customerBO.updateCustomer( new CustomerDto(
+                        id,
+                        txtCustName.getText(),
+                        txtCustMobile.getText(),
+                        txtCustEmail.getText(),
+                        txtCustAddress.getText(),
+                        null,
+                        null
+                ) );
 
-            customerDto.setCustomer_Id(id);
-            customerDto.setName(txtCustName.getText());
-            customerDto.setMobile(txtCustMobile.getText());
-            customerDto.setEmail(txtCustEmail.getText());
-            customerDto.setAddress(txtCustAddress.getText());
+                if (isSaved) {
+                    Navigation.closePane();
+                    CustomerManageFormController.controller.getAllId();
+                }
 
-            boolean isSaved = CustomerModel.updateCustomer(customerDto);
-
-            if (isSaved) {
-                Navigation.closePane();
-                CustomerManageFormController.controller.getAllId();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -226,7 +237,12 @@ public class CustomerUpdateFormController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        CustomerDto cDto = CustomerModel.getData(id);
+        CustomerDto cDto = null;
+        try {
+            cDto = customerBO.getCustomerData( id );
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         setData(cDto);
     }

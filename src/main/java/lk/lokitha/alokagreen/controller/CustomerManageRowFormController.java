@@ -7,11 +7,15 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.CustomerBO;
+import lk.lokitha.alokagreen.bo.custom.impl.CustomerBOImpl;
 import lk.lokitha.alokagreen.dto.CustomerDto;
 import lk.lokitha.alokagreen.model.CustomerModel;
 import lk.lokitha.alokagreen.util.Navigation;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class CustomerManageRowFormController {
 
@@ -35,6 +39,8 @@ public class CustomerManageRowFormController {
 
     @FXML
     private ImageView imgDelete;
+
+    private final CustomerBO customerBO = (CustomerBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.CUSTOMER );
 
     @FXML
     void imgViewOnMouseClicked(MouseEvent event) {
@@ -66,7 +72,11 @@ public class CustomerManageRowFormController {
         ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
 
         if (result == ButtonType.OK) {
-            CustomerModel.deleteCustomer(lblId.getText());
+            try {
+                customerBO.deleteCustomer( lblId.getText() );
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             CustomerManageFormController.controller.getAllId();
         }
 
@@ -103,14 +113,17 @@ public class CustomerManageRowFormController {
     }
 
     public void setData(String id) {
+        try {
+            CustomerDto data = customerBO.getCustomerData( id );
 
-        CustomerDto data = CustomerModel.getData(id);
+            lblId.setText(data.getCustomer_Id());
+            lblName.setText(data.getName());
+            lblEmail.setText(data.getEmail());
+            lblMobile.setText(data.getMobile());
 
-        lblId.setText(data.getCustomer_Id());
-        lblName.setText(data.getName());
-        lblEmail.setText(data.getEmail());
-        lblMobile.setText(data.getMobile());
-
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 }

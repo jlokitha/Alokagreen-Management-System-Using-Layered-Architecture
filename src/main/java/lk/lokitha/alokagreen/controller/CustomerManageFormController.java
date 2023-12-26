@@ -11,11 +11,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.CustomerBO;
+import lk.lokitha.alokagreen.bo.custom.impl.CustomerBOImpl;
 import lk.lokitha.alokagreen.model.CustomerModel;
 import lk.lokitha.alokagreen.util.Navigation;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -34,6 +38,8 @@ public class CustomerManageFormController implements Initializable {
 
     public static CustomerManageFormController controller;
 
+    private final CustomerBO customerBO = (CustomerBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.CUSTOMER );
+
     public CustomerManageFormController() {
         controller = this;
     }
@@ -48,14 +54,18 @@ public class CustomerManageFormController implements Initializable {
     }
 
     public void getAllId() {
+        try {
+            ArrayList<String> list = customerBO.getAllCustomers();
 
-        ArrayList<String> list = CustomerModel.getAllId();
+            vBox.getChildren().clear();
 
-        vBox.getChildren().clear();
-
-        for (int i = 0; i < list.size(); i++) {
-            loadDataTable(list.get(i));
+            for (int i = 0; i < list.size(); i++) {
+                loadDataTable(list.get(i));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+
     }
 
     private void loadDataTable(String id) {

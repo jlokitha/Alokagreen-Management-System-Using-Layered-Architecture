@@ -16,6 +16,6 @@ public class Customer {
     private String mobile;
     private String email;
     private String address;
-    private Date date;
-    private Time time;
+    private String date;
+    private String time;
 }
