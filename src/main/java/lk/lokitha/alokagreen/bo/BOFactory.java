@@ -1,6 +1,7 @@
 package lk.lokitha.alokagreen.bo;
 
 import lk.lokitha.alokagreen.bo.custom.impl.CustomerBOImpl;
+import lk.lokitha.alokagreen.bo.custom.impl.EmployeeBOImpl;
 
 public class BOFactory {
     private static BOFactory boFactory;
@@ -14,13 +15,15 @@ public class BOFactory {
     }
 
     public enum BOType {
-        CUSTOMER
+        CUSTOMER,EMPLOYEE
     }
 
     public SuperBO getBO(BOType boType) {
         switch (boType) {
             case CUSTOMER:
                 return new CustomerBOImpl();
+            case EMPLOYEE:
+                return new EmployeeBOImpl();
             default:
                 return null;
         }

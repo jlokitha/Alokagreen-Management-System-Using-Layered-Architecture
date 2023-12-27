@@ -100,7 +100,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
     @Override
     public Customer getData(final String id) throws SQLException {
-        ResultSet rst = SQLUtil.execute( "SELECT * FROM customer WHERE customer_Id = ?" );
+        ResultSet rst = SQLUtil.execute( "SELECT * FROM customer WHERE customer_Id = ?" ,id);
 
         while (rst.next()) {
             return new Customer(

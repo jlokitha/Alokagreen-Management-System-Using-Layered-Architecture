@@ -6,11 +6,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.EmployeeBO;
+import lk.lokitha.alokagreen.bo.custom.impl.EmployeeBOImpl;
 import lk.lokitha.alokagreen.dto.EmployeeDto;
 import lk.lokitha.alokagreen.model.EmployeeModel;
 import lk.lokitha.alokagreen.util.Navigation;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ResourceBundle;
@@ -46,6 +50,8 @@ public class EmployeeViewFormController implements Initializable {
 
     public static String id;
 
+    private final EmployeeBO employeeBO = (EmployeeBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.EMPLOYEE );
+
     @FXML
     void btnCancelOnAction(ActionEvent event) {
         Navigation.closePane();
@@ -73,32 +79,29 @@ public class EmployeeViewFormController implements Initializable {
                         "-fx-text-fill:  #727374;");
     }
 
-    private static String calculateWorkingDuration(LocalDate startDate) {
-        LocalDate currentDate = LocalDate.now();
-
-        Period period = Period.between(startDate, currentDate);
-
-        if (period.getYears() > 0) {
-            return period.getYears() + " years";
-        } else if (period.getMonths() > 0) {
-            return period.getMonths() + " months";
-        } else {
-            return period.getDays() + " Days";
-        }
+    private String calculateWorkingDuration(LocalDate startDate) {
+        return employeeBO.calculateWorkingDays( startDate );
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        EmployeeDto detail = EmployeeModel.getDetail(id);
-        String adderess = detail.getHouse_No() + " " + detail.getStreet() + " " + detail.getCity();
+        try {
+            EmployeeDto detail = employeeBO.getEmployeeData( id );
 
-        lblId.setText(detail.getEmployee_Id());
-        lblName.setText(detail.getFirst_Name() + " " + detail.getLast_Name());
-        lblRole.setText(detail.getRole());
-        lblMobile.setText(detail.getMobile());
-        lblEmail.setText(detail.getEmail());
-        lblNic.setText(detail.getNic());
-        lblAddress.setText(adderess);
-        lblWorkingFor.setText(calculateWorkingDuration(LocalDate.parse(detail.getDate())));
+            String adderess = detail.getHouse_No() + " " + detail.getStreet() + " " + detail.getCity();
+
+            lblId.setText(detail.getEmployee_Id());
+            lblName.setText(detail.getFirst_Name() + " " + detail.getLast_Name());
+            lblRole.setText(detail.getRole());
+            lblMobile.setText(detail.getMobile());
+            lblEmail.setText(detail.getEmail());
+            lblNic.setText(detail.getNic());
+            lblAddress.setText(adderess);
+            lblWorkingFor.setText(calculateWorkingDuration(LocalDate.parse(detail.getDate())));
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 }

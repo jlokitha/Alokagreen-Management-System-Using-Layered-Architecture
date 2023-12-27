@@ -13,11 +13,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.EmployeeBO;
+import lk.lokitha.alokagreen.bo.custom.impl.EmployeeBOImpl;
 import lk.lokitha.alokagreen.model.EmployeeModel;
 import lk.lokitha.alokagreen.util.Navigation;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -49,6 +53,8 @@ public class EmployeeManageFormController implements Initializable {
 
     public static EmployeeManageFormController controller;
 
+    private final EmployeeBO employeeBO = (EmployeeBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.EMPLOYEE );
+
     public EmployeeManageFormController() {
         controller = this;
         ids = new ArrayList<>();
@@ -74,7 +80,11 @@ public class EmployeeManageFormController implements Initializable {
 
             if ( result == ButtonType.OK ) {
                 for (String id : ids) {
-                    EmployeeModel.deleteEmployee(id);
+                    try {
+                        employeeBO.deleteEmployee( id );
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
                 }
                 EmployeeManageFormController.controller.getAllId();
                 ids = new ArrayList<>();
@@ -102,7 +112,12 @@ public class EmployeeManageFormController implements Initializable {
 
     public void getAllId() {
 
-        ArrayList<String> list = EmployeeModel.getAllId();
+        ArrayList<String> list = null;
+        try {
+            list = employeeBO.getAllId();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         vbox.getChildren().clear();
 

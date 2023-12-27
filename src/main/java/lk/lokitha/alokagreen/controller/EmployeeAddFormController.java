@@ -10,13 +10,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.EmployeeBO;
+import lk.lokitha.alokagreen.bo.custom.impl.EmployeeBOImpl;
 import lk.lokitha.alokagreen.dto.EmployeeDto;
-import lk.lokitha.alokagreen.model.EmployeeModel;
 import lk.lokitha.alokagreen.util.*;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class EmployeeAddFormController implements Initializable {
@@ -75,38 +77,36 @@ public class EmployeeAddFormController implements Initializable {
     @FXML
     private JFXButton btnAdd;
 
+    private final EmployeeBO employeeBO = (EmployeeBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.EMPLOYEE );
+
     @FXML
     void btnAddOnAction(ActionEvent event) {
 
         if (validateEmployee()) {
-            EmployeeDto employeeDto = new EmployeeDto();
+            try {
+                boolean isSaved = employeeBO.saveEmployee( new EmployeeDto(
+                        null,
+                        txtFirstName.getText(),
+                        txtLastName.getText(),
+                        txtNic.getText(),
+                        txtNo.getText(),
+                        txtStreet.getText(),
+                        txtCity.getText(),
+                        txtMobile.getText(),
+                        txtEmail.getText(),
+                        getRole(),
+                        null
+                ) );
 
-            String id = NewId.newEmployeeId();
-            employeeDto.setEmployee_Id(id);
-            employeeDto.setFirst_Name(txtFirstName.getText());
-            employeeDto.setLast_Name(txtLastName.getText());
-            employeeDto.setNic(txtNic.getText());
-            employeeDto.setHouse_No(txtNo.getText());
-            employeeDto.setStreet(txtStreet.getText());
-            employeeDto.setCity(txtCity.getText());
-            employeeDto.setMobile(txtMobile.getText());
-            employeeDto.setEmail(txtEmail.getText());
-            employeeDto.setRole(getRole());
-            employeeDto.setDate(DateTime.dateNow());
-
-            boolean isSaved = EmployeeModel.saveEmployee(employeeDto);
-
-            if (isSaved) {
-                try {
-                    GenerateQrCode.generateQr(id);
-                    new Alert(Alert.AlertType.CONFIRMATION, "Employee Registered!");
+                if (isSaved) {
                     Navigation.closePane();
                     EmployeeManageFormController.controller.getAllId();
-                } catch (IOException | WriterException e) {
-                    throw new RuntimeException(e);
+                } else {
+                    new  Alert(Alert.AlertType.ERROR, "Employee Registration Failed!").show();
                 }
-            } else {
-                new  Alert(Alert.AlertType.ERROR, "Employee Registration Failed!");
+
+            } catch (SQLException | IOException | WriterException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -346,14 +346,7 @@ public class EmployeeAddFormController implements Initializable {
     }
 
     public void setDataInComboBox() {
-        ArrayList<String> roles = new ArrayList<>();
-        roles.add("Manager");
-        roles.add("System Manager");
-        roles.add("Field Staff");
-        roles.add("Shop Staff");
-        roles.add("Other");
-
-        cmbRole.getItems().addAll(roles);
+        cmbRole.getItems().addAll(employeeBO.getEmployeeRoles());
     }
 
     @FXML

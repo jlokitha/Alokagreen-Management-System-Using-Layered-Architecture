@@ -20,5 +20,5 @@ public class Employee {
     private String mobile;
     private String email;
     private String role;
-    private Date date;
+    private String date;
 }

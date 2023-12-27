@@ -8,11 +8,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.EmployeeBO;
+import lk.lokitha.alokagreen.bo.custom.impl.EmployeeBOImpl;
 import lk.lokitha.alokagreen.dto.EmployeeDto;
-import lk.lokitha.alokagreen.model.EmployeeModel;
 import lk.lokitha.alokagreen.util.Navigation;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class EmployeeManageRowFormController {
 
@@ -52,6 +55,8 @@ public class EmployeeManageRowFormController {
         isSelected = false;
     }
 
+    private final EmployeeBO employeeBO = (EmployeeBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.EMPLOYEE );
+
     @FXML
     void imageCheckBoxOnMouseClicked(MouseEvent event) {
         if ( !isSelected ) {
@@ -75,7 +80,11 @@ public class EmployeeManageRowFormController {
         ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
 
         if (result == ButtonType.OK) {
-            EmployeeModel.deleteEmployee(lblId.getText());
+            try {
+                employeeBO.deleteEmployee( lblId.getText() );
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             EmployeeManageFormController.controller.getAllId();
         }
     }
@@ -147,14 +156,20 @@ public class EmployeeManageRowFormController {
 
     public void setData(String id) {
 
-        EmployeeDto data = EmployeeModel.getDetail(id);
+        EmployeeDto data = null;
+        try {
+            data = employeeBO.getEmployeeData( id );
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-        lblId.setText(data.getEmployee_Id());
-        lblName.setText(data.getFirst_Name() + " " + data.getLast_Name());
-        lblRole.setText(data.getRole());
-        lblEmail.setText(data.getEmail());
-        lblMobile.setText(data.getMobile());
-
+        if ( data != null ) {
+            lblId.setText(data.getEmployee_Id());
+            lblName.setText(data.getFirst_Name() + " " + data.getLast_Name());
+            lblRole.setText(data.getRole());
+            lblEmail.setText(data.getEmail());
+            lblMobile.setText(data.getMobile());
+        }
     }
 
 }

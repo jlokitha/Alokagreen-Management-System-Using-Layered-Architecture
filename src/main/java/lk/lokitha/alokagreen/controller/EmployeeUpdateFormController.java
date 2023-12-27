@@ -8,12 +8,16 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.EmployeeBO;
+import lk.lokitha.alokagreen.bo.custom.impl.EmployeeBOImpl;
 import lk.lokitha.alokagreen.dto.EmployeeDto;
 import lk.lokitha.alokagreen.model.EmployeeModel;
 import lk.lokitha.alokagreen.util.Navigation;
 import lk.lokitha.alokagreen.util.Regex;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -75,6 +79,8 @@ public class EmployeeUpdateFormController implements Initializable {
 
     public static String id;
 
+    private final EmployeeBO employeeBO = (EmployeeBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.EMPLOYEE );
+
     @FXML
     void btnCancelOnAction(ActionEvent event) {
         Navigation.closePane();
@@ -83,24 +89,28 @@ public class EmployeeUpdateFormController implements Initializable {
     @FXML
     void btnUpdateOnAction(ActionEvent event) {
         if ( validateEmployee() ) {
-            EmployeeDto eDto = new EmployeeDto();
+            try {
+                boolean isSaved = employeeBO.updateEmployee( new EmployeeDto(
+                        id,
+                        txtFirstName.getText(),
+                        txtLastName.getText(),
+                        txtNic.getText(),
+                        cmbRole.getSelectionModel().getSelectedItem(),
+                        txtMobile.getText(),
+                        txtEmail.getText(),
+                        txtNic.getText(),
+                        txtStreet.getText(),
+                        txtCity.getText(),
+                        null
+                ) );
 
-            eDto.setEmployee_Id(id);
-            eDto.setFirst_Name(txtFirstName.getText());
-            eDto.setLast_Name(txtLastName.getText());
-            eDto.setNic(txtNic.getText());
-            eDto.setRole(cmbRole.getSelectionModel().getSelectedItem());
-            eDto.setMobile(txtMobile.getText());
-            eDto.setEmail(txtEmail.getText());
-            eDto.setHouse_No(txtNo.getText());
-            eDto.setStreet(txtStreet.getText());
-            eDto.setCity(txtCity.getText());
+                if (isSaved) {
+                    Navigation.closePane();
+                    EmployeeManageFormController.controller.getAllId();
+                }
 
-            boolean isSaved = EmployeeModel.updateEmployee(eDto);
-
-            if (isSaved) {
-                Navigation.closePane();
-                EmployeeManageFormController.controller.getAllId();
+            } catch (SQLException e) {
+                throw new RuntimeException( e );
             }
         }
     }
@@ -324,14 +334,7 @@ public class EmployeeUpdateFormController implements Initializable {
     }
 
     public void setDataInComboBox() {
-        ArrayList<String> roles = new ArrayList<>();
-        roles.add("Manager");
-        roles.add("System Manager");
-        roles.add("Field Staff");
-        roles.add("Shop Staff");
-        roles.add("Other");
-
-        cmbRole.getItems().addAll(roles);
+        cmbRole.getItems().addAll(employeeBO.getEmployeeRoles());
     }
 
     @FXML
@@ -375,7 +378,12 @@ public class EmployeeUpdateFormController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        EmployeeDto eDto = EmployeeModel.getDetail(id);
+        EmployeeDto eDto = null;
+        try {
+            eDto = employeeBO.getEmployeeData( id );
+        } catch (SQLException e) {
+            throw new RuntimeException( e );
+        }
 
         setDataInComboBox();
         setData(eDto);

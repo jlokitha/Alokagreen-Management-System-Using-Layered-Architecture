@@ -101,7 +101,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
                     rst.getString( 8 ),
                     rst.getString( 9 ),
                     rst.getString( 10 ),
-                    rst.getDate( 11 )
+                    rst.getString( 11 )
             );
         }
 
