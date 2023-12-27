@@ -6,11 +6,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.SupplierBO;
+import lk.lokitha.alokagreen.bo.custom.impl.SupplierBOImpl;
 import lk.lokitha.alokagreen.dto.SupplierDto;
-import lk.lokitha.alokagreen.model.SupplierModel;
 import lk.lokitha.alokagreen.util.Navigation;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class SupplierViewFormController implements Initializable {
@@ -34,6 +37,8 @@ public class SupplierViewFormController implements Initializable {
     private Label lblAddress;
 
     public static String id;
+
+    private final SupplierBO supplierBO = (SupplierBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.SUPPLIER );
 
     @FXML
     void btnCancelOnAction(ActionEvent event) {
@@ -64,12 +69,16 @@ public class SupplierViewFormController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        SupplierDto data = SupplierModel.getData(id);
+        try {
+            SupplierDto  data = supplierBO.getSupplierData( id );
 
-        lblSupId.setText(data.getSupplier_Id());
-        lblName.setText(data.getCompany_Name());
-        lblMobile.setText(data.getCompany_Mobile());
-        lblEmail.setText(data.getCompany_Email());
-        lblAddress.setText(data.getCompany_Location());
+            lblSupId.setText(data.getSupplier_Id());
+            lblName.setText(data.getCompany_Name());
+            lblMobile.setText(data.getCompany_Mobile());
+            lblEmail.setText(data.getCompany_Email());
+            lblAddress.setText(data.getCompany_Location());
+        } catch (SQLException e) {
+            throw new RuntimeException( e );
+        }
     }
 }

@@ -92,18 +92,6 @@ public class EmployeeBOImpl implements EmployeeBO {
     }
 
     @Override
-    public ArrayList<String> getEmployeeRoles() {
-        ArrayList<String> roles = new ArrayList<>();
-        roles.add("Manager");
-        roles.add("System Manager");
-        roles.add("Field Staff");
-        roles.add("Shop Staff");
-        roles.add("Other");
-
-        return roles;
-    }
-
-    @Override
     public String calculateWorkingDays(LocalDate startDate) {
         LocalDate currentDate = LocalDate.now();
 

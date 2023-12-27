@@ -17,7 +17,7 @@ public class GenerateQrCode {
 
     public static void generateQr(String id) throws IOException, WriterException {
         String input = id;
-        String path = "/home/lokitha/Pictures/QR/";
+        String path = "/media/lokitha/New Volume/Image/QR/";
         String charset = "UTF-8";
         Map<EncodeHintType, ErrorCorrectionLevel> hasMap = new HashMap<>();
         hasMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);

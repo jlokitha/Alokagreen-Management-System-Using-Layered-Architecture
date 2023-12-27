@@ -4,9 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
-import java.sql.Time;
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -16,6 +13,6 @@ public class Supplier {
     private String companyEmail;
     private String companyMobile;
     private String companyLocation;
-    private Time time;
-    private Date date;
+    private String  time;
+    private String date;
 }

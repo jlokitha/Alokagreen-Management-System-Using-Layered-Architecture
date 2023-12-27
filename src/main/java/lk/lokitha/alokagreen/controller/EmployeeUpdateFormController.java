@@ -334,7 +334,14 @@ public class EmployeeUpdateFormController implements Initializable {
     }
 
     public void setDataInComboBox() {
-        cmbRole.getItems().addAll(employeeBO.getEmployeeRoles());
+        ArrayList<String> roles = new ArrayList<>();
+        roles.add("Manager");
+        roles.add("System Manager");
+        roles.add("Field Staff");
+        roles.add("Shop Staff");
+        roles.add("Other");
+
+        cmbRole.getItems().addAll(roles);
     }
 
     @FXML

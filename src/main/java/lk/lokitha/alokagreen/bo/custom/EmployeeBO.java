@@ -15,6 +15,5 @@ public interface EmployeeBO extends SuperBO {
     boolean updateEmployee(EmployeeDto dto) throws SQLException;
     EmployeeDto getEmployeeData(String id) throws SQLException;
     ArrayList<String> getAllId() throws SQLException;
-    ArrayList<String> getEmployeeRoles();
     String calculateWorkingDays(LocalDate startDate);
 }

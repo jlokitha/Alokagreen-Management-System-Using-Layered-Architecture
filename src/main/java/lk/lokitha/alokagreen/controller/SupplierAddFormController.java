@@ -6,12 +6,17 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.SupplierBO;
+import lk.lokitha.alokagreen.bo.custom.impl.SupplierBOImpl;
 import lk.lokitha.alokagreen.dto.SupplierDto;
 import lk.lokitha.alokagreen.model.SupplierModel;
 import lk.lokitha.alokagreen.util.DateTime;
 import lk.lokitha.alokagreen.util.Navigation;
 import lk.lokitha.alokagreen.util.NewId;
 import lk.lokitha.alokagreen.util.Regex;
+
+import java.sql.SQLException;
 
 public class SupplierAddFormController {
 
@@ -45,25 +50,30 @@ public class SupplierAddFormController {
     @FXML
     private Label lblAddress;
 
+    private final SupplierBO supplierBO = (SupplierBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.SUPPLIER );
+
     @FXML
     void btnAddOnAction(ActionEvent event) {
 
         if (validateSupplier()) {
-            SupplierDto supplierDto = new SupplierDto();
+            try {
+                boolean isSaved = supplierBO.saveSupplier( new SupplierDto(
+                        null,
+                        txtSupName.getText(),
+                        txtSupEmail.getText(),
+                        txtSupMobile.getText(),
+                        txtSupLocation.getText(),
+                        null,
+                        null
+                ) );
 
-            supplierDto.setSupplier_Id(NewId.newSupplierId());
-            supplierDto.setCompany_Name(txtSupName.getText());
-            supplierDto.setCompany_Email(txtSupEmail.getText());
-            supplierDto.setCompany_Mobile(txtSupMobile.getText());
-            supplierDto.setCompany_Location(txtSupLocation.getText());
-            supplierDto.setTime(DateTime.timeNow());
-            supplierDto.setDate(DateTime.dateNow());
+                if (isSaved) {
+                    Navigation.closePane();
+                    SupplierManageFormController.controller.getAllId();
+                }
 
-            boolean isSaved = SupplierModel.saveSupplier(supplierDto);
-
-            if (isSaved) {
-                Navigation.closePane();
-                SupplierManageFormController.controller.getAllId();
+            } catch (SQLException e) {
+                throw new RuntimeException( e );
             }
         }
     }

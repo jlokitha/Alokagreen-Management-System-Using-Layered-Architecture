@@ -7,11 +7,15 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.SupplierBO;
+import lk.lokitha.alokagreen.bo.custom.impl.SupplierBOImpl;
 import lk.lokitha.alokagreen.dto.SupplierDto;
 import lk.lokitha.alokagreen.model.SupplierModel;
 import lk.lokitha.alokagreen.util.Navigation;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class SupplierManageTableRowFormController {
 
@@ -36,6 +40,8 @@ public class SupplierManageTableRowFormController {
     @FXML
     private ImageView imgDelete;
 
+    private final SupplierBO supplierBO = (SupplierBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.SUPPLIER );
+
     @FXML
     void imgDeleteOnMouseClicked(MouseEvent event) {
 
@@ -46,7 +52,11 @@ public class SupplierManageTableRowFormController {
         ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
 
         if (result == ButtonType.OK) {
-            SupplierModel.deleteSupplier(lblId.getText());
+            try {
+                supplierBO.deleteSupplier( lblId.getText() );
+            } catch (SQLException e) {
+                throw new RuntimeException( e );
+            }
             SupplierManageFormController.controller.getAllId();
         }
     }
@@ -102,14 +112,17 @@ public class SupplierManageTableRowFormController {
     }
 
     public void setData(String id) {
+        try {
+            SupplierDto data = supplierBO.getSupplierData( id );
 
-        SupplierDto data = SupplierModel.getData(id);
+            lblId.setText(data.getSupplier_Id());
+            lblName.setText(data.getCompany_Name());
+            lblEmail.setText(data.getCompany_Email());
+            lblMobile.setText(data.getCompany_Mobile());
 
-        lblId.setText(data.getSupplier_Id());
-        lblName.setText(data.getCompany_Name());
-        lblEmail.setText(data.getCompany_Email());
-        lblMobile.setText(data.getCompany_Mobile());
-
+        } catch (SQLException e) {
+            throw new RuntimeException( e );
+        }
     }
 
 }

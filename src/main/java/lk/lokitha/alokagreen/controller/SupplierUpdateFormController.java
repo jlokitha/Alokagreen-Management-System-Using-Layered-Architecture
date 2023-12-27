@@ -7,12 +7,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.SupplierBO;
+import lk.lokitha.alokagreen.bo.custom.impl.SupplierBOImpl;
 import lk.lokitha.alokagreen.dto.SupplierDto;
-import lk.lokitha.alokagreen.model.SupplierModel;
 import lk.lokitha.alokagreen.util.Navigation;
 import lk.lokitha.alokagreen.util.Regex;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class SupplierUpdateFormController implements Initializable {
@@ -49,6 +52,8 @@ public class SupplierUpdateFormController implements Initializable {
 
     public static String id;
 
+    private final SupplierBO supplierBO = (SupplierBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.SUPPLIER );
+
     @FXML
     void btnCancelOnAction(ActionEvent event) {
         Navigation.closePane();
@@ -58,19 +63,24 @@ public class SupplierUpdateFormController implements Initializable {
     void btnUpdateOnAction(ActionEvent event) {
 
         if ( validateSupplier() ) {
-            SupplierDto supplierDto = new SupplierDto();
+            try {
+                boolean isSaved = supplierBO.updateSupplier( new SupplierDto(
+                        id,
+                        txtSupName.getText(),
+                        txtSupMobile.getText(),
+                        txtSupEmail.getText(),
+                        txtSupLocation.getText(),
+                        null,
+                        null
+                ) );
 
-            supplierDto.setSupplier_Id(id);
-            supplierDto.setCompany_Name(txtSupName.getText());
-            supplierDto.setCompany_Mobile(txtSupMobile.getText());
-            supplierDto.setCompany_Email(txtSupEmail.getText());
-            supplierDto.setCompany_Location(txtSupLocation.getText());
+                if (isSaved) {
+                    Navigation.closePane();
+                    SupplierManageFormController.controller.getAllId();
+                }
 
-            boolean isSaved = SupplierModel.updateSupplier(supplierDto);
-
-            if (isSaved) {
-                Navigation.closePane();
-                SupplierManageFormController.controller.getAllId();
+            } catch (SQLException e) {
+                throw new RuntimeException( e );
             }
         }
     }
@@ -226,9 +236,12 @@ public class SupplierUpdateFormController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        try {
+            SupplierDto sDto = supplierBO.getSupplierData( id );
 
-        SupplierDto sDto = SupplierModel.getData(id);
-
-        setDate(sDto);
+            setDate(sDto);
+        } catch (SQLException e) {
+            throw new RuntimeException( e );
+        }
     }
 }

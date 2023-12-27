@@ -11,11 +11,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import lk.lokitha.alokagreen.model.SupplierModel;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.SupplierBO;
+import lk.lokitha.alokagreen.bo.custom.impl.SupplierBOImpl;
 import lk.lokitha.alokagreen.util.Navigation;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -34,6 +37,8 @@ public class SupplierManageFormController implements Initializable {
 
     public static SupplierManageFormController controller;
 
+    private final SupplierBO supplierBO = (SupplierBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.SUPPLIER );
+
     public SupplierManageFormController() {
         controller = this;
     }
@@ -48,13 +53,16 @@ public class SupplierManageFormController implements Initializable {
     }
 
     public void getAllId() {
+        try {
+            ArrayList<String> list = supplierBO.getAllSupplierIds();
 
-        ArrayList<String> list = SupplierModel.getAllId();
+            vBox.getChildren().clear();
 
-        vBox.getChildren().clear();
-
-        for (int i = 0; i < list.size(); i++) {
-            loadDataTable(list.get(i));
+            for (int i = 0; i < list.size(); i++) {
+                loadDataTable(list.get(i));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException( e );
         }
     }
 

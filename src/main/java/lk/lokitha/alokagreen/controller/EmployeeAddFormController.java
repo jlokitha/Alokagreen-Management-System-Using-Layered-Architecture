@@ -19,6 +19,7 @@ import lk.lokitha.alokagreen.util.*;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class EmployeeAddFormController implements Initializable {
@@ -346,7 +347,14 @@ public class EmployeeAddFormController implements Initializable {
     }
 
     public void setDataInComboBox() {
-        cmbRole.getItems().addAll(employeeBO.getEmployeeRoles());
+        ArrayList<String> roles = new ArrayList<>();
+        roles.add("Manager");
+        roles.add("System Manager");
+        roles.add("Field Staff");
+        roles.add("Shop Staff");
+        roles.add("Other");
+
+        cmbRole.getItems().addAll(roles);
     }
 
     @FXML
