@@ -11,11 +11,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import lk.lokitha.alokagreen.model.ProductModel;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.ProductBO;
+import lk.lokitha.alokagreen.bo.custom.impl.ProductBOImpl;
 import lk.lokitha.alokagreen.util.Navigation;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -33,6 +36,8 @@ public class ProductListManageFormController implements Initializable {
     private Label lblAdd;
 
     public static ProductListManageFormController controller;
+
+    private final ProductBO productBO = (ProductBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.PRODUCT );
 
     public ProductListManageFormController() {
         controller =this;
@@ -57,13 +62,16 @@ public class ProductListManageFormController implements Initializable {
     }
 
     public void getAllId() {
+        try {
+            ArrayList<String> list = productBO.getAllProductIds( );
 
-        ArrayList<String> list = ProductModel.getAllId();
+            vbox.getChildren().clear();
 
-        vbox.getChildren().clear();
-
-        for (int i = 0; i < list.size(); i++) {
-            loadDataTable(list.get(i));
+            for (int i = 0; i < list.size(); i++) {
+                loadDataTable(list.get(i));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 

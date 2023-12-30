@@ -7,11 +7,14 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.ProductBO;
+import lk.lokitha.alokagreen.bo.custom.impl.ProductBOImpl;
 import lk.lokitha.alokagreen.dto.ProductDto;
-import lk.lokitha.alokagreen.model.ProductModel;
 import lk.lokitha.alokagreen.util.Navigation;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class ProductListManageTableRowFormController {
 
@@ -30,6 +33,8 @@ public class ProductListManageTableRowFormController {
     @FXML
     private ImageView imgDelete;
 
+    private final ProductBO productBO = (ProductBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.PRODUCT );
+
     @FXML
     void imgDeleteOnMouseClicked(MouseEvent event) {
 
@@ -40,7 +45,11 @@ public class ProductListManageTableRowFormController {
         ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
 
         if (result == ButtonType.OK) {
-            ProductModel.deleteProduct(lblProductId.getText());
+            try {
+                productBO.deleteProduct( lblProductId.getText() );
+            } catch (SQLException e) {
+                throw new RuntimeException( e );
+            }
             ProductListManageFormController.controller.getAllId();
         }
     }
@@ -58,7 +67,7 @@ public class ProductListManageTableRowFormController {
     @FXML
     void imgUpdateOnMouseClicked(MouseEvent event) {
         try {
-            ProductUpdateFormController.id = lblProductId.getText();
+            ProductListUpdateFormController.id = lblProductId.getText();
             Navigation.popupPane("ProductUpdateForm.fxml");
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -76,13 +85,16 @@ public class ProductListManageTableRowFormController {
     }
 
     public void setData(String id) {
+        try {
+            ProductDto data = productBO.getProductData( id );
 
-        ProductDto data = ProductModel.getData(id);
+            lblProductId.setText(data.getProduct_Code());
+            lblDescription.setText(data.getDescription());
+            lblUnitPrice.setText(String.valueOf(data.getUnit_Price()));
 
-        lblProductId.setText(data.getProduct_Code());
-        lblDescription.setText(data.getDescription());
-        lblUnitPrice.setText(String.valueOf(data.getUnit_Price()));
-
+        } catch (SQLException e) {
+            throw new RuntimeException( e );
+        }
     }
 
 }

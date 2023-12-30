@@ -7,15 +7,18 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.ProductBO;
+import lk.lokitha.alokagreen.bo.custom.impl.ProductBOImpl;
 import lk.lokitha.alokagreen.dto.ProductDto;
-import lk.lokitha.alokagreen.model.ProductModel;
 import lk.lokitha.alokagreen.util.Navigation;
 import lk.lokitha.alokagreen.util.Regex;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class ProductUpdateFormController implements Initializable {
+public class ProductListUpdateFormController implements Initializable {
 
     @FXML
     public JFXButton btnCancel;
@@ -40,6 +43,8 @@ public class ProductUpdateFormController implements Initializable {
 
     public static String id;
 
+    private final ProductBO productBO = (ProductBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.PRODUCT );
+
     @FXML
     void btnCancelOnAction(ActionEvent event) {
         Navigation.closePane();
@@ -49,17 +54,20 @@ public class ProductUpdateFormController implements Initializable {
     void btnUpdateOnAction(ActionEvent event) {
 
         if ( validateProduct() ) {
-            ProductDto productDto = new ProductDto();
+            try {
+                boolean isSaved = productBO.updateProduct( new ProductDto(
+                        lblProductId.getText( ),
+                        txtDescription.getText( ),
+                        Double.parseDouble( txtUnitPrice.getText( ) )
+                ) );
 
-            productDto.setProduct_Code(lblProductId.getText());
-            productDto.setDescription(txtDescription.getText());
-            productDto.setUnit_Price(Double.parseDouble(txtUnitPrice.getText()));
+                if (isSaved) {
+                    Navigation.closePane();
+                    ProductListManageFormController.controller.getAllId();
+                }
 
-            boolean isSaved = ProductModel.updateProduct(productDto);
-
-            if (isSaved) {
-                Navigation.closePane();
-                ProductListManageFormController.controller.getAllId();
+            } catch (SQLException e) {
+                throw new RuntimeException( e );
             }
         }
 
@@ -159,9 +167,10 @@ public class ProductUpdateFormController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        ProductDto pDto = ProductModel.getData(id);
-
-        setData(pDto);
+        try {
+            setData(productBO.getProductData( id ));
+        } catch (SQLException e) {
+            throw new RuntimeException( e );
+        }
     }
 }
