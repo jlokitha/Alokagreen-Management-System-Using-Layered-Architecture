@@ -9,14 +9,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.AttendanceBO;
+import lk.lokitha.alokagreen.bo.custom.impl.AttendanceBOImpl;
 import lk.lokitha.alokagreen.dto.EmployeeAttendanceDto;
-import lk.lokitha.alokagreen.model.EmployeeAttendanceModel;
-import lk.lokitha.alokagreen.model.EmployeeModel;
-import lk.lokitha.alokagreen.util.DateTime;
 import lk.lokitha.alokagreen.util.Navigation;
-import lk.lokitha.alokagreen.util.NewId;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class EmployeeAttendanceAddFormController implements Initializable {
@@ -38,6 +38,8 @@ public class EmployeeAttendanceAddFormController implements Initializable {
 
     public static String id;
 
+    private final AttendanceBO attendanceBO = (AttendanceBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.ATTENDANCE );
+
     @FXML
     void btnCancelOnAction(ActionEvent event) {
         id = null;
@@ -48,23 +50,27 @@ public class EmployeeAttendanceAddFormController implements Initializable {
     void btnMarkOnAction(ActionEvent event) {
 
         if (cmbEmpId.getSelectionModel().getSelectedItem() != null) {
-            EmployeeAttendanceDto employeeAttendanceDto = new EmployeeAttendanceDto();
+            try {
+                boolean isSaved = attendanceBO.saveAttendance( new EmployeeAttendanceDto(
+                        null,
+                        cmbEmpId.getSelectionModel( ).getSelectedItem( ),
+                        null,
+                        null
+                ) );
 
-            employeeAttendanceDto.setAttendance_Id(NewId.newAttendanceId());
-            employeeAttendanceDto.setEmployee_Id(cmbEmpId.getSelectionModel().getSelectedItem());
-            employeeAttendanceDto.setDate(DateTime.dateNow());
-            employeeAttendanceDto.setTime(DateTime.timeNow());
-
-            boolean isSaved = EmployeeAttendanceModel.saveEmployeeAttendance(employeeAttendanceDto);
-
-            if (isSaved) {
-                Navigation.closePane();
-                if ( EmployeeAttendanceManageFormController.controller != null) {
-                    EmployeeAttendanceManageFormController.controller.getAllId();
+                if (isSaved) {
+                    Navigation.closePane();
+                    if ( EmployeeAttendanceManageFormController.controller != null) {
+                        EmployeeAttendanceManageFormController.controller.getAllId();
+                    }
+                } else {
+                    new Alert(Alert.AlertType.ERROR, "Attendance Not Marked !").show();
                 }
-            } else {
-                new Alert(Alert.AlertType.ERROR, "Attendance Not Marked !").show();
+
+            } catch (SQLException e) {
+                throw new RuntimeException( e );
             }
+
         } else {
             lblId.setText("Please select an employee ID");
         }
@@ -73,7 +79,11 @@ public class EmployeeAttendanceAddFormController implements Initializable {
 
     @FXML
     void cmbEmpIdOnAction(ActionEvent event) {
-        txtName.setText(EmployeeModel.getNameOfId(cmbEmpId.getSelectionModel().getSelectedItem()));
+        try {
+            txtName.setText(attendanceBO.getEmployeeName(cmbEmpId.getSelectionModel().getSelectedItem()));
+        } catch (SQLException e) {
+            throw new RuntimeException( e );
+        }
     }
 
     @FXML
@@ -116,10 +126,15 @@ public class EmployeeAttendanceAddFormController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        cmbEmpId.getItems().addAll(EmployeeModel.getAllId());
-        if ( id != null ) {
-            cmbEmpId.setValue(id);
-            txtName.setText(EmployeeModel.getNameOfId(id));
+        try {
+            cmbEmpId.getItems().addAll(attendanceBO.getAllAttendanceIds());
+
+            if ( id != null ) {
+                cmbEmpId.setValue(id);
+                txtName.setText(attendanceBO.getEmployeeName(id));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException( e );
         }
     }
 

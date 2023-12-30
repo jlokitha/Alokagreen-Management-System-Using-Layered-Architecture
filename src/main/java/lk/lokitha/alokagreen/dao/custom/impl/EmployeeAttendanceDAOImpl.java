@@ -54,8 +54,8 @@ public class EmployeeAttendanceDAOImpl implements EmployeeAttendanceDAO {
             return new Attendance(
                     rst.getString( 1 ),
                     rst.getString( 2 ),
-                    rst.getDate( 3 ),
-                    rst.getTime( 4 )
+                    rst.getString( 3 ),
+                    rst.getString( 4 )
             );
         }
 
@@ -75,10 +75,10 @@ public class EmployeeAttendanceDAOImpl implements EmployeeAttendanceDAO {
     }
 
     @Override
-    public boolean updateEmployeeAttendance(final String... data) throws SQLException {
+    public boolean update(final Attendance entity) throws SQLException {
         return SQLUtil.execute( "UPDATE attendance SET employee_Id=? WHERE attendance_Id = ?",
-                data[1],
-                data[0]
+                entity.getEmployeeId(),
+                entity.getAttendanceId()
         );
     }
 
@@ -98,10 +98,5 @@ public class EmployeeAttendanceDAOImpl implements EmployeeAttendanceDAO {
         }
 
         return ids;
-    }
-
-    @Override
-    public boolean update(Attendance entity) throws SQLException {
-        return false;
     }
 }

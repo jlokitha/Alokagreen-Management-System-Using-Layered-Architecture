@@ -7,12 +7,14 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.AttendanceBO;
+import lk.lokitha.alokagreen.bo.custom.impl.AttendanceBOImpl;
 import lk.lokitha.alokagreen.dto.EmployeeAttendanceDto;
-import lk.lokitha.alokagreen.model.EmployeeAttendanceModel;
-import lk.lokitha.alokagreen.model.EmployeeModel;
 import lk.lokitha.alokagreen.util.Navigation;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class EmployeeAttendanceManageTableRowFormController {
 
@@ -36,6 +38,8 @@ public class EmployeeAttendanceManageTableRowFormController {
 
     private String id;
 
+    private final AttendanceBO attendanceBO = (AttendanceBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.ATTENDANCE );
+
     @FXML
     void imgDeleteOnMouseClicked(MouseEvent event) {
 
@@ -46,7 +50,11 @@ public class EmployeeAttendanceManageTableRowFormController {
         ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
 
         if (result == ButtonType.OK) {
-            EmployeeAttendanceModel.deleteEmployeeAttendance(id);
+            try {
+                attendanceBO.deleteAttendance(id);
+            } catch (SQLException e) {
+                throw new RuntimeException( e );
+            }
             EmployeeAttendanceManageFormController.controller.getAllId();
         }
     }
@@ -82,16 +90,19 @@ public class EmployeeAttendanceManageTableRowFormController {
     }
 
     public void setData(String id) {
+        try {
+            EmployeeAttendanceDto data = attendanceBO.getAttendanceData(id);
+            String name = attendanceBO.getEmployeeName( data.getEmployee_Id( ) );
 
-        EmployeeAttendanceDto data = EmployeeAttendanceModel.getData(id);
-        String name = EmployeeModel.getNameOfId(data.getEmployee_Id());
+            this.id = data.getAttendance_Id();
+            lblEmpId.setText(data.getEmployee_Id());
+            lblName.setText(name);
+            lblDate.setText(data.getDate());
+            lblTime.setText(data.getTime());
 
-        this.id = data.getAttendance_Id();
-        lblEmpId.setText(data.getEmployee_Id());
-        lblName.setText(name);
-        lblDate.setText(data.getDate());
-        lblTime.setText(data.getTime());
-
+        } catch (SQLException e) {
+            throw new RuntimeException( e );
+        }
     }
 
 }

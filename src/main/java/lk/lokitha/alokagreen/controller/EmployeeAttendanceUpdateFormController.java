@@ -8,12 +8,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.input.MouseEvent;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.AttendanceBO;
+import lk.lokitha.alokagreen.bo.custom.impl.AttendanceBOImpl;
 import lk.lokitha.alokagreen.dto.EmployeeAttendanceDto;
-import lk.lokitha.alokagreen.model.EmployeeAttendanceModel;
-import lk.lokitha.alokagreen.model.EmployeeModel;
 import lk.lokitha.alokagreen.util.Navigation;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class EmployeeAttendanceUpdateFormController implements Initializable {
@@ -32,6 +34,8 @@ public class EmployeeAttendanceUpdateFormController implements Initializable {
 
     public static String id;
 
+    private final AttendanceBO attendanceBO = (AttendanceBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.ATTENDANCE );
+
     @FXML
     void btnCancelOnAction(ActionEvent event) {
         Navigation.closePane();
@@ -41,12 +45,23 @@ public class EmployeeAttendanceUpdateFormController implements Initializable {
     void btnUpdateOnAction(ActionEvent event) {
 
         if (cmbEmpId.getSelectionModel().getSelectedItem() != null) {
-            String cId = cmbEmpId.getSelectionModel().getSelectedItem();
-            boolean isSaved = EmployeeAttendanceModel.updateEmployeeAttendance(id, cId);
+            String eId = cmbEmpId.getSelectionModel().getSelectedItem();
 
-            if (isSaved) {
-                Navigation.closePane();
-                EmployeeAttendanceManageFormController.controller.getAllId();
+            try {
+                boolean isSaved = attendanceBO.updateAttendance( new EmployeeAttendanceDto(
+                        id,
+                        eId,
+                        null,
+                        null
+                ) );
+
+                if (isSaved) {
+                    Navigation.closePane();
+                    EmployeeAttendanceManageFormController.controller.getAllId();
+                }
+
+            } catch (SQLException e) {
+                throw new RuntimeException( e );
             }
         } else {
             new Alert(Alert.AlertType.ERROR, "Please select an employee ID").show();
@@ -55,21 +70,33 @@ public class EmployeeAttendanceUpdateFormController implements Initializable {
 
     @FXML
     void cmbEmpIdOnAction(ActionEvent event) {
-        txtName.setText(EmployeeModel.getNameOfId(cmbEmpId.getSelectionModel().getSelectedItem()));
+        try {
+            txtName.setText(attendanceBO.getEmployeeName(cmbEmpId.getSelectionModel().getSelectedItem()));
+        } catch (SQLException e) {
+            throw new RuntimeException( e );
+        }
     }
 
     private void setData() {
+        try {
+            EmployeeAttendanceDto data = attendanceBO.getAttendanceData( id );
+            String name = attendanceBO.getEmployeeName(data.getEmployee_Id());
 
-        EmployeeAttendanceDto data = EmployeeAttendanceModel.getData(id);
-        String name = EmployeeModel.getNameOfId(data.getEmployee_Id());
+            cmbEmpId.setValue(data.getEmployee_Id());
+            txtName.setText(name);
+        } catch (SQLException e) {
+            throw new RuntimeException( e );
+        }
 
-        cmbEmpId.setValue(data.getEmployee_Id());
-        txtName.setText(name);
     }
 
 
     private void setCmb() {
-        cmbEmpId.getItems().addAll(EmployeeModel.getAllId());
+        try {
+            cmbEmpId.getItems().addAll(attendanceBO.getAllEmployeeIds());
+        } catch (SQLException e) {
+            throw new RuntimeException( e );
+        }
         cmbEmpId.setStyle("-fx-font-size: 16;");
     }
 

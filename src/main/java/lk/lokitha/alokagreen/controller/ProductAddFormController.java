@@ -7,6 +7,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.ProductBO;
+import lk.lokitha.alokagreen.bo.custom.impl.ProductBOImpl;
 import lk.lokitha.alokagreen.dto.ProductDto;
 import lk.lokitha.alokagreen.model.ProductModel;
 import lk.lokitha.alokagreen.util.Navigation;
@@ -14,6 +17,7 @@ import lk.lokitha.alokagreen.util.NewId;
 import lk.lokitha.alokagreen.util.Regex;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class ProductAddFormController implements Initializable {
@@ -39,21 +43,26 @@ public class ProductAddFormController implements Initializable {
     @FXML
     private Label lblUnitPrice;
 
+    private final ProductBO productBO = (ProductBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.PRODUCT );
+
     @FXML
     void btnAddOnAction(ActionEvent event) {
 
         if ( validateProduct() ) {
-            ProductDto productDto = new ProductDto();
+            try {
+                boolean isSaved = productBO.saveProduct( new ProductDto(
+                        lblProductId.getText( ),
+                        txtDescription.getText( ),
+                        Double.parseDouble( txtUnitPrice.getText( ) )
+                ) );
 
-            productDto.setProduct_Code(lblProductId.getText());
-            productDto.setDescription(txtDescription.getText());
-            productDto.setUnit_Price(Double.parseDouble(txtUnitPrice.getText()));
+                if (isSaved) {
+                    Navigation.closePane();
+                    ProductListManageFormController.controller.getAllId();
+                }
 
-            boolean isSaved = ProductModel.saveProduct(productDto);
-
-            if (isSaved) {
-                Navigation.closePane();
-                ProductListManageFormController.controller.getAllId();
+            } catch (SQLException e) {
+                throw new RuntimeException( e );
             }
         }
     }
@@ -155,6 +164,6 @@ public class ProductAddFormController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        lblProductId.setText(NewId.newProductCode());
+        lblProductId.setText(productBO.generateNewProductId());
     }
 }

@@ -6,12 +6,21 @@ import lk.lokitha.alokagreen.dao.custom.MaterialDAO;
 import lk.lokitha.alokagreen.dao.custom.impl.MaterialDAOImpl;
 import lk.lokitha.alokagreen.dto.MaterialDto;
 import lk.lokitha.alokagreen.entity.MaterialList;
+import lk.lokitha.alokagreen.util.NewId;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class MaterialBOImpl implements MaterialBO {
     private final MaterialDAO materialDAO = (MaterialDAOImpl) DAOFactory.getDaoFactory().getDAO( DAOFactory.DAOType.MATERIAL );
+
+    @Override
+    public boolean saveMaterial(MaterialDto dto) throws SQLException {
+        return materialDAO.save( new MaterialList(
+                dto.getMaterial_Code(),
+                dto.getDescription()
+        ) );
+    }
 
     @Override
     public ArrayList<String> getAllMaterialIds() throws SQLException {
@@ -39,5 +48,10 @@ public class MaterialBOImpl implements MaterialBO {
                 dto.getMaterial_Code(),
                 dto.getDescription()
         ));
+    }
+
+    @Override
+    public String generateNewMaterialId() {
+        return NewId.newMaterialCode();
     }
 }

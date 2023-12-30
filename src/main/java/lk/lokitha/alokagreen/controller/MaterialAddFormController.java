@@ -7,13 +7,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.MaterialBO;
+import lk.lokitha.alokagreen.bo.custom.impl.MaterialBOImpl;
 import lk.lokitha.alokagreen.dto.MaterialDto;
-import lk.lokitha.alokagreen.model.MaterialModel;
 import lk.lokitha.alokagreen.util.Navigation;
-import lk.lokitha.alokagreen.util.NewId;
 import lk.lokitha.alokagreen.util.Regex;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class MaterialAddFormController implements Initializable {
@@ -33,21 +35,26 @@ public class MaterialAddFormController implements Initializable {
     @FXML
     private Label lblDesc;
 
+    private final MaterialBO materialBO = (MaterialBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.MATERIAL );
+
 
     @FXML
     void btnAddOnAction(ActionEvent event) {
 
         if (validateMaterial()) {
-            MaterialDto materialDto = new MaterialDto();
+            try {
+                boolean isSaved = materialBO.saveMaterial( new MaterialDto(
+                        lblMaterialId.getText( ),
+                        txtDescription.getText( )
+                ) );
 
-            materialDto.setMaterial_Code(lblMaterialId.getText());
-            materialDto.setDescription(txtDescription.getText());
+                if (isSaved) {
+                    Navigation.closePane();
+                    MaterialListManageFormController.controller.getAllId();
+                }
 
-            boolean isSaved = MaterialModel.saveMaterial(materialDto);
-
-            if (isSaved) {
-                Navigation.closePane();
-                MaterialListManageFormController.controller.getAllId();
+            } catch (SQLException e) {
+                throw new RuntimeException( e );
             }
         }
     }
@@ -75,7 +82,7 @@ public class MaterialAddFormController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        lblMaterialId.setText(NewId.newMaterialCode());
+        lblMaterialId.setText(materialBO.generateNewMaterialId());
     }
 
     @FXML

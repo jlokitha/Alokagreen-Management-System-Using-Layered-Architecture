@@ -16,16 +16,16 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.AttendanceBO;
+import lk.lokitha.alokagreen.bo.custom.impl.AttendanceBOImpl;
 import lk.lokitha.alokagreen.dto.EmployeeAttendanceDto;
-import lk.lokitha.alokagreen.model.EmployeeAttendanceModel;
-import lk.lokitha.alokagreen.model.EmployeeModel;
-import lk.lokitha.alokagreen.util.DateTime;
 import lk.lokitha.alokagreen.util.Navigation;
-import lk.lokitha.alokagreen.util.NewId;
 import lk.lokitha.alokagreen.util.ReadQrCode;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicReference;
@@ -61,6 +61,8 @@ public class EmployeeAttendanceManageFormController implements Initializable {
 
     public static EmployeeAttendanceManageFormController controller;
 
+    private final AttendanceBO attendanceBO = (AttendanceBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.ATTENDANCE );
+
     public EmployeeAttendanceManageFormController() {
         controller = this;
     }
@@ -94,16 +96,19 @@ public class EmployeeAttendanceManageFormController implements Initializable {
 
     @FXML
     void DPDateOnAction(ActionEvent event) {
-        String date = String.valueOf(DPDate.getValue());
+        try {
+            ArrayList<String> ids = attendanceBO.getAttendanceForDate( String.valueOf( DPDate.getValue( ) ) );
 
-        ArrayList<String> ids = EmployeeAttendanceModel.getAttendanceForDate(date);
+            if ( !ids.isEmpty() ) {
+                vbox.getChildren().clear();
 
-        if ( !ids.isEmpty() ) {
-            vbox.getChildren().clear();
-
-            for (int i = 0; i < ids.size(); i++) {
-                loadDataTable(ids.get(i));
+                for (int i = 0; i < ids.size(); i++) {
+                    loadDataTable(ids.get(i));
+                }
             }
+
+        } catch (SQLException e) {
+            throw new RuntimeException( e );
         }
     }
 
@@ -127,22 +132,31 @@ public class EmployeeAttendanceManageFormController implements Initializable {
         } catch (InterruptedException ignored) {
         }
 
-        if (result.get() != null) {
-            if (EmployeeModel.getNameOfId(result.get()) != null) {
-                EmployeeAttendanceDto employeeAttendanceDto = new EmployeeAttendanceDto();
+        if ( result.get( ) != null ) {
+            try {
+                String employeeName = attendanceBO.getEmployeeName( result.get( ) );
 
-                employeeAttendanceDto.setAttendance_Id(NewId.newAttendanceId());
-                employeeAttendanceDto.setEmployee_Id(result.get());
-                employeeAttendanceDto.setDate(DateTime.dateNow());
-                employeeAttendanceDto.setTime(DateTime.timeNow());
+                if ( employeeName != null ) {
 
-                boolean isSaved = EmployeeAttendanceModel.saveEmployeeAttendance(employeeAttendanceDto);
+                    try {
+                        attendanceBO.saveAttendance( new EmployeeAttendanceDto(
+                                null,
+                                result.get( ),
+                                null,
+                                null
+                        ) );
+                    } catch ( SQLException e ) {
+                        throw new RuntimeException( e );
+                    }
 
-                if ( EmployeeAttendanceManageFormController.controller != null) {
-                    EmployeeAttendanceManageFormController.controller.getAllId();
+                    if ( EmployeeAttendanceManageFormController.controller != null ) {
+                        EmployeeAttendanceManageFormController.controller.getAllId( );
+                    }
+                } else {
+                    new Alert( Alert.AlertType.ERROR, "Employee does not exist" ).show( );
                 }
-            } else {
-                new Alert(Alert.AlertType.ERROR, "Employee does not exist").show();
+            } catch ( SQLException e ) {
+                throw new RuntimeException( e );
             }
         }
     }
@@ -178,10 +192,15 @@ public class EmployeeAttendanceManageFormController implements Initializable {
 
         vbox.getChildren().clear();
 
-        ArrayList<String> allId = EmployeeAttendanceModel.getAllId();
+        try {
+            ArrayList<String> allId = attendanceBO.getAllAttendanceIds( );
 
-        for (int i = 0; i < allId.size(); i++) {
-            loadDataTable(allId.get(i));
+            for (int i = 0; i < allId.size(); i++) {
+                loadDataTable(allId.get(i));
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException( e );
         }
     }
 
