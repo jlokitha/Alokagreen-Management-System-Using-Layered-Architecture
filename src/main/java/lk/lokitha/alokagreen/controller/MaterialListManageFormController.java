@@ -11,11 +11,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import lk.lokitha.alokagreen.model.MaterialModel;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.MaterialBO;
+import lk.lokitha.alokagreen.bo.custom.impl.MaterialBOImpl;
 import lk.lokitha.alokagreen.util.Navigation;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -33,6 +36,8 @@ public class MaterialListManageFormController implements Initializable {
     private Label lblAdd;
 
     public static MaterialListManageFormController controller;
+
+    private final MaterialBO materialBO = (MaterialBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.MATERIAL );
 
     public MaterialListManageFormController() {
         controller = this;
@@ -57,13 +62,17 @@ public class MaterialListManageFormController implements Initializable {
     }
 
     public void getAllId() {
+        try {
+            ArrayList<String> list = materialBO.getAllMaterialIds();
 
-        ArrayList<String> list = MaterialModel.getAllMaterialId();
+            vbox.getChildren().clear();
 
-        vbox.getChildren().clear();
+            for (int i = 0; i < list.size(); i++) {
+                loadDataTable(list.get(i));
+            }
 
-        for (int i = 0; i < list.size(); i++) {
-            loadDataTable(list.get(i));
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 

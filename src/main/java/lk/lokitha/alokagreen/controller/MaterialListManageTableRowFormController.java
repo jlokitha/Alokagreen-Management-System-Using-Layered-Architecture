@@ -7,11 +7,14 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.MaterialBO;
+import lk.lokitha.alokagreen.bo.custom.impl.MaterialBOImpl;
 import lk.lokitha.alokagreen.dto.MaterialDto;
-import lk.lokitha.alokagreen.model.MaterialModel;
 import lk.lokitha.alokagreen.util.Navigation;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class MaterialListManageTableRowFormController {
 
@@ -27,6 +30,8 @@ public class MaterialListManageTableRowFormController {
     @FXML
     private ImageView imgDelete;
 
+    private final MaterialBO materialBO = (MaterialBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.MATERIAL );
+
     @FXML
     void imgDeleteOnMouseClicked(MouseEvent event) {
 
@@ -37,8 +42,12 @@ public class MaterialListManageTableRowFormController {
         ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
 
         if (result == ButtonType.OK) {
-            MaterialModel.deleteMaterial(lblMaterialId.getText());
-            MaterialListManageFormController.controller.getAllId();
+            try {
+                materialBO.deleteMaterial( lblMaterialId.getText() );
+                MaterialListManageFormController.controller.getAllId();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -55,7 +64,7 @@ public class MaterialListManageTableRowFormController {
     @FXML
     void imgUpdateOnMouseClicked(MouseEvent event) {
         try {
-            MaterialUpdateFormController.id = lblMaterialId.getText();
+            MaterialListUpdateFormController.id = lblMaterialId.getText();
             Navigation.popupPane("MaterialUpdateForm.fxml");
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -73,12 +82,14 @@ public class MaterialListManageTableRowFormController {
     }
 
     public void setData(String id) {
+        try {
+            MaterialDto data = materialBO.getMaterialData( id );
 
-        MaterialDto data = MaterialModel.getData(id);
-
-        lblMaterialId.setText(data.getMaterial_Code());
-        lblDescription.setText(data.getDescription());
-
+            lblMaterialId.setText(data.getMaterial_Code());
+            lblDescription.setText(data.getDescription());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 }

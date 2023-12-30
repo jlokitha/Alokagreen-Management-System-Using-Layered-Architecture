@@ -7,15 +7,18 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.MaterialBO;
+import lk.lokitha.alokagreen.bo.custom.impl.MaterialBOImpl;
 import lk.lokitha.alokagreen.dto.MaterialDto;
-import lk.lokitha.alokagreen.model.MaterialModel;
 import lk.lokitha.alokagreen.util.Navigation;
 import lk.lokitha.alokagreen.util.Regex;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class MaterialUpdateFormController implements Initializable {
+public class MaterialListUpdateFormController implements Initializable {
 
     @FXML
     public JFXButton btnCancel;
@@ -34,6 +37,8 @@ public class MaterialUpdateFormController implements Initializable {
 
     public static String id;
 
+    private final MaterialBO materialBO = (MaterialBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.MATERIAL );
+
     @FXML
     void btnCancelOnAction(ActionEvent event) {
         Navigation.closePane();
@@ -43,16 +48,19 @@ public class MaterialUpdateFormController implements Initializable {
     void btnUpdateOnAction(ActionEvent event) {
 
         if ( validateMaterial() ) {
-            MaterialDto materialDto = new MaterialDto();
+            try {
+                boolean isSaved = materialBO.updateMaterial( new MaterialDto(
+                        lblMaterialId.getText(),
+                        txtDescription.getText()
+                ) );
 
-            materialDto.setMaterial_Code(lblMaterialId.getText());
-            materialDto.setDescription(txtDescription.getText());
+                if (isSaved) {
+                    Navigation.closePane();
+                    MaterialListManageFormController.controller.getAllId();
+                }
 
-            boolean isSaved = MaterialModel.updateMaterial(materialDto);
-
-            if (isSaved) {
-                Navigation.closePane();
-                MaterialListManageFormController.controller.getAllId();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -76,14 +84,6 @@ public class MaterialUpdateFormController implements Initializable {
     private void setData(MaterialDto materialDto) {
         lblMaterialId.setText(materialDto.getMaterial_Code());
         txtDescription.setText(materialDto.getDescription());
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        MaterialDto mDto = MaterialModel.getData(id);
-
-        setData(mDto);
     }
 
     public void txtDescOnAction(ActionEvent event) {
@@ -134,5 +134,14 @@ public class MaterialUpdateFormController implements Initializable {
                         "-fx-border-width: 2px;" +
                         "-fx-border-radius: 15px;" +
                         "-fx-text-fill:  #727374;");
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        try {
+            setData(materialBO.getMaterialData( id ));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
