@@ -9,18 +9,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.SalaryBO;
+import lk.lokitha.alokagreen.bo.custom.impl.SalaryBOImpl;
 import lk.lokitha.alokagreen.dto.EmployeeSalaryDto;
-import lk.lokitha.alokagreen.model.EmployeeAttendanceModel;
-import lk.lokitha.alokagreen.model.EmployeeModel;
-import lk.lokitha.alokagreen.model.EmployeeSalaryModel;
-import lk.lokitha.alokagreen.util.DateTime;
 import lk.lokitha.alokagreen.util.Navigation;
-import lk.lokitha.alokagreen.util.NewId;
 import lk.lokitha.alokagreen.util.Regex;
 
 import java.net.URL;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class EmployeeSalaryAddFormController implements Initializable {
@@ -58,28 +55,34 @@ public class EmployeeSalaryAddFormController implements Initializable {
     @FXML
     private Label lblBaseSalary;
 
+    private final SalaryBO salaryBO = (SalaryBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.SALARY );
+
     @FXML
     void btnAddOnAction(ActionEvent event) {
         if ( validateSalary() ) {
-            EmployeeSalaryDto eSD = new EmployeeSalaryDto();
-
-            eSD.setSalary_Id(NewId.newSalaryId());
-            eSD.setEmployee_Id(cmbEmpId.getSelectionModel().getSelectedItem());
             double base = Double.parseDouble( txtBaseSalary.getText() );
             double bonus = Double.parseDouble( txtBonus.getText() );
-            eSD.setTotal_Salary(base + bonus);
-            eSD.setWorked_Days(Integer.parseInt(txtDayCount.getText()));
-            eSD.setBonus(Double.parseDouble(txtBonus.getText()));
-            eSD.setDate(DateTime.dateNow());
-            eSD.setTime(DateTime.timeNow());
 
-            boolean isSaved = EmployeeSalaryModel.saveEmpSalary(eSD);
+            try {
+                boolean isSaved = salaryBO.saveSalary( new EmployeeSalaryDto(
+                        null,
+                        cmbEmpId.getSelectionModel( ).getSelectedItem( ),
+                        (base + bonus),
+                        Integer.parseInt( txtDayCount.getText( ) ),
+                        bonus,
+                        null,
+                        null
+                ) );
 
-            if (isSaved) {
-                Navigation.closePane();
-                EmployeeSalaryManageFormController.controller.getAllId();
-            } else {
-                new Alert(Alert.AlertType.ERROR, "Salary Payment Not Added !").show();
+                if (isSaved) {
+                    Navigation.closePane();
+                    EmployeeSalaryManageFormController.controller.getAllId();
+                } else {
+                    new Alert(Alert.AlertType.ERROR, "Salary Payment Not Added !").show();
+                }
+
+            } catch ( SQLException e ) {
+                throw new RuntimeException( e );
             }
         }
 
@@ -92,12 +95,17 @@ public class EmployeeSalaryAddFormController implements Initializable {
 
     @FXML
     void cmbEmpIdOnAction(ActionEvent event) {
-        lblEmpId.setText(null);
-        String id = cmbEmpId.getSelectionModel().getSelectedItem();
-        String yearDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM"));
-        txtName.setText(EmployeeModel.getNameOfId(id));
-        txtDayCount.setText(String.valueOf(EmployeeAttendanceModel.getEmployeeWorkDayCount(id, yearDate)));
-        txtBonus.requestFocus();
+        try {
+
+            lblEmpId.setText(null);
+            String id = cmbEmpId.getSelectionModel().getSelectedItem();
+            txtName.setText(salaryBO.getEmployeeName( id ));
+            txtDayCount.setText(salaryBO.employeeWorkedDayCount( id ));
+            txtBonus.requestFocus();
+
+        } catch ( SQLException e ) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -111,8 +119,8 @@ public class EmployeeSalaryAddFormController implements Initializable {
 
         } else {
             double bonus = Double.parseDouble(txtBonus.getText());
-            double baseSalary1 = Double.parseDouble(txtBaseSalary.getText());
-            txtTotalSalary.setText(String.valueOf(bonus + baseSalary1));
+            double base = Double.parseDouble(txtBaseSalary.getText());
+            txtTotalSalary.setText(salaryBO.calculateTotalSalary( bonus, base ));
             btnAddOnAction(event);
         }
     }
@@ -121,15 +129,15 @@ public class EmployeeSalaryAddFormController implements Initializable {
     void txtBonusOnAction(ActionEvent event) {
         lblBonus.setText(null);
 
-        String bonus = txtBonus.getText();
+        String bonusSalary = txtBonus.getText();
 
-        if (Regex.money(bonus)) {
+        if (Regex.money(bonusSalary)) {
             lblBonus.setText("Should contain integer or decimal");
 
         } else {
-            double bonus1 = Double.parseDouble(txtBonus.getText());
+            double bonus = Double.parseDouble(txtBonus.getText());
             double baseSalary = Double.parseDouble(txtBaseSalary.getText());
-            txtTotalSalary.setText(String.valueOf(bonus1 + baseSalary));
+            txtTotalSalary.setText(salaryBO.calculateTotalSalary( baseSalary, bonus ));
             txtBaseSalary.requestFocus();
         }
     }
@@ -173,8 +181,12 @@ public class EmployeeSalaryAddFormController implements Initializable {
     }
 
     public void setComboBox() {
-        cmbEmpId.setStyle("-fx-font-size: 16;");
-        cmbEmpId.getItems().addAll(EmployeeModel.getAllId());
+        try {
+            cmbEmpId.setStyle("-fx-font-size: 16;");
+            cmbEmpId.getItems().addAll(salaryBO.getAllEmployeeId());
+        } catch ( SQLException e ) {
+            e.printStackTrace();
+        }
     }
 
     public void setTextFields() {

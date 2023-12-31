@@ -8,16 +8,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.SalaryBO;
+import lk.lokitha.alokagreen.bo.custom.impl.SalaryBOImpl;
 import lk.lokitha.alokagreen.dto.EmployeeSalaryDto;
-import lk.lokitha.alokagreen.model.EmployeeAttendanceModel;
-import lk.lokitha.alokagreen.model.EmployeeModel;
-import lk.lokitha.alokagreen.model.EmployeeSalaryModel;
 import lk.lokitha.alokagreen.util.Navigation;
 import lk.lokitha.alokagreen.util.Regex;
 
 import java.net.URL;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class EmployeeSalaryUpdateFormController implements Initializable {
@@ -59,25 +58,33 @@ public class EmployeeSalaryUpdateFormController implements Initializable {
 
     public static String id;
 
+    private final SalaryBO salaryBO = (SalaryBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.SALARY );
+
     @FXML
     void btnUpdateOnAction(ActionEvent event) {
 
         if ( validateSalary() ) {
-            EmployeeSalaryDto eSDto = new EmployeeSalaryDto();
+            try {
+                double base = Double.parseDouble( txtBaseSalary.getText() );
+                double bonus = Double.parseDouble( txtBonus.getText() );
 
-            eSDto.setSalary_Id(id);
-            eSDto.setEmployee_Id(cmbEmpId.getSelectionModel().getSelectedItem());
-            double base = Double.parseDouble( txtBaseSalary.getText() );
-            double bonus = Double.parseDouble( txtBonus.getText() );
-            eSDto.setTotal_Salary(base + bonus);
-            eSDto.setWorked_Days(Integer.parseInt(txtDayCount.getText()));
-            eSDto.setBonus(Double.parseDouble(txtBonus.getText()));
+                boolean isSaved = salaryBO.updateSalary( new EmployeeSalaryDto(
+                        id,
+                        cmbEmpId.getSelectionModel( ).getSelectedItem( ),
+                        (base + bonus),
+                        Integer.parseInt( txtDayCount.getText( ) ),
+                        bonus,
+                        null,
+                        null
+                ) );
 
-            boolean isSaved = EmployeeSalaryModel.updateEmpSalary(eSDto);
+                if (isSaved) {
+                    Navigation.closePane();
+                    EmployeeSalaryManageFormController.controller.getAllId();
+                }
 
-            if (isSaved) {
-                Navigation.closePane();
-                EmployeeSalaryManageFormController.controller.getAllId();
+            } catch ( SQLException e ) {
+                e.printStackTrace();
             }
         }
 
@@ -90,14 +97,19 @@ public class EmployeeSalaryUpdateFormController implements Initializable {
 
     @FXML
     void cmbEmpIdOnAction(ActionEvent event) {
-        lblEmpId.setText(null);
-        String name = EmployeeModel.getNameOfId(id);
-        String yearMonth = getYearMonth(date);
-        int days = EmployeeAttendanceModel.getEmployeeWorkDayCount(id, yearMonth);
 
-        txtName.setText(name);
-        txtDayCount.setText(String.valueOf(days));
-        txtBonus.requestFocus();
+        try {
+            lblEmpId.setText(null);
+            String name = salaryBO.getEmployeeName( id );
+            String days = salaryBO.employeeWorkedDayCount(id);
+
+            txtName.setText(name);
+            txtDayCount.setText(days);
+            txtBonus.requestFocus();
+
+        } catch ( SQLException e ) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -111,8 +123,8 @@ public class EmployeeSalaryUpdateFormController implements Initializable {
 
         } else {
             double bonus = Double.parseDouble(txtBonus.getText());
-            double baseSalary1 = Double.parseDouble(txtBaseSalary.getText());
-            txtTotalSalary.setText(String.valueOf(bonus + baseSalary1));
+            double base = Double.parseDouble(txtBaseSalary.getText());
+            txtTotalSalary.setText(salaryBO.calculateTotalSalary( base, bonus ));
             btnUpdateOnAction(event);
         }
     }
@@ -121,15 +133,15 @@ public class EmployeeSalaryUpdateFormController implements Initializable {
     void txtBonusOnAction(ActionEvent event) {
         lblBonus.setText(null);
 
-        String bonus = txtBonus.getText();
+        String bonusSalary = txtBonus.getText();
 
-        if (Regex.money(bonus)) {
+        if (Regex.money(bonusSalary)) {
             lblBonus.setText("Should contain integer or decimal");
 
         } else {
-            double bonus1 = Double.parseDouble(txtBonus.getText());
+            double bonus = Double.parseDouble(txtBonus.getText());
             double baseSalary = Double.parseDouble(txtBaseSalary.getText());
-            txtTotalSalary.setText(String.valueOf(bonus1 + baseSalary));
+            txtTotalSalary.setText(salaryBO.calculateTotalSalary( baseSalary, bonus ));
             txtBaseSalary.requestFocus();
         }
     }
@@ -172,37 +184,34 @@ public class EmployeeSalaryUpdateFormController implements Initializable {
         return true;
     }
 
-    public String getYearMonth(String date) {
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate localDate = LocalDate.parse(date, formatter);
-
-        int year = localDate.getYear();
-        int month = localDate.getMonthValue();
-
-        return year + "-" + month;
-
-    }
-
     private void setData() {
+        try {
+            EmployeeSalaryDto data = salaryBO.getSalaryData( id );
+            String name = salaryBO.getEmployeeName(data.getEmployee_Id());
 
-        EmployeeSalaryDto data = EmployeeSalaryModel.getData(id);
-        String name = EmployeeModel.getNameOfId(data.getEmployee_Id());
+            id = data.getSalary_Id();
+            date = data.getDate();
+            cmbEmpId.setValue(data.getEmployee_Id());
+            txtName.setText(name);
+            txtDayCount.setText(String.valueOf(data.getWorked_Days()));
+            txtBonus.setText(String.valueOf(data.getBonus()));
+            txtBaseSalary.setText(String.valueOf(data.getTotal_Salary() - data.getBonus()));
+            txtTotalSalary.setText(String.valueOf(data.getTotal_Salary()));
 
-        id = data.getSalary_Id();
-        date = data.getDate();
-        cmbEmpId.setValue(data.getEmployee_Id());
-        txtName.setText(name);
-        txtDayCount.setText(String.valueOf(data.getWorked_Days()));
-        txtBonus.setText(String.valueOf(data.getBonus()));
-        txtBaseSalary.setText(String.valueOf(data.getTotal_Salary() - data.getBonus()));
-        txtTotalSalary.setText(String.valueOf(data.getTotal_Salary()));
+        } catch ( SQLException e ) {
+            e.printStackTrace();
+        }
+
 
     }
 
     private void setCmb() {
-        cmbEmpId.getItems().addAll(EmployeeModel.getAllId());
-        cmbEmpId.setStyle("-fx-font-size: 16;");
+        try {
+            cmbEmpId.setStyle("-fx-font-size: 16;");
+            cmbEmpId.getItems().addAll(salaryBO.getAllEmployeeId());
+        } catch ( SQLException e ) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

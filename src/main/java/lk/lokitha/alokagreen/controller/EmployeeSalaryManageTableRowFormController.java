@@ -7,12 +7,14 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.SalaryBO;
+import lk.lokitha.alokagreen.bo.custom.impl.SalaryBOImpl;
 import lk.lokitha.alokagreen.dto.EmployeeSalaryDto;
-import lk.lokitha.alokagreen.model.EmployeeModel;
-import lk.lokitha.alokagreen.model.EmployeeSalaryModel;
 import lk.lokitha.alokagreen.util.Navigation;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class EmployeeSalaryManageTableRowFormController {
 
@@ -39,6 +41,8 @@ public class EmployeeSalaryManageTableRowFormController {
 
     private String id;
 
+    private final SalaryBO salaryBO = (SalaryBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.SALARY );
+
     @FXML
     void imgDeleteOnMouseClicked(MouseEvent event) {
 
@@ -49,8 +53,13 @@ public class EmployeeSalaryManageTableRowFormController {
         ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
 
         if (result == ButtonType.OK) {
-            EmployeeSalaryModel.deleteSalary(id);
-            EmployeeSalaryManageFormController.controller.getAllId();
+            try {
+                salaryBO.deleteSalary( id );
+                EmployeeSalaryManageFormController.controller.getAllId();
+
+            } catch ( SQLException e ) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -104,17 +113,20 @@ public class EmployeeSalaryManageTableRowFormController {
         imgView.setImage(new Image("/assets/icon/view_default.png"));
     }
 
-    public void setData(String id) {
+    public void setData( String id ) {
+        try {
+            EmployeeSalaryDto data = salaryBO.getSalaryData( id );
+            String name = salaryBO.getEmployeeName( data.getEmployee_Id( ) );
 
-        EmployeeSalaryDto data = EmployeeSalaryModel.getData(id);
-        String name = EmployeeModel.getNameOfId(data.getEmployee_Id());
+            this.id = data.getSalary_Id( );
+            lblEmpId.setText( data.getEmployee_Id( ) );
+            lblName.setText( name );
+            lblSalary.setText( String.valueOf( data.getTotal_Salary( ) ) );
+            lblDate.setText( data.getDate( ) );
 
-        this.id = data.getSalary_Id();
-        lblEmpId.setText(data.getEmployee_Id());
-        lblName.setText(name);
-        lblSalary.setText(String.valueOf(data.getTotal_Salary()));
-        lblDate.setText(data.getDate());
-
+        } catch ( SQLException e ) {
+            e.printStackTrace( );
+        }
     }
 
 }

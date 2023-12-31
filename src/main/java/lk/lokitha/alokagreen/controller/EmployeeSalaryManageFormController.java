@@ -16,14 +16,15 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
-import lk.lokitha.alokagreen.model.EmployeeSalaryModel;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.SalaryBO;
+import lk.lokitha.alokagreen.bo.custom.impl.SalaryBOImpl;
 import lk.lokitha.alokagreen.util.Navigation;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDate;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class EmployeeSalaryManageFormController implements Initializable {
@@ -63,6 +64,8 @@ public class EmployeeSalaryManageFormController implements Initializable {
 
     public static EmployeeSalaryManageFormController controller;
 
+    private final SalaryBO salaryBO = (SalaryBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.SALARY );
+
     public EmployeeSalaryManageFormController() {
         controller = this;
     }
@@ -97,21 +100,26 @@ public class EmployeeSalaryManageFormController implements Initializable {
     @FXML
     void btnSearchOnAction(ActionEvent event) {
         if ( validateSearch() ) {
-            String year = cmbYear.getSelectionModel().getSelectedItem();
-            String month = cmbMonth.getSelectionModel().getSelectedItem();
-            String date = year + "-" + mapMonthToNumber(month) + "%";
+            try {
+                String year = cmbYear.getSelectionModel().getSelectedItem();
+                String month = cmbMonth.getSelectionModel().getSelectedItem();
+                String date = year + "-" + salaryBO.mapMonthToNumber( month ) + "%";
 
-            ArrayList<String> ids = EmployeeSalaryModel.getSalaryForMonth(date);
+                ArrayList<String> ids = salaryBO.getSalaryForMonth( date );
 
-            if ( !ids.isEmpty() ) {
-                vbox.getChildren().clear();
+                if ( !ids.isEmpty() ) {
+                    vbox.getChildren().clear();
 
-                for (String id : ids) {
-                    loadDataTable(id);
+                    for (String id : ids) {
+                        loadDataTable(id);
+                    }
                 }
+                cmbYear.setValue(null);
+                cmbMonth.setValue(null);
+
+            } catch ( SQLException e ) {
+                e.printStackTrace();
             }
-            cmbYear.setValue(null);
-            cmbMonth.setValue(null);
         }
     }
 
@@ -134,13 +142,17 @@ public class EmployeeSalaryManageFormController implements Initializable {
     }
 
     public void getAllId() {
+        try {
+            vbox.getChildren().clear();
 
-        vbox.getChildren().clear();
+            ArrayList<String> allId = salaryBO.getAllSalaryIds( );
 
-        ArrayList<String> allId = EmployeeSalaryModel.getAllId();
+            for (int i = 0; i < allId.size(); i++) {
+                loadDataTable(allId.get(i));
+            }
 
-        for (int i = 0; i < allId.size(); i++) {
-            loadDataTable(allId.get(i));
+        } catch ( SQLException e ) {
+            e.printStackTrace();
         }
     }
 
@@ -167,47 +179,7 @@ public class EmployeeSalaryManageFormController implements Initializable {
 
 
     public void setYear() {
-        int currentYear = LocalDate.now().getYear();
-        int pastYear = 2010;
-
-        List<String> years = new ArrayList<>();
-        for (int year = currentYear; year >= pastYear; year--) {
-            years.add(String.valueOf(year));
-        }
-
-        cmbYear.setItems(FXCollections.observableArrayList(years));
-    }
-
-    private String mapMonthToNumber(String month) {
-        if ( month != null ) {
-            switch (month) {
-                case "January":
-                    return "01";
-                case "February":
-                    return "02";
-                case "March":
-                    return "03";
-                case "April":
-                    return "04";
-                case "May":
-                    return "05";
-                case "June":
-                    return "06";
-                case "July":
-                    return "07";
-                case "August":
-                    return "08";
-                case "September":
-                    return "09";
-                case "October":
-                    return "10";
-                case "November":
-                    return "11";
-                case "December":
-                    return "12";
-            }
-        }
-        return "20";
+        cmbYear.setItems( salaryBO.setYears( ) );
     }
 
     public boolean validateSearch() {
