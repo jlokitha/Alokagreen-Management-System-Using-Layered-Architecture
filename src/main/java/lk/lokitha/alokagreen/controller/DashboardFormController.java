@@ -16,17 +16,17 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.DashboardBO;
+import lk.lokitha.alokagreen.bo.custom.impl.DashboardBOImpl;
 import lk.lokitha.alokagreen.dto.EmployeeAttendanceDto;
-import lk.lokitha.alokagreen.model.*;
-import lk.lokitha.alokagreen.util.DateTime;
 import lk.lokitha.alokagreen.util.Navigation;
-import lk.lokitha.alokagreen.util.NewId;
 import lk.lokitha.alokagreen.util.ReadQrCode;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -66,6 +66,8 @@ public class DashboardFormController implements Initializable {
     private JFXButton btnQr;
 
     ArrayList<String[]> pStock;
+
+    private final DashboardBO dashboardBO = (DashboardBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.DASHBOARD );
 
     public DashboardFormController() {
         pStock = new ArrayList<>();
@@ -109,15 +111,18 @@ public class DashboardFormController implements Initializable {
         new Thread(() -> {
             String id = ReadQrCode.readQr();
 
-            if (EmployeeModel.getNameOfId(id) != null) {
-                EmployeeAttendanceDto dto = new EmployeeAttendanceDto();
+            try {
+                if (dashboardBO.getEmployeeName( id ) != null) {
 
-                dto.setAttendance_Id(NewId.newAttendanceId());
-                dto.setEmployee_Id(id);
-                dto.setDate(DateTime.dateNow());
-                dto.setTime(DateTime.timeNow());
-
-                EmployeeAttendanceModel.saveEmployeeAttendance(dto);
+                    dashboardBO.saveEmployeeAttendance( new EmployeeAttendanceDto(
+                            null,
+                            id,
+                            null,
+                            null
+                    ) );
+                }
+            } catch ( SQLException e ) {
+                e.printStackTrace();
             }
         }).start();
     }
@@ -137,24 +142,19 @@ public class DashboardFormController implements Initializable {
     }
 
     public void setProductDetail() {
-        hBoxProducts.getChildren().clear();
 
-        ArrayList<String> allId = ProductModel.getAllId();
+        try {
+            hBoxProducts.getChildren().clear();
 
-        Map<String, Integer> pStock = new HashMap<>();
+            Map<String, Integer> pStock = dashboardBO.setProductDetails();
 
-        for (int i = 0; i < allId.size(); i++) {
-            String desc = ProductModel.getDescOfId(allId.get(i));
-            int qty = ProductStockModel.getProductQty(allId.get(i));
-
-            if (qty != 0) {
-                pStock.put(desc, pStock.getOrDefault(desc, 0) + qty);
+            for (Map.Entry<String, Integer> entry : pStock.entrySet()) {
+                loadProductStockData(entry);
             }
+        } catch ( SQLException e ) {
+            e.printStackTrace();
         }
 
-        for (Map.Entry<String, Integer> entry : pStock.entrySet()) {
-            loadProductStockData(entry);
-        }
     }
 
     private void loadProductStockData(Map.Entry<String, Integer> entry) {
@@ -170,23 +170,18 @@ public class DashboardFormController implements Initializable {
     }
 
     public void setMaterialDetail() {
-        vBoxMaterial.getChildren().clear();
 
-        ArrayList<String> allMaterialId = MaterialModel.getAllMaterialId();
+        try {
+            vBoxMaterial.getChildren().clear();
 
-        Map<String, Integer> pStock = new HashMap<>();
+            Map<String, Integer> pStock = dashboardBO.setMaterialDetails();
 
-        for (int i = 0; i < allMaterialId.size(); i++) {
-            String desc = MaterialModel.getDescOfId(allMaterialId.get(i));
-            int qty = MaterialStockModel.getProductQty(allMaterialId.get(i));
-
-            if ( qty != 0 ) {
-                pStock.put(desc, pStock.getOrDefault(desc, 0) + qty);
+            for (Map.Entry<String, Integer> entry : pStock.entrySet()) {
+                loadMaterialStockData(entry);
             }
-        }
 
-        for (Map.Entry<String, Integer> entry : pStock.entrySet()) {
-            loadMaterialStockData(entry);
+        } catch ( SQLException e ) {
+            e.printStackTrace();
         }
     }
 
@@ -203,12 +198,18 @@ public class DashboardFormController implements Initializable {
     }
 
     public void setCustomerOrderDetail() {
-        vBoxCustOrder.getChildren().clear();
 
-        ArrayList<String> allId = CustomerOrderModel.getAllId();
+        try {
+            vBoxCustOrder.getChildren().clear();
 
-        for (int i = 0; i < allId.size(); i++) {
-            loadCustomerOrder(allId.get(i));
+            ArrayList<String> allId = dashboardBO.getAllCustomerOrderIds( );
+
+            for (int i = 0; i < allId.size(); i++) {
+                loadCustomerOrder(allId.get(i));
+            }
+
+        } catch ( SQLException e ) {
+            e.printStackTrace();
         }
     }
 
@@ -225,13 +226,25 @@ public class DashboardFormController implements Initializable {
     }
 
     public void setWalletData() {
-        double totalIncome = CustomerOrderModel.getTotalIncome();
-        double totalExpense = SupplierOrderModel.getTotalExpense() + EmployeeSalaryModel.getTotalSalary();
-        double saving = totalIncome - totalExpense;
+        try {
+            double totalIncome = dashboardBO.getTotalIncome( );
+            double totalExpense = dashboardBO.getTotalExpenses();
 
-        lblIncome.setText(String.valueOf(totalIncome));
-        lblExpense.setText(String.valueOf(totalExpense));
-        lblSaving.setText(String.valueOf(saving));
+            lblIncome.setText(String.valueOf(totalIncome));
+            lblExpense.setText(String.valueOf(totalExpense));
+            lblSaving.setText(String.valueOf(totalIncome - totalExpense));
+
+        } catch ( SQLException e ) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setCmbEmpId() {
+        try {
+            cmbEmpId.getItems().addAll(dashboardBO.getAllEmployeeIds());
+        } catch ( SQLException e ) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -250,7 +263,7 @@ public class DashboardFormController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        cmbEmpId.getItems().addAll(EmployeeModel.getAllId());
+        setCmbEmpId();
         setProductDetail();
         setMaterialDetail();
         setCustomerOrderDetail();
