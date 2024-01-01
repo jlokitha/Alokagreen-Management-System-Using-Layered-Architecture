@@ -47,8 +47,8 @@ public class EmployeeSalaryDAOImpl implements EmployeeSalaryDAO {
                     rst.getDouble( 3 ),
                     rst.getInt( 4 ),
                     rst.getDouble( 5 ),
-                    rst.getDate( 6 ),
-                    rst.getTime( 7 )
+                    rst.getString( 6 ),
+                    rst.getString( 7 )
             );
         }
 

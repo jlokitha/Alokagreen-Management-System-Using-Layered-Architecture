@@ -52,8 +52,8 @@ public class SupplierDAOImpl implements SupplierDAO {
                         rst.getString( 3 ),
                         rst.getString( 4 ),
                         rst.getString( 5 ),
-                        rst.getTime( 6 ),
-                        rst.getDate( 7 )
+                        rst.getString( 6 ),
+                        rst.getString( 7 )
                 );
             }
 

@@ -68,8 +68,8 @@ public class MaterialStockDAOImpl implements MaterialStockDAO {
                     rst.getInt( 3 ),
                     rst.getInt( 4 ),
                     rst.getDouble( 5 ),
-                    rst.getDate( 6 ),
-                    rst.getDate( 7 ),
+                    rst.getString( 6 ),
+                    rst.getString( 7 ),
                     rst.getString( 8 )
             );
         }

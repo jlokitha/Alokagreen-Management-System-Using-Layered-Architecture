@@ -6,11 +6,14 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import lk.lokitha.alokagreen.dto.tm.MaterialStockTm;
-import lk.lokitha.alokagreen.model.MaterialStockModel;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.MaterialStockBO;
+import lk.lokitha.alokagreen.bo.custom.impl.MaterialStockBOImpl;
+import lk.lokitha.alokagreen.dto.MaterialStockDto;
 import lk.lokitha.alokagreen.util.Navigation;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -33,6 +36,8 @@ public class MaterialStockManageTableRowFormController {
 
     @FXML
     private ImageView imgUpdate;
+
+    private final MaterialStockBO materialStockBO = (MaterialStockBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.MATERIAL_STOCK );
 
     @FXML
     void imgUpdateOnMouseClicked(MouseEvent event) {
@@ -91,22 +96,25 @@ public class MaterialStockManageTableRowFormController {
     }
 
     public void setData(String id) {
+        try {
+            MaterialStockDto data = materialStockBO.getMaterialStockDetail( id );
 
-        MaterialStockTm data = MaterialStockModel.getData(id);
+            LocalDate currentDate = LocalDate.now();
+            LocalDate expDate = LocalDate.parse(data.getExp_Date());
 
-        LocalDate currentDate = LocalDate.now();
-        LocalDate expDate = LocalDate.parse(data.getExp_Date());
+            if ( currentDate.isEqual(expDate) || currentDate.isAfter(expDate) ) {
+                MaterialStockManageFormController.expList.add(id);
+            }
 
-        if ( currentDate.isEqual(expDate) || currentDate.isAfter(expDate) ) {
-            MaterialStockManageFormController.expList.add(id);
+            lblId.setText(data.getStock_Id());
+            lblDesc.setText( materialStockBO.getMaterialDescription(data.getMaterial_Code()) );
+            lblQty.setText( String.valueOf( data.getQty() ) );
+            lblExpDate.setText(data.getStatus());
+            setStatus(data.getStatus());
+
+        } catch ( SQLException e ) {
+            e.printStackTrace();
         }
-
-        lblId.setText(data.getStock_Id());
-        lblDesc.setText(data.getDesc());
-        lblQty.setText(data.getQty());
-        lblExpDate.setText(data.getStatus());
-        setStatus(data.getStatus());
-
     }
 
 }

@@ -7,13 +7,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.MaterialStockBO;
+import lk.lokitha.alokagreen.bo.custom.impl.MaterialStockBOImpl;
 import lk.lokitha.alokagreen.dto.MaterialStockDto;
-import lk.lokitha.alokagreen.model.MaterialModel;
-import lk.lokitha.alokagreen.model.MaterialStockModel;
 import lk.lokitha.alokagreen.util.Navigation;
 import lk.lokitha.alokagreen.util.Regex;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class MaterialStockUpdateFormController implements Initializable {
@@ -44,6 +46,8 @@ public class MaterialStockUpdateFormController implements Initializable {
 
     public static String id;
 
+    private final MaterialStockBO materialStockBO = (MaterialStockBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.MATERIAL_STOCK );
+
     @FXML
     void btnCancelOnAction(ActionEvent event) {
         Navigation.closePane();
@@ -60,12 +64,18 @@ public class MaterialStockUpdateFormController implements Initializable {
                     txtUsedQty.setText("0");
                 }
 
-                boolean isSaved = MaterialStockModel.updateMaterialStock(id, txtUsedQty.getText());
+                try {
+                    boolean isSaved = materialStockBO.updateMaterialStockQty( id, txtUsedQty.getText( ) );
 
-                if (isSaved) {
-                    Navigation.closePane();
-                    MaterialStockManageFormController.controller.getAllId();
+                    if (isSaved) {
+                        Navigation.closePane();
+                        MaterialStockManageFormController.controller.getAllId();
+                    }
+
+                } catch ( SQLException e ) {
+                    e.printStackTrace();
                 }
+
             } else {
                 lblUsedQty.setText("Used quantity exceed the quantity on hand");
             }
@@ -73,10 +83,15 @@ public class MaterialStockUpdateFormController implements Initializable {
     }
 
     private void setData(MaterialStockDto materialStockDto) {
-        txtMId.setText(materialStockDto.getMaterial_Code());
-        txtMDesc.setText(MaterialModel.getDescOfId(txtMId.getText()));
-        txtQtyOnHand.setText(String.valueOf(materialStockDto.getQty_On_Hand()));
-        txtExpDate.setText(materialStockDto.getExp_Date());
+        try {
+            txtMId.setText(materialStockDto.getMaterial_Code());
+            txtMDesc.setText(materialStockBO.getMaterialDescription(txtMId.getText()));
+            txtQtyOnHand.setText(String.valueOf(materialStockDto.getQty_On_Hand()));
+            txtExpDate.setText(materialStockDto.getExp_Date());
+
+        } catch ( SQLException e ) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -98,9 +113,14 @@ public class MaterialStockUpdateFormController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        MaterialStockDto mSDto = MaterialStockModel.getDetail(id);
-        setData(mSDto);
-        txtUsedQty.requestFocus();
+        try {
+            MaterialStockDto mSDto = materialStockBO.getMaterialStockDetail( id );
+            setData(mSDto);
+            txtUsedQty.requestFocus();
+
+        } catch ( SQLException e ) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

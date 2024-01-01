@@ -6,12 +6,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.layout.VBox;
-import lk.lokitha.alokagreen.model.MaterialStockModel;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.MaterialStockBO;
+import lk.lokitha.alokagreen.bo.custom.impl.MaterialStockBOImpl;
 import lk.lokitha.alokagreen.util.Navigation;
-import lombok.SneakyThrows;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -23,6 +25,8 @@ public class MaterialStockManageFormController implements Initializable {
     public static MaterialStockManageFormController controller;
 
     public static ArrayList<String> expList;
+
+    private final MaterialStockBO materialStockBO = (MaterialStockBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.MATERIAL_STOCK );
 
     public MaterialStockManageFormController() {
         controller = this;
@@ -48,13 +52,17 @@ public class MaterialStockManageFormController implements Initializable {
     }
 
     public void getAllId() {
+        try {
+            ArrayList<String> list = materialStockBO.getAllMaterialStockIds( );
 
-        ArrayList<String> list = MaterialStockModel.getAllId();
+            vbox.getChildren().clear();
 
-        vbox.getChildren().clear();
+            for (int i = 0; i < list.size(); i++) {
+                loadDataTable(list.get(i));
+            }
 
-        for (int i = 0; i < list.size(); i++) {
-            loadDataTable(list.get(i));
+        } catch ( SQLException e ) {
+            e.printStackTrace();
         }
     }
 
@@ -70,10 +78,17 @@ public class MaterialStockManageFormController implements Initializable {
         }
     }
 
-    @SneakyThrows
+    public void updateMaterialStockStatus() {
+        try {
+            materialStockBO.updateMaterialStockStatus(expList);
+        } catch ( SQLException e ) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         getAllId();
-        MaterialStockModel.UpdateMaterialStockExp(expList);
+        updateMaterialStockStatus();
     }
 }
