@@ -11,13 +11,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import lk.lokitha.alokagreen.model.ProductStockModel;
-import lk.lokitha.alokagreen.model.StockTransaction;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.ProductStockBO;
+import lk.lokitha.alokagreen.bo.custom.impl.ProductStockBOImpl;
 import lk.lokitha.alokagreen.util.Navigation;
-import lombok.SneakyThrows;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -37,6 +38,8 @@ public class ProductStockManageFormController implements Initializable {
     public static ProductStockManageFormController controller;
 
     public static ArrayList<String> expList;
+
+    private final ProductStockBO productStockBO = (ProductStockBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.PRODUCT_STOCK );
 
     public ProductStockManageFormController() {
         controller = this;
@@ -71,13 +74,17 @@ public class ProductStockManageFormController implements Initializable {
     }
 
     public void getAllId() {
+        try {
+            ArrayList<String> list = productStockBO.getAllProductStockIds( );
 
-        ArrayList<String> list = ProductStockModel.getAllId();
+            vbox.getChildren().clear();
 
-        vbox.getChildren().clear();
+            for (int i = 0; i < list.size(); i++) {
+                loadDataTable(list.get(i));
+            }
 
-        for (int i = 0; i < list.size(); i++) {
-            loadDataTable(list.get(i));
+        } catch ( SQLException e ) {
+            e.printStackTrace();
         }
     }
 
@@ -117,10 +124,17 @@ public class ProductStockManageFormController implements Initializable {
         imgAdd.setImage(new Image("/assets/icon/add.png"));
     }
 
-    @SneakyThrows
+    public void updateProductStockExp() {
+        try {
+            productStockBO.updateProductStockExp(expList);
+        } catch ( SQLException e ) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         getAllId();
-        StockTransaction.UpdateProductStockExp(expList);
+        updateProductStockExp();
     }
 }

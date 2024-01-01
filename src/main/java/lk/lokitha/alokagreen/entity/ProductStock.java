@@ -14,7 +14,7 @@ public class ProductStock {
     private String productCode;
     private int qtyOnHand;
     private int qty;
-    private Date date;
-    private Date expDate;
+    private String date;
+    private String expDate;
     private String status;
 }

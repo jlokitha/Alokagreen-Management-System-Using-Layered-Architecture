@@ -6,12 +6,14 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.ProductStockBO;
+import lk.lokitha.alokagreen.bo.custom.impl.ProductStockBOImpl;
 import lk.lokitha.alokagreen.dto.ProductStockDto;
-import lk.lokitha.alokagreen.model.ProductModel;
-import lk.lokitha.alokagreen.model.ProductStockModel;
 import lk.lokitha.alokagreen.util.Navigation;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -37,6 +39,8 @@ public class ProductStockManageTableRowFormController {
 
     @FXML
     private ImageView imgUpdate;
+
+    private final ProductStockBO productStockBO = (ProductStockBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.PRODUCT_STOCK );
 
     @FXML
     void imgUpdateOnMouseClicked(MouseEvent event) {
@@ -95,24 +99,27 @@ public class ProductStockManageTableRowFormController {
     }
 
     public void setData(String id) {
+        try {
+            ProductStockDto data = productStockBO.getProductStockDetails( id );
+            String[] descPrice = productStockBO.getProductDescAndPrice(data.getProduct_Code());
 
-        ProductStockDto data = ProductStockModel.getData(id);
-        String[] descPrice = ProductModel.getDescUnitPriceOfId(data.getProduct_Code());
+            LocalDate currentDate = LocalDate.now();
+            LocalDate expDate = LocalDate.parse(data.getExp_Date());
 
-        LocalDate currentDate = LocalDate.now();
-        LocalDate expDate = LocalDate.parse(data.getExp_Date());
+            if ( (currentDate.isEqual(expDate) || currentDate.isAfter(expDate)) && (data.getStatus().equals("Not Expired")) ) {
+                ProductStockManageFormController.expList.add(id);
+            }
 
-        if ( (currentDate.isEqual(expDate) || currentDate.isAfter(expDate)) && (data.getStatus().equals("Not Expired")) ) {
-            ProductStockManageFormController.expList.add(id);
+            lblId.setText(data.getStock_Id());
+            lblDesc.setText(descPrice[0]);
+            lblQty.setText(String.valueOf(data.getQty_On_Hand()));
+            lblUnitPrice.setText(descPrice[1]);
+            lblExpDate.setText(data.getStatus());
+            setStatus(data.getStatus());
+
+        } catch ( SQLException e ) {
+            e.printStackTrace();
         }
-
-        lblId.setText(data.getStock_Id());
-        lblDesc.setText(descPrice[0]);
-        lblQty.setText(String.valueOf(data.getQty_On_Hand()));
-        lblUnitPrice.setText(descPrice[1]);
-        lblExpDate.setText(data.getStatus());
-        setStatus(data.getStatus());
-
     }
 
 }

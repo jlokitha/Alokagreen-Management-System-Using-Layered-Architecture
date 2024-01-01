@@ -45,8 +45,8 @@ public class ProductStockDAOImpl implements ProductStockDAO {
                         rst.getString( 2 ),
                         rst.getInt( 3 ),
                         rst.getInt( 4 ),
-                        rst.getDate( 5 ),
-                        rst.getDate( 6 ),
+                        rst.getString( 5 ),
+                        rst.getString( 6 ),
                         rst.getString( 7 )
                 );
             }

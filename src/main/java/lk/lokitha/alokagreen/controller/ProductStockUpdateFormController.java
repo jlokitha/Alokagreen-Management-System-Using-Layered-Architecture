@@ -9,13 +9,16 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.ProductStockBO;
+import lk.lokitha.alokagreen.bo.custom.impl.ProductStockBOImpl;
 import lk.lokitha.alokagreen.dto.ProductStockDto;
-import lk.lokitha.alokagreen.model.ProductModel;
-import lk.lokitha.alokagreen.model.ProductStockModel;
 import lk.lokitha.alokagreen.util.Navigation;
 import lk.lokitha.alokagreen.util.Regex;
+import lombok.SneakyThrows;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
@@ -59,6 +62,8 @@ public class ProductStockUpdateFormController implements Initializable {
 
     public static String id;
 
+    private final ProductStockBO productStockBO = (ProductStockBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.PRODUCT_STOCK );
+
     @FXML
     void btnCancelOnAction(ActionEvent event) {
         Navigation.closePane();
@@ -72,20 +77,24 @@ public class ProductStockUpdateFormController implements Initializable {
             double remain = Double.parseDouble(txtRemainedQty.getText());
 
             if ( remain <= net ) {
-                ProductStockDto pSDto = new ProductStockDto();
+                try {
+                    boolean isSaved = productStockBO.updateProductStock(new ProductStockDto(
+                            id,
+                            txtId.getText(),
+                            Integer.parseInt( txtRemainedQty.getText() ),
+                            Integer.parseInt( txtNetQty.getText() ),
+                            null,
+                            String.valueOf( datePickerExp.getValue() ),
+                            txtStatus.getText()
+                    ));
 
-                pSDto.setStock_Id(id);
-                pSDto.setProduct_Code(txtId.getText());
-                pSDto.setQty_On_Hand(Integer.parseInt(txtRemainedQty.getText()));
-                pSDto.setQty(Integer.parseInt(txtNetQty.getText()));
-                pSDto.setExp_Date(String.valueOf(datePickerExp.getValue()));
-                pSDto.setStatus(txtStatus.getText());
+                    if (isSaved) {
+                        Navigation.closePane();
+                        ProductStockManageFormController.controller.getAllId();
+                    }
 
-                boolean isSaved = ProductStockModel.updateProductStock(pSDto);
-
-                if (isSaved) {
-                    Navigation.closePane();
-                    ProductStockManageFormController.controller.getAllId();
+                } catch ( SQLException e ) {
+                    e.printStackTrace();
                 }
             } else {
                 lblRemaining.setText("Remaining quantity can not exceed net quantity");
@@ -102,22 +111,30 @@ public class ProductStockUpdateFormController implements Initializable {
             lblDesc.setText("Please select a product");
 
         } else {
-            String id = ProductModel.getIdOfDesc(cmbDesc.getSelectionModel().getSelectedItem());
-            txtId.setText(id);
-            txtNetQty.requestFocus();
+            try {
+                String id = productStockBO.getProductId(cmbDesc.getSelectionModel().getSelectedItem());
+                txtId.setText(id);
+                txtNetQty.requestFocus();
+            } catch ( SQLException e ) {
+                e.printStackTrace();
+            }
         }
     }
 
     private void setData(ProductStockDto productStockDto) {
+        try {
+            String desc = productStockBO.getProductDescription( productStockDto.getProduct_Code( ) );
 
-        String desc = ProductModel.getDescOfId(productStockDto.getProduct_Code());
+            cmbDesc.setValue(desc);
+            txtId.setText(productStockDto.getProduct_Code());
+            txtRemainedQty.setText(String.valueOf(productStockDto.getQty_On_Hand()));
+            txtNetQty.setText(String.valueOf(productStockDto.getQty()));
+            datePickerExp.setValue(LocalDate.parse(productStockDto.getExp_Date()));
+            txtStatus.setText(productStockDto.getStatus());
 
-        cmbDesc.setValue(desc);
-        txtId.setText(productStockDto.getProduct_Code());
-        txtRemainedQty.setText(String.valueOf(productStockDto.getQty_On_Hand()));
-        txtNetQty.setText(String.valueOf(productStockDto.getQty()));
-        datePickerExp.setValue(LocalDate.parse(productStockDto.getExp_Date()));
-        txtStatus.setText(productStockDto.getStatus());
+        } catch ( SQLException e ) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -252,13 +269,18 @@ public class ProductStockUpdateFormController implements Initializable {
                         "-fx-text-fill:  #727374;");
     }
 
+    public void setProductDesc() {
+        try {
+            cmbDesc.getItems().addAll(productStockBO.getAllProductDescription());
+        } catch ( SQLException e ) {
+            e.printStackTrace();
+        }
+    }
+
+    @SneakyThrows
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         cmbDesc.setStyle("-fx-font-size: 16;");
-        ProductStockDto pSDto = ProductStockModel.getData(id);
-
-        cmbDesc.getItems().addAll(ProductModel.getAllProductDesc());
-
-        setData(pSDto);
+        setData(productStockBO.getProductStockDetails( id ));
     }
 }

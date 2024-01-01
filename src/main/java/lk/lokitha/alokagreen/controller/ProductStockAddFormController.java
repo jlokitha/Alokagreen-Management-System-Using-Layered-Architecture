@@ -9,19 +9,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.ProductStockBO;
+import lk.lokitha.alokagreen.bo.custom.impl.ProductStockBOImpl;
 import lk.lokitha.alokagreen.dto.ProductStockDto;
-import lk.lokitha.alokagreen.dto.SpoiledReportDto;
-import lk.lokitha.alokagreen.model.ProductModel;
-import lk.lokitha.alokagreen.model.ProductStockModel;
-import lk.lokitha.alokagreen.model.SpoiledReportModel;
-import lk.lokitha.alokagreen.util.DateTime;
 import lk.lokitha.alokagreen.util.Navigation;
-import lk.lokitha.alokagreen.util.NewId;
 import lk.lokitha.alokagreen.util.Regex;
 
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -54,48 +50,34 @@ public class ProductStockAddFormController implements Initializable {
     @FXML
     private Label lblDate;
 
+    private final ProductStockBO productStockBO = (ProductStockBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.PRODUCT_STOCK );
+
     @FXML
     void btnAddOnAction(ActionEvent event) {
 
         if ( validateProductStock() ) {
-            ProductStockDto pSD = new ProductStockDto();
+            try {
+                String isSaved = productStockBO.saveProductStock( new ProductStockDto(
+                        null,
+                        txtId.getText( ),
+                        Integer.parseInt( txtQty.getText( ) ),
+                        Integer.parseInt( txtQty.getText( ) ),
+                        null,
+                        String.valueOf( datePickerExp.getValue( ) ),
+                        null
+                ) );
 
-            pSD.setStock_Id(NewId.newProductStockCode());
-            pSD.setProduct_Code(txtId.getText());
-            pSD.setQty_On_Hand(Integer.parseInt(txtQty.getText()));
-            pSD.setQty(Integer.parseInt(txtQty.getText()));
-            pSD.setDate(DateTime.dateNow());
-            pSD.setExp_Date(String.valueOf(datePickerExp.getValue()));
+                if (isSaved != null && isSaved.equals("Expired")) {
+                    boolean isAdded = productStockBO.saveSpoiledProductReport( txtId.getText( ), Integer.parseInt( txtQty.getText( ) ) );
 
-            LocalDate expDate = datePickerExp.getValue();
-            LocalDate now = LocalDate.now();
-
-            if (expDate.isBefore(now) || expDate.isEqual(now)) {
-                pSD.setStatus("Expired");
-            } else {
-                pSD.setStatus("Not Expired");
-            }
-
-            boolean isSaved = ProductStockModel.saveProductStock(pSD);
-
-            if (isSaved && pSD.getStatus().equals("Expired")) {
-                SpoiledReportDto sRD = new SpoiledReportDto();
-
-                sRD.setReport_Id(NewId.newSpoiledReportId());
-                sRD.setProduct_Code(txtId.getText());
-                sRD.setSpoiled_Qty(Integer.parseInt(txtQty.getText()));
-                sRD.setDate(DateTime.dateNow());
-                sRD.setTime(DateTime.timeNow());
-
-                try {
-                    SpoiledReportModel.saveSpoiledReport( sRD );
-                } catch (SQLException e) {
-                    throw new RuntimeException( e );
+                    if ( isAdded ) {
+                        Navigation.closePane();
+                        ProductStockManageFormController.controller.getAllId();
+                    }
                 }
+            } catch ( SQLException e ) {
+                e.printStackTrace();
             }
-
-            Navigation.closePane();
-            ProductStockManageFormController.controller.getAllId();
         }
 
     }
@@ -113,10 +95,13 @@ public class ProductStockAddFormController implements Initializable {
             lblPDesc.setText("Please select a product");
 
         } else {
-            String id = ProductModel.getIdOfDesc(getDesc());
-            txtId.setText(id);
-
-            txtQty.requestFocus();
+            try {
+                String id = productStockBO.getProductId( getDesc( ) );
+                txtId.setText(id);
+                txtQty.requestFocus();
+            } catch ( SQLException e ) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -171,13 +156,16 @@ public class ProductStockAddFormController implements Initializable {
     }
 
     public String getDesc() {
-        return String.valueOf(cmbDesc.getSelectionModel().getSelectedItem());
+        return cmbDesc.getSelectionModel().getSelectedItem();
     }
 
     public void setDataInComboBox() {
-        ArrayList<String> products = ProductModel.getAllProductDesc();
-
-        cmbDesc.getItems().addAll(products);
+        try {
+            ArrayList<String> products = productStockBO.getAllProductDescription( );
+            cmbDesc.getItems().addAll(products);
+        } catch ( SQLException e ) {
+            e.printStackTrace();
+        }
     }
 
     @Override
