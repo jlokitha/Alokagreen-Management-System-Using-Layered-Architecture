@@ -7,15 +7,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
-import lk.lokitha.alokagreen.model.EmployeeModel;
-import lk.lokitha.alokagreen.model.UserModel;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.ProfileBO;
+import lk.lokitha.alokagreen.bo.custom.impl.ProfileBOImpl;
 import lk.lokitha.alokagreen.util.Navigation;
 import lk.lokitha.alokagreen.util.Regex;
-import lk.lokitha.alokagreen.util.SendEmail;
 
-import javax.mail.MessagingException;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class DeleteUserFormController implements Initializable {
@@ -35,6 +35,8 @@ public class DeleteUserFormController implements Initializable {
     @FXML
     private Label lblOtp;
 
+    private final ProfileBO profileBO = (ProfileBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.PROFILE );
+
     @FXML
     void btnCancelOnAction(ActionEvent event) {
         Navigation.closePane();
@@ -45,32 +47,23 @@ public class DeleteUserFormController implements Initializable {
         if ( validatePassword() ) {
             String password = txtPassword.getText();
 
-            if ( UserModel.checkPassword(GlobalFormController.user, password) ) {
-                String employeeId = UserModel.getEmployeeId(lblUserName.getText());
-                String email = EmployeeModel.getEmailOfId(employeeId);
-                boolean deleted = UserModel.deleteUser(lblUserName.getText());
+            try {
+                if ( profileBO.checkPassword(GlobalFormController.user, password) ) {
+                    String employeeId = profileBO.getEmployeeId(lblUserName.getText());
+                    String email = profileBO.getEmployeeEmail(employeeId);
+                    boolean deleted = profileBO.deleteUser(lblUserName.getText());
 
-                if ( deleted ) {
-                    SendEmail sendEmail = new SendEmail();
-                    String subject = "Account Deletion Confirmation";
-                    String htmlPath = "DeleteUserEmail.html";
+                    if ( deleted ) {
+                        profileBO.sendAccountDeletionEmail( email );
 
-                    new Thread(() -> {
-                        try {
-                            sendEmail.sendEmail(email, subject, htmlPath);
-
-                        } catch (MessagingException e) {}
-                    }).start();
-
-                    SignInFormController.stage.close();
-                    try {
+                        SignInFormController.stage.close();
                         Navigation.switchNavigation("GlobalLoginForm.fxml", event);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
                     }
+                } else {
+                    lblOtp.setText("Please enter correct password");
                 }
-            } else {
-                lblOtp.setText("Please enter correct password");
+            } catch ( SQLException | IOException e ) {
+                e.printStackTrace();
             }
         }
     }

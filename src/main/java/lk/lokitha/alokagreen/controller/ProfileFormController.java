@@ -8,13 +8,15 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.ProfileBO;
+import lk.lokitha.alokagreen.bo.custom.impl.ProfileBOImpl;
 import lk.lokitha.alokagreen.dto.EmployeeDto;
-import lk.lokitha.alokagreen.model.EmployeeModel;
-import lk.lokitha.alokagreen.model.UserModel;
 import lk.lokitha.alokagreen.util.Navigation;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class ProfileFormController implements Initializable {
@@ -39,6 +41,8 @@ public class ProfileFormController implements Initializable {
 
     @FXML
     private ImageView imgClose;
+
+    private final ProfileBO profileBO = (ProfileBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.PROFILE );
 
     @FXML
     void btnDeleteOnAction(ActionEvent event) {
@@ -77,13 +81,18 @@ public class ProfileFormController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        String employeeId = UserModel.getEmployeeId(GlobalFormController.user);
-        EmployeeDto detail = EmployeeModel.getDetail(employeeId);
+        try {
+            String employeeId = profileBO.getEmployeeId( GlobalFormController.user );
+            EmployeeDto detail = profileBO.getEmployeeDetails(employeeId);
 
-        lblUserName.setText(GlobalFormController.user);
-        lblEmpId.setText(detail.getEmployee_Id());
-        lblName.setText(detail.getFirst_Name() + " " + detail.getLast_Name());
-        lblEmail.setText(detail.getEmail());
+            lblUserName.setText(GlobalFormController.user);
+            lblEmpId.setText(detail.getEmployee_Id());
+            lblName.setText(detail.getFirst_Name() + " " + detail.getLast_Name());
+            lblEmail.setText(detail.getEmail());
+
+        } catch ( SQLException e ) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

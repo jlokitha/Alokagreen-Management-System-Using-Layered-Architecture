@@ -7,14 +7,15 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
-import lk.lokitha.alokagreen.model.EmployeeModel;
-import lk.lokitha.alokagreen.model.UserModel;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.ProfileBO;
+import lk.lokitha.alokagreen.bo.custom.impl.ProfileBOImpl;
 import lk.lokitha.alokagreen.util.Navigation;
 import lk.lokitha.alokagreen.util.Regex;
 import lk.lokitha.alokagreen.util.SendEmail;
 
 import javax.mail.MessagingException;
-import java.util.regex.Pattern;
+import java.sql.SQLException;
 
 public class ChangeCredentialFormController {
 
@@ -42,6 +43,8 @@ public class ChangeCredentialFormController {
     @FXML
     private Label lblConPass;
 
+    private final ProfileBO profileBO = (ProfileBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.PROFILE );
+
     @FXML
     void btnCancelOnAction(ActionEvent event) {
         Navigation.closePane();
@@ -50,37 +53,32 @@ public class ChangeCredentialFormController {
     @FXML
     void btnUpdateOnAction(ActionEvent event) {
         if ( validatePassword() ) {
-            boolean isCorrect = UserModel.checkPassword(GlobalFormController.user, txtCurrentPass.getText());
+            try {
+                boolean isCorrect = profileBO.checkPassword( GlobalFormController.user, txtCurrentPass.getText( ) );
 
-            if (isCorrect) {
-                boolean equals = txtNEWPass.getText().equals(txtConNewPass.getText());
+                if (isCorrect) {
+                    boolean equals = txtNEWPass.getText().equals(txtConNewPass.getText());
 
-                if (equals) {
-                    boolean isUpdated = UserModel.updatePassword(GlobalFormController.user, txtConNewPass.getText());
+                    if (equals) {
+                        boolean isUpdated = profileBO.updatePassword(GlobalFormController.user, txtConNewPass.getText());
 
-                    if (isUpdated) {
-                        String employeeId = UserModel.getEmployeeId(GlobalFormController.user);
-                        String email = EmployeeModel.getEmailOfId(employeeId);
+                        if (isUpdated) {
+                            String employeeId = profileBO.getEmployeeId(GlobalFormController.user);
+                            String email = profileBO.getEmployeeEmail(employeeId);
 
-                        new Thread(() -> {
-                            SendEmail sendEmail = new SendEmail();
+                            profileBO.sendPasswordChangeEmail( email );
 
-                            String subject = "Password Change Confirmation";
-                            String htmlPath = "ChangePasswordEmail.html";
-                            try {
-                                sendEmail.sendEmail(email, subject, htmlPath);
-                            } catch (MessagingException e) {
-                                throw new RuntimeException(e);
-                            }
-                        }).start();
-
-                        Navigation.closePane();
+                            Navigation.closePane();
+                        }
+                    } else {
+                        lblConPass.setText("PassWord does not match");
                     }
                 } else {
-                    lblConPass.setText("PassWord does not match");
+                    lblCurentPass.setText("Wrong PassWord");
                 }
-            } else {
-                lblCurentPass.setText("Wrong PassWord");
+
+            } catch ( SQLException e ) {
+                e.printStackTrace();
             }
         }
     }
