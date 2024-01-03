@@ -8,8 +8,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface CustomerOrderDAO extends CrudUtil<CustomerOrder> {
-    String[] getStockDetails(final String sId) throws SQLException;
-
     boolean updateCustomerOrder(final String[] data) throws SQLException;
 
     double getTotalIncome() throws SQLException;

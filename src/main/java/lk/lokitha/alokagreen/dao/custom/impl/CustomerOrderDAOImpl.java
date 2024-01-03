@@ -10,28 +10,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class CustomerOrderDAOImpl implements CustomerOrderDAO {
-    @Override
-    public String[] getStockDetails(final String sId) throws SQLException {
-        String sql = "SELECT ps.exp_Date, ps.qty_On_Hand, pl.unit_Price " +
-                "FROM product_Stock ps " +
-                "JOIN product_List pl " +
-                "ON ps.product_Code = pl.product_Code " +
-                "WHERE ps.stock_ID = ?";
-
-        ResultSet rst = SQLUtil.execute( sql, sId );
-
-        String[] details = null;
-
-        if (rst.next()) {
-            details = new String[]{
-                    rst.getString( 1 ),
-                    rst.getString( 3 ),
-                    rst.getString( 2 )
-            };
-        }
-
-        return details;
-    }
 
     @Override
     public int getLastId() throws SQLException {
@@ -79,8 +57,8 @@ public class CustomerOrderDAOImpl implements CustomerOrderDAO {
                    rst.getString( 1 ),
                    rst.getString( 2 ),
                    rst.getDouble( 3 ),
-                   rst.getDate( 4 ),
-                   rst.getTime( 5 )
+                   rst.getString ( 4 ),
+                   rst.getString ( 5 )
             );
         }
 

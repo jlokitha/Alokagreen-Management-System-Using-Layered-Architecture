@@ -5,9 +5,11 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import lk.lokitha.alokagreen.model.ProductModel;
-import lk.lokitha.alokagreen.model.ProductStockModel;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.CustomerOrderBO;
+import lk.lokitha.alokagreen.bo.custom.impl.CustomerOrderBOImpl;
 
+import java.sql.SQLException;
 import java.util.Map;
 
 public class CustomerOrderAddTableRowFormController {
@@ -29,6 +31,8 @@ public class CustomerOrderAddTableRowFormController {
 
     @FXML
     private ImageView imgDelete;
+
+    private final CustomerOrderBO customerOrderBO = (CustomerOrderBOImpl) BOFactory.getBoFactory ().getBO ( BOFactory.BOType.CUSTOMER_ORDER );
 
     @FXML
     void imgDeleteOnMouseClicked(MouseEvent event) {
@@ -72,20 +76,21 @@ public class CustomerOrderAddTableRowFormController {
     }
 
     public void setData(String[] detail) {
+        try {
+            String id = customerOrderBO.getProductId ( detail[0] );
+            String[] data = customerOrderBO.getDescAndPriceOfProduct (id);
 
-        String id = ProductStockModel.getProductId(detail[0]);
-        String[] data = ProductModel.getDescUnitPriceOfId(id);
+            lblItemId.setText(detail[0]);
+            lblDesc.setText(data[1]);
+            lblQty.setText(detail[1]);
+            lblUnitPrice.setText(data[1]);
 
-        lblItemId.setText(detail[0]);
-        lblDesc.setText(data[1]);
-        lblQty.setText(detail[1]);
-        lblUnitPrice.setText(data[1]);
-        
-        int qty = Integer.parseInt(detail[1]);
-        double unitPrice = Double.parseDouble(data[1]);
+            int qty = Integer.parseInt(detail[1]);
+            double unitPrice = Double.parseDouble(data[1]);
 
-        lblTotal.setText(String.valueOf(qty * unitPrice));
-
+            lblTotal.setText(String.valueOf(qty * unitPrice));
+        } catch ( SQLException e ) {
+            e.printStackTrace ();
+        }
     }
-
 }

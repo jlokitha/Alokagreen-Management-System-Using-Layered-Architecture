@@ -9,14 +9,15 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.CustomerOrderBO;
+import lk.lokitha.alokagreen.bo.custom.impl.CustomerOrderBOImpl;
 import lk.lokitha.alokagreen.dto.CustomerOrderDto;
-import lk.lokitha.alokagreen.model.CustomerModel;
-import lk.lokitha.alokagreen.model.CustomerOrderDetailModel;
-import lk.lokitha.alokagreen.model.CustomerOrderModel;
 import lk.lokitha.alokagreen.util.Navigation;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -47,6 +48,8 @@ public class CustomerOrderViewFormController implements Initializable {
     private JFXButton btnCancel;
 
     public static String id;
+
+    private final CustomerOrderBO customerOrderBO = (CustomerOrderBOImpl) BOFactory.getBoFactory ().getBO ( BOFactory.BOType.CUSTOMER_ORDER );
 
     @FXML
     void btnCancelOnAction(ActionEvent event) {
@@ -80,18 +83,22 @@ public class CustomerOrderViewFormController implements Initializable {
     }
 
     public void setData() {
-        CustomerOrderDto dto = CustomerOrderModel.getData(id);
-        String name = CustomerModel.getNameOfId(dto.getCustomer_Id());
-        Map<String, String> data = CustomerOrderDetailModel.getData(dto.getCustomer_Order_Id());
+        try {
+            CustomerOrderDto dto = customerOrderBO.getCustomerOrderDetails ( id );
+            String name = customerOrderBO.getCustomerNameOfId (dto.getCustomer_Id());
+            Map<String, String> data = customerOrderBO.getCustomerOrderDetailsData (dto.getCustomer_Order_Id());
 
-        lblOrderId.setText(dto.getCustomer_Order_Id());
-        lblCustId.setText(dto.getCustomer_Id());
-        lblCustName.setText(name);
-        lblOrderDate.setText(dto.getDate());
-        lblOrderTme.setText(dto.getTime());
-        labelTotal.setText(String.valueOf(dto.getTotal_Amount()));
+            lblOrderId.setText(dto.getCustomer_Order_Id());
+            lblCustId.setText(dto.getCustomer_Id());
+            lblCustName.setText(name);
+            lblOrderDate.setText(dto.getDate());
+            lblOrderTme.setText(dto.getTime());
+            labelTotal.setText(String.valueOf(dto.getTotal_Amount()));
 
-        getProduct(data);
+            getProduct(data);
+        } catch ( SQLException e ) {
+            e.printStackTrace ();
+        }
     }
 
     @FXML

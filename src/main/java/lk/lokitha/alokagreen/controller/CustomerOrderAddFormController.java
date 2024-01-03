@@ -14,11 +14,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.CustomerOrderBO;
+import lk.lokitha.alokagreen.bo.custom.impl.CustomerOrderBOImpl;
 import lk.lokitha.alokagreen.dto.CustomerOrderDto;
-import lk.lokitha.alokagreen.model.*;
-import lk.lokitha.alokagreen.util.DateTime;
 import lk.lokitha.alokagreen.util.Navigation;
-import lk.lokitha.alokagreen.util.NewId;
 import lk.lokitha.alokagreen.util.Regex;
 
 import java.io.IOException;
@@ -88,6 +88,8 @@ public class CustomerOrderAddFormController implements Initializable {
 
     public static CustomerOrderAddFormController controller;
 
+    private final CustomerOrderBO customerOrderBO = (CustomerOrderBOImpl) BOFactory.getBoFactory().getBO( BOFactory.BOType.CUSTOMER_ORDER );
+
     public CustomerOrderAddFormController() {
         controller = this;
         dto = new CustomerOrderDto();
@@ -97,10 +99,10 @@ public class CustomerOrderAddFormController implements Initializable {
     void btnAddItemOnAction(ActionEvent event) {
 
         if (validateItem()) {
-            int qauntity = Integer.parseInt(txtQty.getText());
+            int quantity = Integer.parseInt(txtQty.getText());
             int orderedQty = Integer.parseInt(txtOrderedQty.getText());
 
-            if (orderedQty <= qauntity) {
+            if (orderedQty <= quantity) {
                 String stockId = getCmbValue(cmbStockId);
                 String current = dto.getItems().get(stockId);
                 int currentQty = current == null ? 0 : Integer.parseInt(current);
@@ -125,53 +127,59 @@ public class CustomerOrderAddFormController implements Initializable {
     }
 
     @FXML
-    void btnOrderOnAction(ActionEvent event) {
-        if ( validateOrder() ) {
-            if (!dto.getItems().isEmpty()) {
-                dto.setCustomer_Order_Id(NewId.newCustomerOrderId());
-                String id = CustomerModel.getIdOfMobile(getCmbValue(cmbMobile));
-                dto.setCustomer_Id(id);
-                dto.setTotal_Amount(Double.parseDouble(labelTotal.getText()));
-                dto.setDate(DateTime.dateNow());
-                dto.setTime(DateTime.timeNow());
+    void btnOrderOnAction (ActionEvent event) {
+        if ( validateOrder ( ) ) {
+            if ( !dto.getItems ( ).isEmpty ( ) ) {
 
                 try {
-                    boolean isSaved = PlaceOrdersModel.saveCustomerOrder(dto);
+                    String id = customerOrderBO.getCustomerIdUsingMobile ( getCmbValue ( cmbMobile ) );
+                    dto.setCustomer_Id ( id );
+                    dto.setTotal_Amount ( Double.parseDouble ( labelTotal.getText ( ) ) );
 
-                    if (isSaved) {
-                        Navigation.closePane();
-                        CustomerOrderManageFormController.controller.getAllId();
+                    boolean isSaved = customerOrderBO.saveCustomerOrder ( dto );
+
+                    if ( isSaved ) {
+                        Navigation.closePane ( );
+                        CustomerOrderManageFormController.controller.getAllId ( );
                     }
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
+
+                } catch ( SQLException e ) {
+                    e.printStackTrace ( );
                 }
             } else {
-                new Alert(Alert.AlertType.ERROR, "Order Does not have any products !").show();
+                new Alert ( Alert.AlertType.ERROR, "Order Does not have any products !" ).show ( );
             }
         }
     }
 
     @FXML
     void cmbMobileOnAction(ActionEvent event) {
-        String name = CustomerModel.getNameOfMobile(getCmbValue(cmbMobile));
-        txtCustName.setText(name);
+        try {
+            txtCustName.setText(customerOrderBO.getCustomerNameUsingMobile (getCmbValue(cmbMobile)));
+        } catch ( SQLException e ) {
+            e.printStackTrace ();
+        }
     }
 
     @FXML
     void cmbProductDescOnAction(ActionEvent event) {
-        cmbStockId.getItems().clear();
-        txtQty.clear();
-        txtExpDate.clear();
-        txtUnitPrice.clear();
-        ArrayList<String> stockIds = ProductStockModel.getAllIdOfPDesc(getCmbValue(cmbProductDesc));
-        cmbStockId.getItems().addAll(stockIds);
-        cmbStockId.requestFocus();
+        try {
+            cmbStockId.getItems().clear();
+            txtQty.clear();
+            txtExpDate.clear();
+            txtUnitPrice.clear();
+            ArrayList<String> stockIds = customerOrderBO.getAllProductStockIdOfDesc ( getCmbValue ( cmbProductDesc ) );
+            cmbStockId.getItems().addAll(stockIds);
+            cmbStockId.requestFocus();
+        } catch ( SQLException e ) {
+            e.printStackTrace ();
+        }
     }
 
     @FXML
     void cmbStockIdOnAction(ActionEvent event) {
         try {
-            String[] stockDetails = CustomerOrderModel.getStockDetails(getCmbValue(cmbStockId));
+            String[] stockDetails = customerOrderBO.getProductStockDetails (getCmbValue(cmbStockId));
             txtExpDate.setText(stockDetails[0]);
             txtUnitPrice.setText(stockDetails[1]);
             txtOrderedQty.requestFocus();
@@ -185,10 +193,9 @@ public class CustomerOrderAddFormController implements Initializable {
             } else {
                 txtQty.setText(stockDetails[2]);
             }
-        } catch (NullPointerException e) {
-
+        } catch ( NullPointerException | SQLException e) {
+            e.printStackTrace ();
         }
-
     }
 
     public String getCmbValue(JFXComboBox<String> cmb) {
@@ -196,12 +203,18 @@ public class CustomerOrderAddFormController implements Initializable {
     }
 
     public void setDataInCmbMobile() {
-        ArrayList<String> custMobile = CustomerModel.getAllMobile();
-        cmbMobile.getItems().addAll(custMobile);
+        try {
+            cmbMobile.getItems().addAll(customerOrderBO.getAllCustomerMobile ());
+        } catch ( SQLException e ) {
+            e.printStackTrace ();
+        }
     }
     public void setDataInCmbDesc() {
-        ArrayList<String> productDescs = ProductModel.getAllProductDesc();
-        cmbProductDesc.getItems().addAll(productDescs);
+        try {
+            cmbProductDesc.getItems().addAll(customerOrderBO.getAllProductDesc ());
+        } catch ( SQLException e ) {
+            e.printStackTrace ();
+        }
     }
 
     @FXML
