@@ -15,10 +15,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.SupplierOrderBO;
+import lk.lokitha.alokagreen.bo.custom.impl.SupplierOrderBOImpl;
 import lk.lokitha.alokagreen.dto.SupplierOrderDto;
-import lk.lokitha.alokagreen.model.MaterialModel;
-import lk.lokitha.alokagreen.model.PlaceOrdersModel;
-import lk.lokitha.alokagreen.model.SupplierModel;
 import lk.lokitha.alokagreen.util.DateTime;
 import lk.lokitha.alokagreen.util.Navigation;
 import lk.lokitha.alokagreen.util.NewId;
@@ -29,7 +29,6 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class SupplierOrderAddFormController implements Initializable {
@@ -92,6 +91,8 @@ public class SupplierOrderAddFormController implements Initializable {
 
     public static SupplierOrderAddFormController controller;
 
+    private final SupplierOrderBO supplierOrderBO = (SupplierOrderBOImpl) BOFactory.getBoFactory ().getBO ( BOFactory.BOType.SUPPLIER_ORDER );
+
     public SupplierOrderAddFormController() {
         controller = this;
         supplierOrderDto = new SupplierOrderDto();
@@ -135,42 +136,51 @@ public class SupplierOrderAddFormController implements Initializable {
     }
 
     @FXML
-    void btnOrderOnAction(ActionEvent event) {
-        if ( validateOrder() ) {
-            if ( !supplierOrderDto.getItems().isEmpty() ) {
-                String id = SupplierModel.getIdOfName(getCmbValue(cmbSupName));
-
-                supplierOrderDto.setSupplier_Order_Id(NewId.newSupplierOrderId());
-                supplierOrderDto.setSupplier_Id(id);
-                supplierOrderDto.setTotal_Amount(Double.parseDouble(labelTotal.getText()));
-                supplierOrderDto.setDate(DateTime.dateNow());
-                supplierOrderDto.setTime(DateTime.timeNow());
-
+    void btnOrderOnAction ( ActionEvent event ) {
+        if ( validateOrder ( ) ) {
+            if ( !supplierOrderDto.getItems ( ).isEmpty ( ) ) {
                 try {
-                    boolean isSaved = PlaceOrdersModel.saveSupplierOrder(supplierOrderDto);
+                    String id = supplierOrderBO.getSupplierIdOfName ( getCmbValue ( cmbSupName ) );
 
-                    if (isSaved) {
-                        Navigation.closePane();
-                        SupplierOrderManageFormController.controller.getAllId();
+                    supplierOrderDto.setSupplier_Order_Id ( NewId.newSupplierOrderId ( ) );
+                    supplierOrderDto.setSupplier_Id ( id );
+                    supplierOrderDto.setTotal_Amount ( Double.parseDouble ( labelTotal.getText ( ) ) );
+                    supplierOrderDto.setDate ( DateTime.dateNow ( ) );
+                    supplierOrderDto.setTime ( DateTime.timeNow ( ) );
+
+                    boolean isSaved = supplierOrderBO.saveSupplierOrder ( supplierOrderDto );
+
+                    if ( isSaved ) {
+                        Navigation.closePane ( );
+                        SupplierOrderManageFormController.controller.getAllId ( );
                     }
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
+
+                } catch ( SQLException e ) {
+                    e.printStackTrace ( );
                 }
             } else {
-                new Alert(Alert.AlertType.ERROR, "Order Does not have any products !").show();
+                new Alert ( Alert.AlertType.ERROR, "Order Does not have any products !" ).show ( );
             }
         }
     }
 
     @FXML
     void cmbMaterialDescOnAction(ActionEvent event) {
-        txtMId.setText(MaterialModel.getIdOfDesc(getCmbValue(cmbMDesc)));
-        txtMQty.requestFocus();
+        try {
+            txtMId.setText(supplierOrderBO.getMaterialIdOfDesc (getCmbValue(cmbMDesc)));
+            txtMQty.requestFocus();
+        } catch ( SQLException e ) {
+            e.printStackTrace ();
+        }
     }
 
     @FXML
     void cmbSupNameOnAction(ActionEvent event) {
-        txtSupId.setText(SupplierModel.getIdOfName(getCmbValue(cmbSupName)));
+        try {
+            txtSupId.setText(supplierOrderBO.getIdOfName(getCmbValue(cmbSupName)));
+        } catch ( SQLException e ) {
+            e.printStackTrace ();
+        }
     }
 
     public String getCmbValue(JFXComboBox<String> cmb) {
@@ -343,17 +353,22 @@ public class SupplierOrderAddFormController implements Initializable {
     }
 
     public void setDataInComboBox() {
-        ArrayList<String> supId = SupplierModel.getAllId();
-        ArrayList<String> supName = new ArrayList<>();
+        try {
+            ArrayList<String> supId = supplierOrderBO.getAllSupplierIds ( );
+            ArrayList<String> supName = new ArrayList<>();
 
-        for (String id : supId) {
-            supName.add(SupplierModel.getNameOfId(id));
+            for (String id : supId) {
+                supName.add(supplierOrderBO.getSupplierNameOfId (id));
+            }
+            cmbSupName.getItems().addAll(supName);
+
+            ArrayList<String> materialDesc = supplierOrderBO.getAllMaterialDesc();
+
+            cmbMDesc.getItems().addAll(materialDesc);
+
+        } catch ( SQLException e ) {
+            e.printStackTrace ();
         }
-        cmbSupName.getItems().addAll(supName);
-
-        ArrayList<String> materialDesc = MaterialModel.getAllMaterialDesc();
-
-        cmbMDesc.getItems().addAll(materialDesc);
     }
 
     public void getAllMaterial() {

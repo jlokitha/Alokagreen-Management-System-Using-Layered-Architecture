@@ -31,8 +31,8 @@ public class SupplierOrderDAOImpl implements SupplierOrderDAO {
                     rst.getString( 1 ),
                     rst.getString( 2 ),
                     rst.getDouble( 3 ),
-                    rst.getDate( 4 ),
-                    rst.getTime( 5 )
+                    rst.getString ( 4 ),
+                    rst.getString ( 5 )
             );
         }
 

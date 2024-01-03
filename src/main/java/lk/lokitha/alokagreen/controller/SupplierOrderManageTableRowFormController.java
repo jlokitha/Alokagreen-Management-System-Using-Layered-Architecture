@@ -5,20 +5,15 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import lk.lokitha.alokagreen.db.DbConnection;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.SupplierOrderBO;
+import lk.lokitha.alokagreen.bo.custom.impl.SupplierOrderBOImpl;
 import lk.lokitha.alokagreen.dto.SupplierDto;
-import lk.lokitha.alokagreen.dto.tm.SupplierOrderTm;
-import lk.lokitha.alokagreen.model.SupplierModel;
-import lk.lokitha.alokagreen.model.SupplierOrderModel;
+import lk.lokitha.alokagreen.dto.SupplierOrderDto;
 import lk.lokitha.alokagreen.util.Navigation;
 import net.sf.jasperreports.engine.*;
-import net.sf.jasperreports.engine.design.JRDesignQuery;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.xml.JRXmlLoader;
-import net.sf.jasperreports.view.JasperViewer;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,6 +41,8 @@ public class SupplierOrderManageTableRowFormController {
     @FXML
     private ImageView imgPrint;
 
+    private final SupplierOrderBO supplierOrderBO = (SupplierOrderBOImpl) BOFactory.getBoFactory ().getBO ( BOFactory.BOType.SUPPLIER_ORDER );
+
     @FXML
     void imgViewOnMouseClicked(MouseEvent event) {
         try {
@@ -67,42 +64,12 @@ public class SupplierOrderManageTableRowFormController {
     }
 
     @FXML
-    void imgPrintOnMouseClicked(MouseEvent event) throws JRException, SQLException {
-        Map<String, Object> map = setData();
-
-        InputStream resourceAsStream = getClass().getResourceAsStream("/report/SupplierOrderReport.jrxml");
-        JasperDesign load = JRXmlLoader.load(resourceAsStream);
-
-        JRDesignQuery jrDesignQuery = new JRDesignQuery();
-        jrDesignQuery.setText("SELECT" +
-                "    sod.stock_Id," +
-                "    ms.qty," +
-                "    m.description," +
-                "    ms.unit_Price," +
-                "    ms.qty * ms.unit_Price AS total " +
-                "FROM " +
-                "    supplier_Order so " +
-                "JOIN " +
-                "    supplier_Order_Detail sod ON so.supplier_Order_Id = sod.supplier_Order_Id " +
-                "JOIN " +
-                "    material_Stock ms ON sod.stock_Id = ms.stock_Id " +
-                "JOIN " +
-                "    material_List m ON m.material_Code = ms.material_Code " +
-                "WHERE " +
-                "    so.supplier_Order_Id ='" + lblOrderId.getText() + "'");
-
-        load.setQuery(jrDesignQuery);
-
-        JasperReport jasperReport = JasperCompileManager.compileReport(load);
-
-        JasperPrint jasperPrint = JasperFillManager.fillReport(
-                jasperReport,
-                map,
-                DbConnection.getInstance().getConnection()
-        );
-
-        JasperViewer.viewReport(jasperPrint, false);
-        JasperExportManager.exportReportToPdfFile(jasperPrint, "/home/lokitha/Documents/Jasper/Supplier Order PDF/" + lblOrderId.getText() + ".pdf");
+    void imgPrintOnMouseClicked(MouseEvent event) {
+        try {
+            supplierOrderBO.saveSupplierOrderAsPDF ( lblOrderId.getText (), setData () );
+        } catch ( JRException | SQLException e ) {
+            e.printStackTrace ();
+        }
     }
 
     @FXML
@@ -116,33 +83,41 @@ public class SupplierOrderManageTableRowFormController {
     }
 
     public Map<String, Object> setData() {
-        SupplierOrderTm dto = SupplierOrderModel.getData(lblOrderId.getText());
-        SupplierDto data = SupplierModel.getData(dto.getSupplier_Id());
+        try {
+            SupplierOrderDto dto = supplierOrderBO.getSupplierOrderDetails ( lblOrderId.getText ( ) );
+            SupplierDto data = supplierOrderBO.getSupplierDetails (dto.getSupplier_Id());
 
-        Map<String, Object> temp = new HashMap<>();
+            Map<String, Object> temp = new HashMap<>();
 
-        temp.put("OrderId", dto.getSupplier_Order_Id());
-        temp.put("OrderedDate", dto.getDate());
-        temp.put("OrderedTime", dto.getTime());
-        temp.put("SupplierId", data.getSupplier_Id());
-        temp.put("Name", data.getCompany_Name());
-        temp.put("Mobile", data.getCompany_Mobile());
-        temp.put("Email", data.getCompany_Email());
-        temp.put("total", String.valueOf(dto.getTotal_Amount()));
+            temp.put("OrderId", dto.getSupplier_Order_Id());
+            temp.put("OrderedDate", dto.getDate());
+            temp.put("OrderedTime", dto.getTime());
+            temp.put("SupplierId", data.getSupplier_Id());
+            temp.put("Name", data.getCompany_Name());
+            temp.put("Mobile", data.getCompany_Mobile());
+            temp.put("Email", data.getCompany_Email());
+            temp.put("total", String.valueOf(dto.getTotal_Amount()));
 
-        return temp;
+            return temp;
+
+        } catch ( SQLException e ) {
+            e.printStackTrace ();
+        }
+        return null;
     }
 
     public void setData(String id) {
+        try {
+            SupplierOrderDto data = supplierOrderBO.getSupplierOrderDetails ( id );
 
-        SupplierOrderTm data = SupplierOrderModel.getData(id);
+            lblOrderId.setText(data.getSupplier_Order_Id());
+            lblSupId.setText(data.getSupplier_Id());
+            lblAmount.setText(String.valueOf(data.getTotal_Amount()));
+            lblDate.setText(data.getDate());
+            lblTime.setText(data.getTime());
 
-        lblOrderId.setText(data.getSupplier_Order_Id());
-        lblSupId.setText(data.getSupplier_Id());
-        lblAmount.setText(String.valueOf(data.getTotal_Amount()));
-        lblDate.setText(data.getDate());
-        lblTime.setText(data.getTime());
-
+        } catch ( SQLException e ) {
+            e.printStackTrace ();
+        }
     }
-
 }

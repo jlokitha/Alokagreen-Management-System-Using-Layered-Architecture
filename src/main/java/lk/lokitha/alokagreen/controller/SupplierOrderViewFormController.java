@@ -9,14 +9,15 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import lk.lokitha.alokagreen.dto.tm.SupplierOrderTm;
-import lk.lokitha.alokagreen.model.SupplierModel;
-import lk.lokitha.alokagreen.model.SupplierOrderDetailModel;
-import lk.lokitha.alokagreen.model.SupplierOrderModel;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.SupplierOrderBO;
+import lk.lokitha.alokagreen.bo.custom.impl.SupplierOrderBOImpl;
+import lk.lokitha.alokagreen.dto.SupplierOrderDto;
 import lk.lokitha.alokagreen.util.Navigation;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -48,18 +49,11 @@ public class SupplierOrderViewFormController implements Initializable {
 
     public static String id;
 
+    private final SupplierOrderBO supplierOrderBO = (SupplierOrderBOImpl) BOFactory.getBoFactory ().getBO ( BOFactory.BOType.SUPPLIER_ORDER );
+
     @FXML
     void btnCancelOnAction(ActionEvent event) {
         Navigation.closePane();
-    }
-
-    public void getProduct(ArrayList<String> list) {
-
-        vBox.getChildren().clear();
-
-        for (int i = 0; i < list.size(); i++) {
-            loadDataTable(list.get(i));
-        }
     }
 
     private void loadDataTable(String id) {
@@ -75,18 +69,31 @@ public class SupplierOrderViewFormController implements Initializable {
     }
 
     public void setData() {
-        SupplierOrderTm dto = SupplierOrderModel.getData(id);
-        String name = SupplierModel.getNameOfId(dto.getSupplier_Id());
-        ArrayList<String> data = SupplierOrderDetailModel.getData(dto.getSupplier_Order_Id());
+        try {
+            SupplierOrderDto dto = supplierOrderBO.getSupplierOrderDetails ( id );
+            String name = supplierOrderBO.getSupplierNameOfId (dto.getSupplier_Id());
+            ArrayList<String> data = supplierOrderBO.getSupplierOrderDetailsData (dto.getSupplier_Order_Id());
 
-        lblOrderId.setText(dto.getSupplier_Order_Id());
-        lblSupId.setText(dto.getSupplier_Id());
-        lblSupName.setText(name);
-        lblOrderDate.setText(dto.getDate());
-        lblOrderTime.setText(dto.getTime());
-        labelTotal.setText(String.valueOf(dto.getTotal_Amount()));
+            lblOrderId.setText(dto.getSupplier_Order_Id());
+            lblSupId.setText(dto.getSupplier_Id());
+            lblSupName.setText(name);
+            lblOrderDate.setText(dto.getDate());
+            lblOrderTime.setText(dto.getTime());
+            labelTotal.setText(String.valueOf(dto.getTotal_Amount()));
 
-        getProduct(data);
+            getProduct(data);
+        } catch ( SQLException e ) {
+            e.printStackTrace ();
+        }
+    }
+
+    public void getProduct(ArrayList<String> list) {
+
+        vBox.getChildren().clear();
+
+        for (int i = 0; i < list.size(); i++) {
+            loadDataTable(list.get(i));
+        }
     }
 
     @FXML
