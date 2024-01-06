@@ -6,15 +6,15 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
-import lk.lokitha.alokagreen.model.EmployeeModel;
-import lk.lokitha.alokagreen.model.UserModel;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.SignInBO;
+import lk.lokitha.alokagreen.bo.custom.impl.SignInBOImpl;
 import lk.lokitha.alokagreen.util.Navigation;
 import lk.lokitha.alokagreen.util.OTPGenerator;
 import lk.lokitha.alokagreen.util.Regex;
-import lk.lokitha.alokagreen.util.SendEmail;
 
-import javax.mail.MessagingException;
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class ForgotPasswordFormController {
     @FXML
@@ -33,6 +33,8 @@ public class ForgotPasswordFormController {
     private String otp;
     public static String userName;
 
+    private final SignInBO signInBO = (SignInBOImpl) BOFactory.getBoFactory ().getBO ( BOFactory.BOType.SIGN_IN );
+
     public ForgotPasswordFormController() {
         subject = "Password Reset Verification Code";
         otp = OTPGenerator.generateOTP();
@@ -41,29 +43,26 @@ public class ForgotPasswordFormController {
     @FXML
     void btnRequesOtpOnAction(ActionEvent event) {
         if ( validateUserName() ) {
-            if ( UserModel.getEmployeeId(txtUsername.getText()) != null ) {
-                SendEmail sendEmail = new SendEmail();
-                String employeeId = UserModel.getEmployeeId(txtUsername.getText());
-                String email = EmployeeModel.getEmailOfId(employeeId);
+            try {
+                if ( signInBO.getEmployeeId(txtUsername.getText()) != null ) {
+                    String employeeId = signInBO.getEmployeeId(txtUsername.getText());
+                    String email = signInBO.getEmployeeEmail(employeeId);
 
-                try {
-                    SignInVerifyOtpFormController.otp = otp;
-                    userName = txtUsername.getText();
-                    Navigation.switchLoginPage("SignInVerifyOtpForm.fxml");
+                    try {
+                        SignInVerifyOtpFormController.otp = otp;
+                        userName = txtUsername.getText();
+                        Navigation.switchLoginPage("SignInVerifyOtpForm.fxml");
 
-                    new Thread(()->{
-                        try {
-                            sendEmail.sendEmail(email, subject, "ForgotPasswordEmail.html", otp);
-                        } catch (MessagingException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }).start();
+                        signInBO.sendEmail ( email, subject, "ForgotPasswordEmail.html", otp );
 
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                } else {
+                    lblUserName.setText("User does not exists");
                 }
-            } else {
-                lblUserName.setText("User does not exists");
+            } catch ( SQLException e ) {
+                e.printStackTrace ();
             }
         }
     }

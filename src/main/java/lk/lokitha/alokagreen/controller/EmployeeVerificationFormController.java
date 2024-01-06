@@ -12,12 +12,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
-import lk.lokitha.alokagreen.model.EmployeeModel;
-import lk.lokitha.alokagreen.model.UserModel;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.SignInBO;
+import lk.lokitha.alokagreen.bo.custom.impl.SignInBOImpl;
 import lk.lokitha.alokagreen.util.*;
 
-import javax.mail.MessagingException;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class EmployeeVerificationFormController {
@@ -51,6 +52,8 @@ public class EmployeeVerificationFormController {
     @FXML
     private Label lblID;
 
+    private final SignInBO signInBO = (SignInBOImpl) BOFactory.getBoFactory ().getBO ( BOFactory.BOType.SIGN_IN );
+
     public EmployeeVerificationFormController() {
         subject = "New Employee Registration";
         otp = OTPGenerator.generateOTP();
@@ -60,31 +63,28 @@ public class EmployeeVerificationFormController {
     @FXML
     void btnRequestOtpOnAction(ActionEvent event) {
         if ( validateId() ) {
-            if (EmployeeModel.getNameOfId(txtEmployeeId.getText()) != null) {
-                if (UserModel.getUserName(txtEmployeeId.getText()) == null) {
-                    try {
-                        SendEmail sendEmail = new SendEmail();
-                        SignUpVerifyOtpFormController.otp = otp;
-                        empID = txtEmployeeId.getText();
-                        String name = EmployeeModel.getNameOfId(empID);
-                        Navigation.switchLoginPage("SignUpVerifyOtpForm.fxml");
+            try {
+                if (signInBO.getEmployeeName (txtEmployeeId.getText()) != null) {
+                    if (signInBO.getUserName(txtEmployeeId.getText()) == null) {
+                        try {
+                            SignUpVerifyOtpFormController.otp = otp;
+                            empID = txtEmployeeId.getText();
+                            String name = signInBO.getEmployeeName (empID);
+                            Navigation.switchLoginPage("SignUpVerifyOtpForm.fxml");
 
-                        new Thread(()->{
-                            try {
-                                sendEmail.sendEmail(email, subject, "SignUpEmail.html", otp, name, empID);
-                            } catch (MessagingException e) {
-                                throw new RuntimeException(e);
-                            }
-                        }).start();
+                            signInBO.sendEmail ( email, subject, "SignUpEmail.html", otp, name, empID );
 
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    } else {
+                        lblID.setText("Employee already has a account");
                     }
                 } else {
-                    lblID.setText("Employee already has a account");
+                    lblID.setText("Employee does not exists");
                 }
-            } else {
-                lblID.setText("Employee does not exists");
+            } catch ( SQLException e ) {
+                e.printStackTrace ();
             }
         }
     }
@@ -188,31 +188,28 @@ public class EmployeeVerificationFormController {
             workerThread.join();
         } catch (InterruptedException e) {}
 
-        if (EmployeeModel.getNameOfId(empId.get()) != null) {
-            if (UserModel.getUserName(empId.get()) == null) {
-                try {
-                    SendEmail sendEmail = new SendEmail();
-                    SignUpVerifyOtpFormController.otp = otp;
-                    empID = empId.get();
-                    String name = EmployeeModel.getNameOfId(empId.get());
-                    Navigation.switchLoginPage("SignUpVerifyOtpForm.fxml");
+        try {
+            if (signInBO.getEmployeeName (empId.get()) != null) {
+                if (signInBO.getUserName(empId.get()) == null) {
+                    try {
+                        SignUpVerifyOtpFormController.otp = otp;
+                        empID = empId.get();
+                        String name = signInBO.getEmployeeName (empId.get());
+                        Navigation.switchLoginPage("SignUpVerifyOtpForm.fxml");
 
-                    new Thread(()->{
-                        try {
-                            sendEmail.sendEmail(email, subject, "SignUpEmail.html", otp, name, empID);
-                        } catch (MessagingException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }).start();
+                        signInBO.sendEmail ( email, subject, "SignUpEmail.html", otp, name, empID );
 
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                } else {
+                    lblID.setText("Employee already has a account");
                 }
             } else {
-                lblID.setText("Employee already has a account");
+                lblID.setText("Employee does not exist");
             }
-        } else {
-            lblID.setText("Employee does not exist");
+        } catch ( SQLException e ) {
+            e.printStackTrace ();
         }
     }
 

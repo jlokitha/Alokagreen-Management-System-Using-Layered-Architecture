@@ -7,11 +7,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
-import lk.lokitha.alokagreen.model.UserModel;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.SignInBO;
+import lk.lokitha.alokagreen.bo.custom.impl.SignInBOImpl;
 import lk.lokitha.alokagreen.util.Navigation;
 import lk.lokitha.alokagreen.util.Regex;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class ResetPasswordFormController {
 
@@ -33,6 +36,8 @@ public class ResetPasswordFormController {
     @FXML
     private Label lblConPass;
 
+    private final SignInBO signInBO = (SignInBOImpl) BOFactory.getBoFactory ().getBO ( BOFactory.BOType.SIGN_IN );
+
     @FXML
     void btnCancelOnAction(ActionEvent event) {
         try {
@@ -48,14 +53,16 @@ public class ResetPasswordFormController {
             if (txtNewPassword.getText().equals(txtComfirmNewPassword.getText())) {
                 String userName = ForgotPasswordFormController.userName;
 
-                boolean updated = UserModel.updatePassword(userName, txtComfirmNewPassword.getText());
-
-                if (updated) {
-                    try {
-                        Navigation.switchNavigation("GlobalForm.fxml", event);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
+                try {
+                    if (signInBO.updateUserPassword (userName, txtComfirmNewPassword.getText())) {
+                        try {
+                            Navigation.switchNavigation("GlobalForm.fxml", event);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
+                } catch ( SQLException e ) {
+                    e.printStackTrace ();
                 }
             } else {
                 lblConPass.setText("Password Does Not Match !");

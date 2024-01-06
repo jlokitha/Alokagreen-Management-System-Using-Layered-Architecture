@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
@@ -13,7 +14,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import lk.lokitha.alokagreen.model.UserModel;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.SignInBO;
+import lk.lokitha.alokagreen.bo.custom.impl.SignInBOImpl;
 import lk.lokitha.alokagreen.util.Navigation;
 import lk.lokitha.alokagreen.util.Regex;
 
@@ -44,18 +47,20 @@ public class SignInFormController {
 
     public static Stage stage;
 
+    private final SignInBO signInBO = (SignInBOImpl) BOFactory.getBoFactory ().getBO ( BOFactory.BOType.SIGN_IN );
+
     @FXML
     void btnLogInOnAction(ActionEvent event) {
         if ( validateSignIn() ) {
             try {
-                if (UserModel.checkPassword(txtUsername.getText(), txtPassword.getText())) {
+                if (signInBO.checkPassword(txtUsername.getText(), txtPassword.getText())) {
                     GlobalFormController.user = txtUsername.getText();
                     Navigation.switchNavigation("GlobalForm.fxml", event);
                 } else {
                     lblPassword.setText("Invalid username or password");
                 }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            } catch ( IOException | SQLException e) {
+                e.printStackTrace ();
             }
         }
     }
