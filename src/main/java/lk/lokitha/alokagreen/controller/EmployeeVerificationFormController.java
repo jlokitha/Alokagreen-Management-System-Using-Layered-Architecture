@@ -13,8 +13,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import lk.lokitha.alokagreen.bo.BOFactory;
-import lk.lokitha.alokagreen.bo.custom.SignInBO;
-import lk.lokitha.alokagreen.bo.custom.impl.SignInBOImpl;
+import lk.lokitha.alokagreen.bo.custom.SignUpBO;
+import lk.lokitha.alokagreen.bo.custom.impl.SignUpBOImpl;
 import lk.lokitha.alokagreen.util.*;
 
 import java.io.IOException;
@@ -52,7 +52,7 @@ public class EmployeeVerificationFormController {
     @FXML
     private Label lblID;
 
-    private final SignInBO signInBO = (SignInBOImpl) BOFactory.getBoFactory ().getBO ( BOFactory.BOType.SIGN_IN );
+    private final SignUpBO signUpBO = (SignUpBOImpl) BOFactory.getBoFactory ().getBO ( BOFactory.BOType.SIGN_UP );
 
     public EmployeeVerificationFormController() {
         subject = "New Employee Registration";
@@ -64,15 +64,15 @@ public class EmployeeVerificationFormController {
     void btnRequestOtpOnAction(ActionEvent event) {
         if ( validateId() ) {
             try {
-                if (signInBO.getEmployeeName (txtEmployeeId.getText()) != null) {
-                    if (signInBO.getUserName(txtEmployeeId.getText()) == null) {
+                if (signUpBO.getEmployeeName (txtEmployeeId.getText()) != null) {
+                    if (signUpBO.getUserName(txtEmployeeId.getText()) == null) {
                         try {
                             SignUpVerifyOtpFormController.otp = otp;
                             empID = txtEmployeeId.getText();
-                            String name = signInBO.getEmployeeName (empID);
+                            String name = signUpBO.getEmployeeName (empID);
                             Navigation.switchLoginPage("SignUpVerifyOtpForm.fxml");
 
-                            signInBO.sendEmail ( email, subject, "SignUpEmail.html", otp, name, empID );
+                            signUpBO.sendEmail ( email, subject, "SignUpEmail.html", otp, name, empID );
 
                         } catch (IOException e) {
                             throw new RuntimeException(e);
@@ -189,15 +189,15 @@ public class EmployeeVerificationFormController {
         } catch (InterruptedException e) {}
 
         try {
-            if (signInBO.getEmployeeName (empId.get()) != null) {
-                if (signInBO.getUserName(empId.get()) == null) {
+            if (signUpBO.getEmployeeName (empId.get()) != null) {
+                if (signUpBO.getUserName(empId.get()) == null) {
                     try {
                         SignUpVerifyOtpFormController.otp = otp;
                         empID = empId.get();
-                        String name = signInBO.getEmployeeName (empId.get());
+                        String name = signUpBO.getEmployeeName (empId.get());
                         Navigation.switchLoginPage("SignUpVerifyOtpForm.fxml");
 
-                        signInBO.sendEmail ( email, subject, "SignUpEmail.html", otp, name, empID );
+                        signUpBO.sendEmail ( email, subject, "SignUpEmail.html", otp, name, empID );
 
                     } catch (IOException e) {
                         throw new RuntimeException(e);

@@ -8,12 +8,15 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.SignUpBO;
+import lk.lokitha.alokagreen.bo.custom.impl.SignUpBOImpl;
 import lk.lokitha.alokagreen.dto.UserDto;
-import lk.lokitha.alokagreen.model.UserModel;
 import lk.lokitha.alokagreen.util.Navigation;
 import lk.lokitha.alokagreen.util.Regex;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class SignUpFormController {
 
@@ -35,6 +38,8 @@ public class SignUpFormController {
     @FXML
     private Label lblPassword;
 
+    private final SignUpBO signUpBO = (SignUpBOImpl) BOFactory.getBoFactory ().getBO ( BOFactory.BOType.SIGN_UP );
+
     @FXML
     void btnCancelOnAction(ActionEvent event) {
         try {
@@ -47,26 +52,30 @@ public class SignUpFormController {
     @FXML
     void btnSignUpOnAction(ActionEvent event) {
         if ( validateSignUp() ) {
-            if ( UserModel.getEmployeeId(txtUsername.getText()) == null ) {
-                UserDto userDto = new UserDto();
+            try {
+                if ( signUpBO.getEmployeeId(txtUsername.getText()) == null ) {
 
-                userDto.setUsername(txtUsername.getText());
-                userDto.setPassword(txtPassword.getText());
-                userDto.setEmpId(EmployeeVerificationFormController.empID);
+                    boolean saved = signUpBO.saveUser(new UserDto (
+                            txtUsername.getText (),
+                            txtPassword.getText (),
+                            EmployeeVerificationFormController.empID
+                    ));
 
-                boolean saved = UserModel.saveUser(userDto);
-
-                if (saved) {
-                    try {
-                        GlobalFormController.user = txtUsername.getText();
-                        Navigation.switchNavigation("GlobalForm.fxml", event);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
+                    if (saved) {
+                        try {
+                            GlobalFormController.user = txtUsername.getText();
+                            Navigation.switchNavigation("GlobalForm.fxml", event);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    } else {
+                        new Alert(Alert.AlertType.ERROR, "Something Went Wrong !").show();
                     }
-                } else {
-                    new Alert(Alert.AlertType.ERROR, "Something Went Wrong !").show();
                 }
-            } {
+            } catch ( SQLException e ) {
+                e.printStackTrace ();
+            }
+            {
                 lblUserName.setText("Username is already exists");
             }
         }

@@ -29,7 +29,7 @@ public class GlobalLoginFormController implements Initializable {
         try {
             Navigation.switchLoginPage("SignInForm.fxml");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace ();
         }
     }
 }

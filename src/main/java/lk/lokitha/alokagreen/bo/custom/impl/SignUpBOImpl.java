@@ -1,33 +1,30 @@
 package lk.lokitha.alokagreen.bo.custom.impl;
 
-import lk.lokitha.alokagreen.bo.custom.SignInBO;
+import lk.lokitha.alokagreen.bo.custom.SignUpBO;
 import lk.lokitha.alokagreen.dao.DAOFactory;
 import lk.lokitha.alokagreen.dao.custom.EmployeeDAO;
 import lk.lokitha.alokagreen.dao.custom.UserDAO;
 import lk.lokitha.alokagreen.dao.custom.impl.EmployeeDAOImpl;
 import lk.lokitha.alokagreen.dao.custom.impl.UserDAOImpl;
+import lk.lokitha.alokagreen.dto.UserDto;
+import lk.lokitha.alokagreen.entity.User;
 import lk.lokitha.alokagreen.util.SendEmail;
 
 import javax.mail.MessagingException;
 import java.sql.SQLException;
 
-public class SignInBOImpl implements SignInBO {
-    private final UserDAO userDAO = (UserDAOImpl) DAOFactory.getDaoFactory ().getDAO ( DAOFactory.DAOType.USER );
+public class SignUpBOImpl implements SignUpBO {
     private final EmployeeDAO employeeDAO = (EmployeeDAOImpl) DAOFactory.getDaoFactory ().getDAO ( DAOFactory.DAOType.EMPLOYEE );
+    private final UserDAO userDAO = (UserDAOImpl) DAOFactory.getDaoFactory ().getDAO ( DAOFactory.DAOType.USER );
 
     @Override
-    public boolean checkPassword(String user, String password) throws SQLException {
-        return userDAO.checkPassword ( user, password );
+    public String getEmployeeName(String id) throws SQLException {
+        return employeeDAO.getNameOfId ( id );
     }
 
     @Override
-    public String getEmployeeId(String user) throws SQLException {
-        return userDAO.getEmployeeId ( user );
-    }
-
-    @Override
-    public String getEmployeeEmail(String id) throws SQLException {
-        return employeeDAO.getEmailOfId ( id );
+    public String getUserName(String user) throws SQLException {
+        return userDAO.getUserName ( user );
     }
 
     @Override
@@ -43,7 +40,16 @@ public class SignInBOImpl implements SignInBO {
     }
 
     @Override
-    public boolean updateUserPassword(String user, String password) throws SQLException {
-        return userDAO.updatePassword ( user, password );
+    public String getEmployeeId(String user) throws SQLException {
+        return userDAO.getEmployeeId ( user );
+    }
+
+    @Override
+    public boolean saveUser( UserDto dto ) throws SQLException {
+        return userDAO.save ( new User (
+                dto.getUsername (),
+                dto.getPassword (),
+                dto.getEmpId ()
+        ) );
     }
 }

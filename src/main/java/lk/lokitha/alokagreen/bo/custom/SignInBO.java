@@ -10,6 +10,4 @@ public interface SignInBO extends SuperBO {
     String getEmployeeEmail(String id) throws SQLException;
     void sendEmail ( String... data);
     boolean updateUserPassword(String user, String password) throws SQLException;
-    String getEmployeeName(String id) throws SQLException;
-    String getUserName(String user) throws SQLException;
 }
