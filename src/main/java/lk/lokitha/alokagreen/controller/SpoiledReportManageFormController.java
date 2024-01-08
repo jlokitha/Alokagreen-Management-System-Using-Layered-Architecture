@@ -11,11 +11,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import lk.lokitha.alokagreen.model.SpoiledReportModel;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.SpoiledReportBO;
+import lk.lokitha.alokagreen.bo.custom.impl.SpoiledReportBOImpl;
 import lk.lokitha.alokagreen.util.Navigation;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -37,6 +40,8 @@ public class SpoiledReportManageFormController implements Initializable {
     public SpoiledReportManageFormController() {
         controller = this;
     }
+
+    private final SpoiledReportBO spoiledReportBO = (SpoiledReportBOImpl) BOFactory.getBoFactory ().getBO ( BOFactory.BOType.SPOILED );
 
     @FXML
     void btnAddReportOnAction(ActionEvent event) {
@@ -67,12 +72,16 @@ public class SpoiledReportManageFormController implements Initializable {
 
     public void getAllId() {
 
-        vbox.getChildren().clear();
+        try {
+            vbox.getChildren().clear();
 
-        ArrayList<String> allId = SpoiledReportModel.getAllId();
+            ArrayList<String> allId = spoiledReportBO.getAllSpoiledReportIds ( );
 
-        for (int i = 0; i < allId.size(); i++) {
-            loadDataTable(allId.get(i));
+            for (int i = 0; i < allId.size(); i++) {
+                loadDataTable(allId.get(i));
+            }
+        } catch ( SQLException e ) {
+            e.printStackTrace ();
         }
     }
 

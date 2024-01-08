@@ -13,11 +13,14 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import lk.lokitha.alokagreen.model.*;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.DashboardBO;
+import lk.lokitha.alokagreen.bo.custom.impl.DashboardBOImpl;
 import lk.lokitha.alokagreen.util.Navigation;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class GlobalFormController implements Initializable {
@@ -132,6 +135,8 @@ public class GlobalFormController implements Initializable {
     public GlobalFormController() {
         globalFormController = this;
     }
+
+    private final DashboardBO dashboardBO = (DashboardBOImpl) BOFactory.getBoFactory ().getBO ( BOFactory.BOType.DASHBOARD );
 
     @FXML
     void btnDashboardOnAction(ActionEvent event) {
@@ -373,56 +378,56 @@ public class GlobalFormController implements Initializable {
                 String id = txtSearch.getText();
                 switch (substring) {
                     case "E-":
-                        if (EmployeeModel.getNameOfId(id) != null) {
+                        if (dashboardBO.getEmployeeName (id) != null) {
                             EmployeeViewFormController.id = id;
                             Navigation.popupPane("EmployeeViewForm.fxml");
                         }
                         txtSearch.clear();
                         break;
                     case "C-":
-                        if (CustomerModel.getNameOfId(id) != null) {
+                        if (dashboardBO.getCustomerName (id) != null) {
                             CustomerViewFormController.id = txtSearch.getText();
                             Navigation.popupPane("CustomerViewForm.fxml");
                         }
                         txtSearch.clear();
                         break;
                     case "S-":
-                        if (SupplierModel.getNameOfId(id) != null) {
+                        if (dashboardBO.getSupplierName (id) != null) {
                             SupplierViewFormController.id = txtSearch.getText();
                             Navigation.popupPane("SupplierViewForm.fxml");
                         }
                         txtSearch.clear();
                         break;
                     case "PS":
-                        if (ProductStockModel.getProductId(id) != null) {
+                        if (dashboardBO.getProductIdOfStock (id) != null) {
                             ProductStockViewFormController.id = txtSearch.getText();
                             Navigation.popupPane("ProductStockViewForm.fxml");
                         }
                         txtSearch.clear();
                         break;
                     case "MS":
-                        if (MaterialStockModel.getData(id) != null) {
+                        if (dashboardBO.getMaterialStockDetails (id) != null) {
                             MaterialStockViewFormController.id = txtSearch.getText();
                             Navigation.popupPane("MaterialStockViewForm.fxml");
                         }
                         txtSearch.clear();
                         break;
                     case "CO":
-                        if (CustomerOrderModel.getData(id) != null) {
+                        if (dashboardBO.getCustomerOrderDetails (id) != null) {
                             CustomerOrderViewFormController.id = txtSearch.getText();
                             Navigation.popupPane("CustomerOrderViewForm.fxml");
                         }
                         txtSearch.clear();
                         break;
                     case "SO":
-                        if (SupplierOrderModel.getSupplierId(id) != null) {
+                        if (dashboardBO.getSupplierIdOfSupilerOrder (id) != null) {
                             SupplierOrderViewFormController.id = txtSearch.getText();
                             Navigation.popupPane("SupplierOrderViewForm.fxml");
                         }
                         txtSearch.clear();
                         break;
                     case "07":
-                        String idOfMobile = CustomerModel.getIdOfMobile(id);
+                        String idOfMobile = dashboardBO.getCustomerIdOfMobile (id);
                         if (idOfMobile != null) {
                             CustomerViewFormController.id = idOfMobile;
                             Navigation.popupPane("CustomerViewForm.fxml");
@@ -432,7 +437,7 @@ public class GlobalFormController implements Initializable {
                     default:
                         txtSearch.setStyle("-fx-text-fill: red;");
                 }
-            } catch (IOException e) {
+            } catch ( IOException | SQLException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -445,11 +450,15 @@ public class GlobalFormController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        String employeeId = UserModel.getEmployeeId(user);
-        String name = EmployeeModel.getNameOfId(employeeId);
+        try {
+            String employeeId = dashboardBO.getUserEmpId (user);
+            String name = dashboardBO.getEmployeeName ( employeeId );
 
-        labelUser.setText(name);
-        btnDashboardOnAction(null);
+            labelUser.setText(name);
+            btnDashboardOnAction(null);
+        } catch ( SQLException e ) {
+            e.printStackTrace ();
+        }
     }
 
     void btnSelected(JFXButton button, ImageView imageView, String path, Label label) {

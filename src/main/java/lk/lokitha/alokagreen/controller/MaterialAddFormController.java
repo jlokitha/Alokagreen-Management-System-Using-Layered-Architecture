@@ -82,7 +82,11 @@ public class MaterialAddFormController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        lblMaterialId.setText(materialBO.generateNewMaterialId());
+        try {
+            lblMaterialId.setText(materialBO.generateNewMaterialId());
+        } catch ( SQLException e ) {
+            e.printStackTrace ();
+        }
     }
 
     @FXML

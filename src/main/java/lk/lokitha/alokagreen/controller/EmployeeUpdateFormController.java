@@ -12,7 +12,6 @@ import lk.lokitha.alokagreen.bo.BOFactory;
 import lk.lokitha.alokagreen.bo.custom.EmployeeBO;
 import lk.lokitha.alokagreen.bo.custom.impl.EmployeeBOImpl;
 import lk.lokitha.alokagreen.dto.EmployeeDto;
-import lk.lokitha.alokagreen.model.EmployeeModel;
 import lk.lokitha.alokagreen.util.Navigation;
 import lk.lokitha.alokagreen.util.Regex;
 
@@ -95,12 +94,12 @@ public class EmployeeUpdateFormController implements Initializable {
                         txtFirstName.getText(),
                         txtLastName.getText(),
                         txtNic.getText(),
-                        cmbRole.getSelectionModel().getSelectedItem(),
-                        txtMobile.getText(),
-                        txtEmail.getText(),
-                        txtNic.getText(),
+                        txtNo.getText (),
                         txtStreet.getText(),
                         txtCity.getText(),
+                        txtMobile.getText(),
+                        txtEmail.getText(),
+                        cmbRole.getSelectionModel().getSelectedItem(),
                         null
                 ) );
 
@@ -334,6 +333,7 @@ public class EmployeeUpdateFormController implements Initializable {
     }
 
     public void setDataInComboBox() {
+        cmbRole.setStyle("-fx-font-size: 16;");
         ArrayList<String> roles = new ArrayList<>();
         roles.add("Manager");
         roles.add("System Manager");

@@ -127,7 +127,7 @@ public class EmployeeAttendanceAddFormController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
-            cmbEmpId.getItems().addAll(attendanceBO.getAllAttendanceIds());
+            cmbEmpId.getItems().addAll(attendanceBO.getAllEmployeeIds ());
 
             if ( id != null ) {
                 cmbEmpId.setValue(id);

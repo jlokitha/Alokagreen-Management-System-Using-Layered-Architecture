@@ -66,15 +66,13 @@ public class ProductStockAddFormController implements Initializable {
                         String.valueOf( datePickerExp.getValue( ) ),
                         null
                 ) );
-
                 if (isSaved != null && isSaved.equals("Expired")) {
-                    boolean isAdded = productStockBO.saveSpoiledProductReport( txtId.getText( ), Integer.parseInt( txtQty.getText( ) ) );
-
-                    if ( isAdded ) {
-                        Navigation.closePane();
-                        ProductStockManageFormController.controller.getAllId();
-                    }
+                    productStockBO.saveSpoiledProductReport( txtId.getText( ), Integer.parseInt( txtQty.getText( ) ) );
                 }
+
+                Navigation.closePane();
+                ProductStockManageFormController.controller.getAllId();
+
             } catch ( SQLException e ) {
                 e.printStackTrace();
             }

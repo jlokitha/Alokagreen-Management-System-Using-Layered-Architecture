@@ -8,12 +8,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.SpoiledReportBO;
+import lk.lokitha.alokagreen.bo.custom.impl.SpoiledReportBOImpl;
 import lk.lokitha.alokagreen.dto.SpoiledReportDto;
-import lk.lokitha.alokagreen.model.ProductModel;
-import lk.lokitha.alokagreen.model.SpoiledReportModel;
-import lk.lokitha.alokagreen.util.DateTime;
 import lk.lokitha.alokagreen.util.Navigation;
-import lk.lokitha.alokagreen.util.NewId;
 import lk.lokitha.alokagreen.util.Regex;
 
 import java.net.URL;
@@ -44,28 +43,28 @@ public class SpoiledReportAddFormController implements Initializable {
     @FXML
     private Label lblQty;
 
+    private final SpoiledReportBO spoiledReportBO = (SpoiledReportBOImpl) BOFactory.getBoFactory ().getBO ( BOFactory.BOType.SPOILED );
+
     @FXML
     void btnAddOnAction(ActionEvent event) {
 
         if ( validateReport() ) {
-            SpoiledReportDto sPD = new SpoiledReportDto();
-
-            sPD.setReport_Id(NewId.newSpoiledReportId());
-            sPD.setProduct_Code(txtId.getText());
-            sPD.setSpoiled_Qty(Integer.parseInt(txtQty.getText()));
-            sPD.setDate(DateTime.dateNow());
-            sPD.setTime(DateTime.timeNow());
-
-            boolean isSaved = false;
             try {
-                isSaved = SpoiledReportModel.saveSpoiledReport(sPD);
+                boolean isSaved = spoiledReportBO.saveSpoiledReport ( new SpoiledReportDto (
+                        null,
+                        txtId.getText ( ),
+                        Integer.parseInt ( txtQty.getText ( ) ),
+                        null,
+                        null
+                ) );
+
+                if (isSaved) {
+                    Navigation.closePane();
+                    SpoiledReportManageFormController.controller.getAllId();
+                }
+
             } catch (SQLException e) {
                 throw new RuntimeException(e);
-            }
-
-            if (isSaved) {
-                Navigation.closePane();
-                SpoiledReportManageFormController.controller.getAllId();
             }
         }
     }
@@ -77,11 +76,14 @@ public class SpoiledReportAddFormController implements Initializable {
 
     @FXML
     void cmbProductDescOnAction(ActionEvent event) {
-        lblDesc.setText(null);
-        String id = ProductModel.getIdOfDesc(getDesc());
-        txtId.setText(id);
-
-        txtQty.requestFocus();
+        try {
+            lblDesc.setText(null);
+            String id = spoiledReportBO.getProductId ( getDesc ( ) );
+            txtId.setText(id);
+            txtQty.requestFocus();
+        } catch ( SQLException e ) {
+            e.printStackTrace ();
+        }
     }
 
     @FXML
@@ -123,9 +125,13 @@ public class SpoiledReportAddFormController implements Initializable {
     }
 
     public void setDataInComboBox() {
-        ArrayList<String> products = ProductModel.getAllProductDesc();
+        try {
+            ArrayList<String> products = spoiledReportBO.getAllProductDesc ( );
 
-        cmbDesc.getItems().addAll(products);
+            cmbDesc.getItems().addAll(products);
+        } catch ( SQLException e ) {
+            e.printStackTrace ();
+        }
     }
 
     @Override

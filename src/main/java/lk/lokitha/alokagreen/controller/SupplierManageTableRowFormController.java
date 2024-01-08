@@ -11,7 +11,6 @@ import lk.lokitha.alokagreen.bo.BOFactory;
 import lk.lokitha.alokagreen.bo.custom.SupplierBO;
 import lk.lokitha.alokagreen.bo.custom.impl.SupplierBOImpl;
 import lk.lokitha.alokagreen.dto.SupplierDto;
-import lk.lokitha.alokagreen.model.SupplierModel;
 import lk.lokitha.alokagreen.util.Navigation;
 
 import java.io.IOException;

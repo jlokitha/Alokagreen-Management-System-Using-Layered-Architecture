@@ -8,13 +8,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.SpoiledReportBO;
+import lk.lokitha.alokagreen.bo.custom.impl.SpoiledReportBOImpl;
 import lk.lokitha.alokagreen.dto.SpoiledReportDto;
-import lk.lokitha.alokagreen.model.ProductModel;
-import lk.lokitha.alokagreen.model.SpoiledReportModel;
 import lk.lokitha.alokagreen.util.Navigation;
 import lk.lokitha.alokagreen.util.Regex;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class SpoiledReportUpdateFormController implements Initializable {
@@ -42,6 +44,8 @@ public class SpoiledReportUpdateFormController implements Initializable {
 
     public static String id;
 
+    private final SpoiledReportBO spoiledReportBO = (SpoiledReportBOImpl) BOFactory.getBoFactory ().getBO ( BOFactory.BOType.SPOILED );
+
     @FXML
     void btnCancelOnAction(ActionEvent event) {
         Navigation.closePane();
@@ -51,11 +55,15 @@ public class SpoiledReportUpdateFormController implements Initializable {
     void btnUpdateOnAction(ActionEvent event) {
 
         if ( validateReport() ) {
-            boolean isSaved = SpoiledReportModel.UpdateSpoiledReport(id, txtId.getText(), txtQty.getText());
+            try {
+                boolean isSaved = spoiledReportBO.updateSpoiledReport ( id, txtId.getText ( ), txtQty.getText ( ) );
 
-            if (isSaved) {
-                Navigation.closePane();
-                SpoiledReportManageFormController.controller.getAllId();
+                if (isSaved) {
+                    Navigation.closePane();
+                    SpoiledReportManageFormController.controller.getAllId();
+                }
+            } catch ( SQLException e ) {
+                e.printStackTrace ();
             }
         }
 
@@ -63,11 +71,14 @@ public class SpoiledReportUpdateFormController implements Initializable {
 
     @FXML
     void cmbProductDescOnAction(ActionEvent event) {
-        lblDesc.setText(null);
-        String idOfDesc = ProductModel.getIdOfDesc(cmbDesc.getSelectionModel().getSelectedItem());
-        txtId.setText(idOfDesc);
-
-        txtQty.requestFocus();
+        try {
+            lblDesc.setText(null);
+            String idOfDesc = spoiledReportBO.getProductId ( cmbDesc.getSelectionModel ( ).getSelectedItem ( ) );
+            txtId.setText(idOfDesc);
+            txtQty.requestFocus();
+        } catch ( SQLException e ) {
+            e.printStackTrace ();
+        }
     }
 
     @FXML
@@ -112,17 +123,25 @@ public class SpoiledReportUpdateFormController implements Initializable {
     }
 
     private void setData() {
-        SpoiledReportDto data = SpoiledReportModel.getData(id);
-        String desc = ProductModel.getDescOfId(data.getProduct_Code());
+        try {
+            SpoiledReportDto data = spoiledReportBO.getSpoiledReportDetails (id);
+            String desc = spoiledReportBO.getProductDesc ( data.getProduct_Code ( ) );
 
-        cmbDesc.setValue(desc);
-        txtId.setText(data.getProduct_Code());
-        txtQty.setText(String.valueOf(data.getSpoiled_Qty()));
+            cmbDesc.setValue(desc);
+            txtId.setText(data.getProduct_Code());
+            txtQty.setText(String.valueOf(data.getSpoiled_Qty()));
+        } catch ( SQLException e ) {
+            e.printStackTrace ();
+        }
     }
 
     public void setCmb() {
-        cmbDesc.getItems().addAll(ProductModel.getAllProductDesc());
-        cmbDesc.setStyle("-fx-font-size: 16;");
+        try {
+            cmbDesc.getItems().addAll(spoiledReportBO.getAllProductDesc());
+            cmbDesc.setStyle("-fx-font-size: 16;");
+        } catch ( SQLException e ) {
+            e.printStackTrace ();
+        }
     }
 
     @Override

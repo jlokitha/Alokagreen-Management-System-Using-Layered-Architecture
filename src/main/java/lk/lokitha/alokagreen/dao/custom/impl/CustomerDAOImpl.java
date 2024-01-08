@@ -67,7 +67,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
     @Override
     public String getNameOfId(final String id) throws SQLException {
-        ResultSet rst = SQLUtil.execute( "SELECT name FROM customer WHERE customer_Id = ?" );
+        ResultSet rst = SQLUtil.execute( "SELECT name FROM customer WHERE customer_Id = ?", id );
 
         if (rst.next()) {
             return rst.getString(1);

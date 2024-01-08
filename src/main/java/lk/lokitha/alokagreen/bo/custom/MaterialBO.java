@@ -12,5 +12,5 @@ public interface MaterialBO extends SuperBO {
     boolean deleteMaterial(String id) throws SQLException;
     MaterialDto getMaterialData(String id) throws SQLException;
     boolean updateMaterial(MaterialDto dto) throws SQLException;
-    String generateNewMaterialId();
+    String generateNewMaterialId() throws SQLException;
 }

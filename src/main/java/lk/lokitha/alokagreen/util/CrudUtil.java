@@ -14,7 +14,7 @@ public interface CrudUtil<T> extends SuperDAO {
 
     T getData(final String id) throws SQLException;
 
-    int getLastId() throws SQLException;
+    int getLastId () throws SQLException;
 
     ArrayList<String> getAllId() throws SQLException;
 }

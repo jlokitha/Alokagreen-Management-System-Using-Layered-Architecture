@@ -47,14 +47,13 @@ public class ProductStockBOImpl implements ProductStockBO {
                 dto.getExp_Date( ),
                 status
         ) );
-
         return save ? status : null;
     }
 
     @Override
     public boolean saveSpoiledProductReport(String pId, int qty) throws SQLException {
         return spoiledReportDAO.save( new SpoiledProductReport(
-                NewId.newSpoiledReportId(),
+                new NewId().newSpoiledReportId(),
                 pId,
                 qty,
                 DateTime.dateNow(),
@@ -111,8 +110,6 @@ public class ProductStockBOImpl implements ProductStockBO {
             }
         } catch (SQLException e) {
             TransactionUtil.rollBack();
-        } finally {
-            TransactionUtil.endTransaction();
         }
         return result;
     }

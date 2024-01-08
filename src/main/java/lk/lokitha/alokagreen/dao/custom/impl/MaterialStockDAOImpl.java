@@ -18,16 +18,17 @@ public class MaterialStockDAOImpl implements MaterialStockDAO {
     }
 
     @Override
-    public boolean save(MaterialStock entity) throws SQLException {
-        return SQLUtil.execute( "INSERT INTO material_Stock VALUES(?, ?, ?, ?, ?, ?, ?, ?)",
-                entity.getStockId(),
-                entity.getMaterialCode(),
-                entity.getQtyOnHand(),
-                entity.getQty(),
-                entity.getUnitPrice(),
-                entity.getDate(),
-                entity.getExpDate(),
-                entity.getStatus()
+    public boolean SaveMaterialStock(final String[] item, final String date) throws SQLException {
+
+        return SQLUtil.execute ("INSERT INTO material_Stock VALUES(?, ?, ?, ?, ?, ?, ?, ?)",
+                item[0],
+                item[1],
+                item[2],
+                item[2],
+                item[3],
+                date,
+                item[4],
+                item[5]
         );
     }
 
@@ -105,6 +106,11 @@ public class MaterialStockDAOImpl implements MaterialStockDAO {
 
     @Override
     public boolean update(MaterialStock entity) throws SQLException {
+        return false;
+    }
+
+    @Override
+    public boolean save(MaterialStock entity) throws SQLException {
         return false;
     }
 }

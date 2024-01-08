@@ -16,7 +16,6 @@ import javafx.scene.layout.VBox;
 import lk.lokitha.alokagreen.bo.BOFactory;
 import lk.lokitha.alokagreen.bo.custom.EmployeeBO;
 import lk.lokitha.alokagreen.bo.custom.impl.EmployeeBOImpl;
-import lk.lokitha.alokagreen.model.EmployeeModel;
 import lk.lokitha.alokagreen.util.Navigation;
 
 import java.io.IOException;

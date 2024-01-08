@@ -54,7 +54,7 @@ public class ProductBOImpl implements ProductBO {
     }
 
     @Override
-    public String generateNewProductId() {
+    public String generateNewProductId() throws SQLException {
         return NewId.newProductCode();
     }
 }

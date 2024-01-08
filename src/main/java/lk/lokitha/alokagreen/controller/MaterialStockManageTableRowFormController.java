@@ -108,7 +108,7 @@ public class MaterialStockManageTableRowFormController {
 
             lblId.setText(data.getStock_Id());
             lblDesc.setText( materialStockBO.getMaterialDescription(data.getMaterial_Code()) );
-            lblQty.setText( String.valueOf( data.getQty() ) );
+            lblQty.setText( String.valueOf( data.getQty_On_Hand () ) );
             lblExpDate.setText(data.getStatus());
             setStatus(data.getStatus());
 

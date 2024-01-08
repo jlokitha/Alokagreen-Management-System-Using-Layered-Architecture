@@ -11,9 +11,7 @@ import lk.lokitha.alokagreen.bo.BOFactory;
 import lk.lokitha.alokagreen.bo.custom.ProductBO;
 import lk.lokitha.alokagreen.bo.custom.impl.ProductBOImpl;
 import lk.lokitha.alokagreen.dto.ProductDto;
-import lk.lokitha.alokagreen.model.ProductModel;
 import lk.lokitha.alokagreen.util.Navigation;
-import lk.lokitha.alokagreen.util.NewId;
 import lk.lokitha.alokagreen.util.Regex;
 
 import java.net.URL;
@@ -164,6 +162,10 @@ public class ProductAddFormController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        lblProductId.setText(productBO.generateNewProductId());
+        try {
+            lblProductId.setText(productBO.generateNewProductId());
+        } catch ( SQLException e ) {
+            e.printStackTrace ();
+        }
     }
 }

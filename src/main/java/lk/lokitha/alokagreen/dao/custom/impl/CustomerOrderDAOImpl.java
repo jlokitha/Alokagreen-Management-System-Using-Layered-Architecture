@@ -48,7 +48,7 @@ public class CustomerOrderDAOImpl implements CustomerOrderDAO {
 
     @Override
     public CustomerOrder getData(final String id) throws SQLException {
-        ResultSet rst = SQLUtil.execute( "SELECT * FROM customer_Order WHERE customer_Order_Id = ?" );
+        ResultSet rst = SQLUtil.execute( "SELECT * FROM customer_Order WHERE customer_Order_Id = ?", id );
 
         CustomerOrder entity = null;
 

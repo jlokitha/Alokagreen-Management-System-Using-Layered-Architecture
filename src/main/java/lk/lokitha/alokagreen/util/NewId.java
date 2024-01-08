@@ -1,12 +1,28 @@
 package lk.lokitha.alokagreen.util;
 
-import lk.lokitha.alokagreen.model.*;
+import lk.lokitha.alokagreen.dao.*;
+import lk.lokitha.alokagreen.dao.custom.*;
+import lk.lokitha.alokagreen.dao.custom.impl.*;
+
+import java.sql.SQLException;
 
 public class NewId {
+    private static final EmployeeDAO employeeDAO = (EmployeeDAOImpl) DAOFactory.getDaoFactory ().getDAO ( DAOFactory.DAOType.EMPLOYEE );
+    private static final EmployeeAttendanceDAO employeeAttendanceDAO = (EmployeeAttendanceDAOImpl) DAOFactory.getDaoFactory ().getDAO ( DAOFactory.DAOType.ATTENDANCE );
+    private static final EmployeeSalaryDAO employeeSalaryDAO = (EmployeeSalaryDAOImpl) DAOFactory.getDaoFactory ().getDAO ( DAOFactory.DAOType.SALARY );
+    private static final CustomerDAO customerDAO = (CustomerDAOImpl) DAOFactory.getDaoFactory ().getDAO ( DAOFactory.DAOType.CUSTOMER );
+    private static final SupplierDAO supplierDAO = (SupplierDAOImpl) DAOFactory.getDaoFactory ().getDAO ( DAOFactory.DAOType.SUPPLIER );
+    private static final MaterialDAO materialDAO = (MaterialDAOImpl) DAOFactory.getDaoFactory ().getDAO ( DAOFactory.DAOType.MATERIAL );
+    private static final MaterialStockDAO materialStockDAO = (MaterialStockDAOImpl) DAOFactory.getDaoFactory ().getDAO ( DAOFactory.DAOType.MATERIAL_STOCK );
+    private static final ProductDAO productDAO = (ProductDAOImpl) DAOFactory.getDaoFactory ().getDAO ( DAOFactory.DAOType.PRODUCT );
+    private static final ProductStockDAO productStockDAO = (ProductStockDAOImpl) DAOFactory.getDaoFactory ().getDAO ( DAOFactory.DAOType.PRODUCT_STOCK );
+    private static final CustomerOrderDAO customerOrderDAO = (CustomerOrderDAOImpl) DAOFactory.getDaoFactory ().getDAO ( DAOFactory.DAOType.CUSTOMER_ORDER );
+    private static final SupplierOrderDAO supplierOrderDAO = (SupplierOrderDAOImpl) DAOFactory.getDaoFactory ().getDAO ( DAOFactory.DAOType.SUPPLIER_ORDER );
+    private static final SpoiledReportDAO spoiledReportDAO = (SpoiledReportDAOImpl) DAOFactory.getDaoFactory ().getDAO ( DAOFactory.DAOType.SPOILED );
 
-    public static String newEmployeeId() {
+    public static String newEmployeeId() throws SQLException {
 
-        int lastId = EmployeeModel.getLastId();
+        int lastId = employeeDAO.getLastId();
 
         if (lastId != -1) {
             lastId++;
@@ -16,8 +32,8 @@ public class NewId {
         }
     }
 
-    public static String newCustomerId() {
-        int lastId = CustomerModel.getLastId();
+    public static String newCustomerId() throws SQLException {
+        int lastId = customerDAO.getLastId();
 
         if (lastId != -1) {
             lastId++;
@@ -27,8 +43,8 @@ public class NewId {
         }
     }
 
-    public static String newSupplierId() {
-        int lastId = SupplierModel.getLastId();
+    public static String newSupplierId() throws SQLException {
+        int lastId = supplierDAO.getLastId();
 
         if (lastId != -1) {
             lastId++;
@@ -38,8 +54,8 @@ public class NewId {
         }
     }
 
-    public static String newMaterialCode() {
-        int lastId = MaterialModel.getLastId();
+    public static String newMaterialCode() throws SQLException {
+        int lastId = materialDAO.getLastId();
 
         if (lastId != -1) {
             lastId++;
@@ -49,8 +65,8 @@ public class NewId {
         }
     }
 
-    public static String newProductCode() {
-        int lastId = ProductModel.getLastId();
+    public static String newProductCode() throws SQLException {
+        int lastId = productDAO.getLastId();
 
         if (lastId != -1) {
             lastId++;
@@ -60,8 +76,8 @@ public class NewId {
         }
     }
 
-    public static String newProductStockCode() {
-        int lastId = ProductStockModel.getLastId();
+    public static String newProductStockCode() throws SQLException {
+        int lastId = productStockDAO.getLastId();
 
         if (lastId != -1) {
             lastId++;
@@ -71,8 +87,8 @@ public class NewId {
         }
     }
 
-    public static String newMaterialStockCode() {
-        int lastId = MaterialStockModel.getLastId();
+    public static String newMaterialStockCode() throws SQLException {
+        int lastId = materialStockDAO.getLastId();
 
         if (lastId != -1) {
             lastId++;
@@ -82,8 +98,8 @@ public class NewId {
         }
     }
 
-    public static String newCustomerOrderId() {
-        int lastId = CustomerOrderModel.getLastId();
+    public static String newCustomerOrderId() throws SQLException {
+        int lastId = customerOrderDAO.getLastId();
 
         if (lastId != -1) {
             lastId++;
@@ -93,8 +109,8 @@ public class NewId {
         }
     }
 
-    public static String newSupplierOrderId() {
-        int lastId = SupplierOrderModel.getLastId();
+    public static String newSupplierOrderId() throws SQLException {
+        int lastId = supplierOrderDAO.getLastId();
 
         if (lastId != -1) {
             lastId++;
@@ -104,8 +120,8 @@ public class NewId {
         }
     }
 
-    public static String newAttendanceId() {
-        int lastId = EmployeeAttendanceModel.getLastId();
+    public static String newAttendanceId() throws SQLException {
+        int lastId = employeeAttendanceDAO.getLastId();
 
         if (lastId != -1) {
             lastId++;
@@ -115,8 +131,8 @@ public class NewId {
         }
     }
 
-    public static String newSalaryId() {
-        int lastId = EmployeeSalaryModel.getLastId();
+    public static String newSalaryId() throws SQLException {
+        int lastId = employeeSalaryDAO.getLastId();
 
         if (lastId != -1) {
             lastId++;
@@ -126,8 +142,8 @@ public class NewId {
         }
     }
 
-    public static String newSpoiledReportId() {
-        int lastId = SpoiledReportModel.getLastId();
+    public static String newSpoiledReportId() throws SQLException {
+        int lastId = spoiledReportDAO.getLastId();
 
         if (lastId != -1) {
             lastId++;

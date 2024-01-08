@@ -4,8 +4,12 @@ import lk.lokitha.alokagreen.bo.custom.DashboardBO;
 import lk.lokitha.alokagreen.dao.DAOFactory;
 import lk.lokitha.alokagreen.dao.custom.*;
 import lk.lokitha.alokagreen.dao.custom.impl.*;
+import lk.lokitha.alokagreen.dto.CustomerOrderDto;
 import lk.lokitha.alokagreen.dto.EmployeeAttendanceDto;
+import lk.lokitha.alokagreen.dto.MaterialStockDto;
 import lk.lokitha.alokagreen.entity.Attendance;
+import lk.lokitha.alokagreen.entity.CustomerOrder;
+import lk.lokitha.alokagreen.entity.MaterialStock;
 import lk.lokitha.alokagreen.util.DateTime;
 import lk.lokitha.alokagreen.util.NewId;
 
@@ -24,6 +28,9 @@ public class DashboardBOImpl implements DashboardBO {
     private final CustomerOrderDAO customerOrderDAO = (CustomerOrderDAOImpl) DAOFactory.getDaoFactory().getDAO( DAOFactory.DAOType.CUSTOMER_ORDER );
     private final SupplierOrderDAO supplierOrderDAO = (SupplierOrderDAOImpl) DAOFactory.getDaoFactory().getDAO( DAOFactory.DAOType.SUPPLIER_ORDER );
     private final EmployeeSalaryDAO employeeSalaryDAO = (EmployeeSalaryDAOImpl) DAOFactory.getDaoFactory().getDAO( DAOFactory.DAOType.SALARY );
+    private final CustomerDAO customerDAO = (CustomerDAOImpl) DAOFactory.getDaoFactory ().getDAO ( DAOFactory.DAOType.CUSTOMER );
+    private final SupplierDAO supplierDAO = (SupplierDAOImpl) DAOFactory.getDaoFactory ().getDAO ( DAOFactory.DAOType.SUPPLIER );
+    private final UserDAO userDAO = (UserDAOImpl) DAOFactory.getDaoFactory ().getDAO ( DAOFactory.DAOType.USER );
 
     @Override
     public String getEmployeeName(String id) throws SQLException {
@@ -102,5 +109,64 @@ public class DashboardBOImpl implements DashboardBO {
     @Override
     public ArrayList<String> getAllEmployeeIds() throws SQLException {
         return employeeDAO.getAllId();
+    }
+
+    @Override
+    public String getCustomerName(String id) throws SQLException {
+        return customerDAO.getNameOfId ( id );
+    }
+
+    @Override
+    public String getSupplierName(String id) throws SQLException {
+        return supplierDAO.getNameOfId ( id );
+    }
+
+    @Override
+    public String getProductIdOfStock(String id) throws SQLException {
+        return productStockDAO.getProductId ( id );
+    }
+
+    @Override
+    public MaterialStockDto getMaterialStockDetails(String id) throws SQLException {
+        MaterialStock data = materialStockDAO.getData ( id );
+
+        return new MaterialStockDto (
+                data.getStockId (),
+                data.getMaterialCode (),
+                data.getQtyOnHand (),
+                data.getQty (),
+                data.getUnitPrice (),
+                data.getDate (),
+                data.getExpDate (),
+                data.getStatus ()
+        );
+    }
+
+    @Override
+    public CustomerOrderDto getCustomerOrderDetails(String id) throws SQLException {
+        CustomerOrder data = customerOrderDAO.getData ( id );
+
+        return new CustomerOrderDto (
+                data.getCustomerOrderId (),
+                data.getCustomerId (),
+                data.getTotalAmount (),
+                data.getDate (),
+                data.getTime ()
+        );
+    }
+
+    @Override
+    public String getSupplierIdOfSupilerOrder(String id) throws SQLException {
+        return supplierOrderDAO.getSupplierId ( id );
+    }
+
+    @Override
+    public String getCustomerIdOfMobile(String mobile) throws SQLException {
+        return customerDAO.getIdOfMobile ( mobile );
+    }
+
+    @Override
+    public String getUserEmpId(String user) throws SQLException {
+        return userDAO.getEmployeeId ( user );
     }
 }

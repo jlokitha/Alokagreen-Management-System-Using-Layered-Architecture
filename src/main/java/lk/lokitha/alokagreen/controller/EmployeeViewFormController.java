@@ -10,7 +10,6 @@ import lk.lokitha.alokagreen.bo.BOFactory;
 import lk.lokitha.alokagreen.bo.custom.EmployeeBO;
 import lk.lokitha.alokagreen.bo.custom.impl.EmployeeBOImpl;
 import lk.lokitha.alokagreen.dto.EmployeeDto;
-import lk.lokitha.alokagreen.model.EmployeeModel;
 import lk.lokitha.alokagreen.util.Navigation;
 
 import java.net.URL;
@@ -88,7 +87,7 @@ public class EmployeeViewFormController implements Initializable {
         try {
             EmployeeDto detail = employeeBO.getEmployeeData( id );
 
-            String adderess = detail.getHouse_No() + " " + detail.getStreet() + " " + detail.getCity();
+            String adderess = detail.getHouse_No() + ", " + detail.getStreet() + ", " + detail.getCity();
 
             lblId.setText(detail.getEmployee_Id());
             lblName.setText(detail.getFirst_Name() + " " + detail.getLast_Name());

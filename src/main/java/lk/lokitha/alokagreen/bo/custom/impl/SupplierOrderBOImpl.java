@@ -13,9 +13,7 @@ import lk.lokitha.alokagreen.entity.MaterialList;
 import lk.lokitha.alokagreen.entity.MaterialStock;
 import lk.lokitha.alokagreen.entity.Supplier;
 import lk.lokitha.alokagreen.entity.SupplierOrder;
-import lk.lokitha.alokagreen.model.MaterialStockModel;
-import lk.lokitha.alokagreen.model.SupplierOrderDetailModel;
-import lk.lokitha.alokagreen.model.SupplierOrderModel;
+import lk.lokitha.alokagreen.util.NewId;
 import lk.lokitha.alokagreen.util.TransactionUtil;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
@@ -47,18 +45,33 @@ public class SupplierOrderBOImpl implements SupplierOrderBO {
         try {
             TransactionUtil.startTransaction ();
 
-            boolean isOrderSaved = SupplierOrderModel.saveSupplierOrder(dto);
+            boolean isOrderSaved = supplierOrderDAO.save (new SupplierOrder (
+                    dto.getSupplier_Order_Id (),
+                    dto.getSupplier_Id (),
+                    dto.getTotal_Amount (),
+                    dto.getDate (),
+                    dto.getTime ()
+            ));
 
             if (isOrderSaved) {
 
-                boolean isQtyUpdated = MaterialStockModel.SaveMaterialStock(dto.getItems(), dto.getDate());
+                boolean isStockSaved = true;
 
-                if (isQtyUpdated) {
+                for (String[] item : dto.getItems ()) {
+                    item[0] = NewId.newMaterialStockCode ();
+                    boolean s = materialStockDAO.SaveMaterialStock ( item, dto.getDate ( ) );
 
-                    boolean isAssociatedUpdate = SupplierOrderDetailModel.saveSupplierOrderDetail(dto.getSupplier_Order_Id(), dto.getItems());
+                    if ( !s ) {
+                        isStockSaved = false;
+                        break;
+                    }
+                }
 
-                    if (isAssociatedUpdate) {
-                        TransactionUtil.endTransaction ();
+                if (isStockSaved) {
+
+                    boolean isAssociateSaved = supplierOrderDetailDAO.saveSupplierOrderDetail(dto.getSupplier_Order_Id(), dto.getItems());
+
+                    if (isAssociateSaved) {
                         result = true;
                     }
                 }

@@ -51,7 +51,7 @@ public class MaterialBOImpl implements MaterialBO {
     }
 
     @Override
-    public String generateNewMaterialId() {
+    public String generateNewMaterialId() throws SQLException {
         return NewId.newMaterialCode();
     }
 }

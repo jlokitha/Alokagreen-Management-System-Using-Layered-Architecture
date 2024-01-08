@@ -44,9 +44,10 @@ public class CustomerOrderBOImpl implements CustomerOrderBO {
 
         try {
             TransactionUtil.startTransaction ();
+            dto.setCustomer_Order_Id (NewId.newCustomerOrderId ());
 
             boolean isOrderSaved = customerOrderDAO.save (new CustomerOrder (
-                    NewId.newCustomerOrderId (),
+                    dto.getCustomer_Order_Id (),
                     dto.getCustomer_Id (),
                     dto.getTotal_Amount (),
                     DateTime.dateNow (),
@@ -62,7 +63,6 @@ public class CustomerOrderBOImpl implements CustomerOrderBO {
                     boolean isAssociatedUpdate = customerOrderDetailDAO.saveCustomerOrderDetail(dto.getCustomer_Order_Id(), dto.getItems());
 
                     if (isAssociatedUpdate) {
-                        TransactionUtil.endTransaction ();
                         result = true;
                     }
 

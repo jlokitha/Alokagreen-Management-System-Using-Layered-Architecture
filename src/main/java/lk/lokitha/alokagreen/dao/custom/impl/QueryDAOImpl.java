@@ -20,11 +20,12 @@ public class QueryDAOImpl implements QueryDAO {
         String[] details = null;
 
         if (rst.next()) {
-            details = new String[]{
-                    rst.getString( 1 ),
-                    rst.getString( 3 ),
-                    rst.getString( 2 )
-            };
+            details = new String[3];
+
+            details[0] = rst.getString( 1 );
+            details[1] = rst.getString( 3 );
+            details[2] = rst.getString( 2 );
+
         }
 
         return details;

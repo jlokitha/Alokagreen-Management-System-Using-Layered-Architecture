@@ -11,7 +11,6 @@ import lk.lokitha.alokagreen.bo.BOFactory;
 import lk.lokitha.alokagreen.bo.custom.CustomerBO;
 import lk.lokitha.alokagreen.bo.custom.impl.CustomerBOImpl;
 import lk.lokitha.alokagreen.dto.CustomerDto;
-import lk.lokitha.alokagreen.model.CustomerModel;
 import lk.lokitha.alokagreen.util.Navigation;
 
 import java.io.IOException;

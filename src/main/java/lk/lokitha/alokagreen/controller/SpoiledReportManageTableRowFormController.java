@@ -5,12 +5,14 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import lk.lokitha.alokagreen.bo.BOFactory;
+import lk.lokitha.alokagreen.bo.custom.SpoiledReportBO;
+import lk.lokitha.alokagreen.bo.custom.impl.SpoiledReportBOImpl;
 import lk.lokitha.alokagreen.dto.SpoiledReportDto;
-import lk.lokitha.alokagreen.model.ProductModel;
-import lk.lokitha.alokagreen.model.SpoiledReportModel;
 import lk.lokitha.alokagreen.util.Navigation;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class SpoiledReportManageTableRowFormController {
 
@@ -34,6 +36,8 @@ public class SpoiledReportManageTableRowFormController {
 
     private String id;
 
+    private final SpoiledReportBO spoiledReportBO = (SpoiledReportBOImpl) BOFactory.getBoFactory ().getBO ( BOFactory.BOType.SPOILED );
+
     @FXML
     void imgUpdateOnMouseClicked(MouseEvent event) {
         try {
@@ -56,15 +60,19 @@ public class SpoiledReportManageTableRowFormController {
 
     public void setData(String id) {
 
-        SpoiledReportDto data = SpoiledReportModel.getData(id);
-        String desc = ProductModel.getDescOfId(data.getProduct_Code());
+        try {
+            SpoiledReportDto data = spoiledReportBO.getSpoiledReportDetails ( id );
+            String desc = spoiledReportBO.getProductDesc (data.getProduct_Code());
 
-        this.id = data.getReport_Id();
-        lblItemId.setText(data.getProduct_Code());
-        lblDesc.setText(desc);
-        lblQty.setText(String.valueOf(data.getSpoiled_Qty()));
-        lblDate.setText(data.getDate());
-        lblTime.setText(data.getTime());
+            this.id = data.getReport_Id();
+            lblItemId.setText(data.getProduct_Code());
+            lblDesc.setText(desc);
+            lblQty.setText(String.valueOf(data.getSpoiled_Qty()));
+            lblDate.setText(data.getDate());
+            lblTime.setText(data.getTime());
+        } catch ( SQLException e ) {
+            e.printStackTrace ();
+        }
 
     }
 
