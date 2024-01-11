@@ -11,7 +11,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="632.0" prefWidth="600.0" style="-fx-background-radius: 20; -fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.lokitha.alokagreen.controller.EmployeeUpdateFormController">
+<AnchorPane prefHeight="632.0" prefWidth="600.0" style="-fx-background-radius: 20; -fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.alokagreen.controller.EmployeeUpdateFormController">
     <children>
       <Button layoutX="-62.0" layoutY="87.0" mnemonicParsing="false" />
         <Line endX="478.0" layoutX="118.0" layoutY="87.0" startX="-115.0" />

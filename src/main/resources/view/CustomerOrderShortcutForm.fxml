@@ -5,7 +5,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane minHeight="70.0" minWidth="570.0" prefHeight="70.0" prefWidth="570.0" style="-fx-border-color: #727374; -fx-border-radius: 5;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.lokitha.alokagreen.controller.CustomerOrderShortcutFormController">
+<AnchorPane minHeight="70.0" minWidth="570.0" prefHeight="70.0" prefWidth="570.0" style="-fx-border-color: #727374; -fx-border-radius: 5;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.alokagreen.controller.CustomerOrderShortcutFormController">
    <children>
       <Line endX="30.0" layoutX="12.0" layoutY="35.0" rotate="90.0" startX="-30.0" stroke="#139547" strokeWidth="3.0" />
       <Line endX="30.0" layoutX="20.0" layoutY="35.0" rotate="90.0" startX="-30.0" stroke="#139547" strokeWidth="3.0" />

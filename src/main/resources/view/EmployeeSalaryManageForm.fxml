@@ -16,7 +16,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="980.0" prefWidth="1670.0" style="-fx-background-color: #E8E8E8;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.lokitha.alokagreen.controller.EmployeeSalaryManageFormController">
+<AnchorPane prefHeight="980.0" prefWidth="1670.0" style="-fx-background-color: #E8E8E8;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.alokagreen.controller.EmployeeSalaryManageFormController">
    <children>
       <AnchorPane layoutX="59.0" layoutY="60.0" prefHeight="868.0" prefWidth="1551.0" style="-fx-background-color: white; -fx-background-radius: 20;">
          <children>

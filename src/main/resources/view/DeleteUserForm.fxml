@@ -9,7 +9,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="475.0" prefWidth="600.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.lokitha.alokagreen.controller.DeleteUserFormController">
+<AnchorPane prefHeight="475.0" prefWidth="600.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.alokagreen.controller.DeleteUserFormController">
     <children>
       <JFXTextField fx:id="txtPassword" focusColor="#139547" focusTraversable="false" layoutX="20.0" layoutY="256.0" onAction="#txtPasswordOnAction" onMouseClicked="#txtPasswordOnMouseClicked" prefHeight="50.0" prefWidth="560.0" unFocusColor="#727374">
          <font>

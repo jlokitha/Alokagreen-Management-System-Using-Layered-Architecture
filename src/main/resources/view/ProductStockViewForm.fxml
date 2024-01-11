@@ -9,7 +9,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="608.0" prefWidth="600.0" style="-fx-background-radius: 20; -fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.lokitha.alokagreen.controller.ProductStockViewFormController">
+<AnchorPane prefHeight="608.0" prefWidth="600.0" style="-fx-background-radius: 20; -fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.alokagreen.controller.ProductStockViewFormController">
     <children>
       <Button layoutX="-94.0" layoutY="90.0" mnemonicParsing="false" text="Button" />
         <Line endX="478.0" layoutX="118.0" layoutY="89.0" startX="-115.0" />

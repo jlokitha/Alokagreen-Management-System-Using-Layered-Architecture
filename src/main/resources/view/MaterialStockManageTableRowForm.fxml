@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="70.0" prefWidth="1547.0" style="-fx-background-color: white; -fx-border-color: #A8A9AB; -fx-border-width: 0 0 1 0;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.lokitha.alokagreen.controller.MaterialStockManageTableRowFormController">
+<AnchorPane prefHeight="70.0" prefWidth="1547.0" style="-fx-background-color: white; -fx-border-color: #A8A9AB; -fx-border-width: 0 0 1 0;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.alokagreen.controller.MaterialStockManageTableRowFormController">
    <children>
       <Label fx:id="lblId" layoutX="109.0" layoutY="23.0" text="Id">
          <font>

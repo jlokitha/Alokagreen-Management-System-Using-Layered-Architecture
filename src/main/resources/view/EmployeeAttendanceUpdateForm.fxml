@@ -10,7 +10,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="356.0" prefWidth="600.0" style="-fx-background-radius: 20; -fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.lokitha.alokagreen.controller.EmployeeAttendanceUpdateFormController">
+<AnchorPane prefHeight="356.0" prefWidth="600.0" style="-fx-background-radius: 20; -fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.alokagreen.controller.EmployeeAttendanceUpdateFormController">
     <children>
         <JFXComboBox fx:id="cmbEmpId" focusColor="#139547" layoutX="20.0" layoutY="147.0" onAction="#cmbEmpIdOnAction" prefHeight="50.0" prefWidth="270.0" promptText="Employee ID" unFocusColor="#727374" />
         <Line endX="478.0" layoutX="118.0" layoutY="99.0" startX="-115.0" />

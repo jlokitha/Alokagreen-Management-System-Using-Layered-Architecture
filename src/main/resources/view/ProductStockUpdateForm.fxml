@@ -11,7 +11,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="728.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.lokitha.alokagreen.controller.ProductStockUpdateFormController">
+<AnchorPane prefHeight="728.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.alokagreen.controller.ProductStockUpdateFormController">
     <children>
         <JFXComboBox fx:id="cmbDesc" focusColor="#139547" layoutX="20.0" layoutY="110.0" onAction="#cmbProductDescOnAction" onMouseClicked="#cmbDescOnMouseCliked" prefHeight="50.0" prefWidth="560.0" promptText="Product Description" unFocusColor="#727374" />
         <Line endX="415.5" layoutX="182.0" layoutY="87.0" startX="-180.0" />
