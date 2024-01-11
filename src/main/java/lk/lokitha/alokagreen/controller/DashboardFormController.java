@@ -22,6 +22,7 @@ import lk.lokitha.alokagreen.bo.custom.impl.DashboardBOImpl;
 import lk.lokitha.alokagreen.dto.EmployeeAttendanceDto;
 import lk.lokitha.alokagreen.util.Navigation;
 import lk.lokitha.alokagreen.util.ReadQrCode;
+import lk.lokitha.alokagreen.util.Style;
 
 import java.io.IOException;
 import java.net.URL;
@@ -249,16 +250,12 @@ public class DashboardFormController implements Initializable {
 
     @FXML
     void btnAddAttendanceMouseEntered(MouseEvent event) {
-        btnAddAttendance.setStyle(
-                "-fx-background-color: #1DBC5D;" +
-                        "-fx-background-radius: 10px;");
+        Style.btnAddAttendanceMouseEntered ( btnAddAttendance );
     }
 
     @FXML
     void btnAddAttendanceMouseExited(MouseEvent event) {
-        btnAddAttendance.setStyle(
-                "-fx-background-color: #139547;" +
-                        "-fx-background-radius: 10px;");
+        Style.btnAddAttendanceMouseExited ( btnAddAttendance );
     }
 
     @Override

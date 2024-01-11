@@ -12,9 +12,8 @@ import lk.lokitha.alokagreen.bo.custom.ProfileBO;
 import lk.lokitha.alokagreen.bo.custom.impl.ProfileBOImpl;
 import lk.lokitha.alokagreen.util.Navigation;
 import lk.lokitha.alokagreen.util.Regex;
-import lk.lokitha.alokagreen.util.SendEmail;
+import lk.lokitha.alokagreen.util.Style;
 
-import javax.mail.MessagingException;
 import java.sql.SQLException;
 
 public class ChangeCredentialFormController {
@@ -163,39 +162,21 @@ public class ChangeCredentialFormController {
 
     @FXML
     void btnUpdateOnMouseEntered(MouseEvent event) {
-        btnUpdate.setStyle(
-                "-fx-background-color: #1DBC5D;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-text-fill:  #FFFFFF;");
+        Style.btnOnMouseEntered ( btnUpdate );
     }
 
     @FXML
     void btnUpdateOnMouseExited(MouseEvent event) {
-        btnUpdate.setStyle(
-                "-fx-background-color: #139547;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-text-fill:  #FFFFFF;");
+        Style.btnOnMouseExited ( btnUpdate );
     }
 
     @FXML
     public void btnCancelOnMoseEntered(MouseEvent mouseEvent) {
-        btnCancel.setStyle(
-                "-fx-background-color: #C7FFDE;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-border-color: #139547;" +
-                        "-fx-border-width: 2px;" +
-                        "-fx-border-radius: 15px;" +
-                        "-fx-text-fill:  #139547;");
+        Style.btnOnMoseEnteredWithBorder ( btnCancel );
     }
 
     @FXML
     public void btnCancelOnMoseExited(MouseEvent mouseEvent) {
-        btnCancel.setStyle(
-                "-fx-background-color: #FFFFFF;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-border-color: #727374;" +
-                        "-fx-border-width: 2px;" +
-                        "-fx-border-radius: 15px;" +
-                        "-fx-text-fill:  #727374;");
+        Style.btnOnMoseExitedWithBorder ( btnCancel );
     }
 }

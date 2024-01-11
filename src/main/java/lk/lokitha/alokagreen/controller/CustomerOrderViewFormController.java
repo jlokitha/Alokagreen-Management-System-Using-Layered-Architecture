@@ -14,6 +14,7 @@ import lk.lokitha.alokagreen.bo.custom.CustomerOrderBO;
 import lk.lokitha.alokagreen.bo.custom.impl.CustomerOrderBOImpl;
 import lk.lokitha.alokagreen.dto.CustomerOrderDto;
 import lk.lokitha.alokagreen.util.Navigation;
+import lk.lokitha.alokagreen.util.Style;
 
 import java.io.IOException;
 import java.net.URL;
@@ -103,24 +104,12 @@ public class CustomerOrderViewFormController implements Initializable {
 
     @FXML
     void btnCancelOnMouseEntered(MouseEvent event) {
-        btnCancel.setStyle(
-                "-fx-background-color: #C7FFDE;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-border-color: #139547;" +
-                        "-fx-border-width: 2px;" +
-                        "-fx-border-radius: 15px;" +
-                        "-fx-text-fill:  #139547;");
+        Style.btnOnMoseEnteredWithBorder ( btnCancel );
     }
 
     @FXML
     void btnCancelOnMouseExited(MouseEvent event) {
-        btnCancel.setStyle(
-                "-fx-background-color: #FFFFFF;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-border-color: #139547;" +
-                        "-fx-border-width: 2px;" +
-                        "-fx-border-radius: 15px;" +
-                        "-fx-text-fill:  #139547;");
+        Style.btnOnMouseExitedWithBorder2 ( btnCancel );
     }
 
     @Override

@@ -22,6 +22,7 @@ import lk.lokitha.alokagreen.bo.custom.impl.AttendanceBOImpl;
 import lk.lokitha.alokagreen.dto.EmployeeAttendanceDto;
 import lk.lokitha.alokagreen.util.Navigation;
 import lk.lokitha.alokagreen.util.ReadQrCode;
+import lk.lokitha.alokagreen.util.Style;
 
 import java.io.IOException;
 import java.net.URL;
@@ -232,26 +233,12 @@ public class EmployeeAttendanceManageFormController implements Initializable {
 
     @FXML
     void btnAddOnMouseEntered(MouseEvent event) {
-        btnAdd.setStyle(
-                "-fx-background-color: #C7FFDE;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-border-color: #139547;" +
-                        "-fx-border-radius: 15px;");
-        lblAdd.setStyle(
-                "-fx-text-fill:  #139547;");
-        imgAdd.setImage(new Image("/assets/icon/mark_attendance_btn_green.png"));
+        Style.btnOnMouseEntered ( btnAdd, lblAdd, imgAdd );
     }
 
     @FXML
     void btnAddOnMouseExited(MouseEvent event) {
-        btnAdd.setStyle(
-                "-fx-background-color: #FFFFFF;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-border-color: #727374;" +
-                        "-fx-border-radius: 15px;");
-        lblAdd.setStyle(
-                "-fx-text-fill:  #727374;");
-        imgAdd.setImage(new Image("/assets/icon/mark_attendance_btn.png"));
+        Style.btnOnMouseExited ( btnAdd, lblAdd, imgAdd );
     }
 
     @Override

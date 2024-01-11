@@ -20,6 +20,7 @@ import lk.lokitha.alokagreen.bo.custom.impl.CustomerOrderBOImpl;
 import lk.lokitha.alokagreen.dto.CustomerOrderDto;
 import lk.lokitha.alokagreen.util.Navigation;
 import lk.lokitha.alokagreen.util.Regex;
+import lk.lokitha.alokagreen.util.Style;
 
 import java.io.IOException;
 import java.net.URL;
@@ -346,56 +347,32 @@ public class CustomerOrderAddFormController implements Initializable {
 
     @FXML
     void btnAddItemOnMouseEntered(MouseEvent event) {
-        btnAddItem.setStyle(
-                "-fx-background-color: #1DBC5D;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-text-fill:  #FFFFFF;");
+        Style.btnOnMouseEntered ( btnAddItem );
     }
 
     @FXML
     void btnAddItemOnMouseExited(MouseEvent event) {
-        btnAddItem.setStyle(
-                "-fx-background-color: #139547;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-text-fill:  #FFFFFF;");
+        Style.btnOnMouseExited ( btnAddItem );
     }
 
     @FXML
     void btnCancelOnMouseEntered(MouseEvent event) {
-        btnCancel.setStyle(
-                "-fx-background-color: #C7FFDE;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-border-color: #139547;" +
-                        "-fx-border-width: 2px;" +
-                        "-fx-border-radius: 15px;" +
-                        "-fx-text-fill:  #139547;");
+        Style.btnOnMoseEnteredWithBorder ( btnCancel );
     }
 
     @FXML
     void btnCancelOnMouseExited(MouseEvent event) {
-        btnCancel.setStyle(
-                "-fx-background-color: #FFFFFF;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-border-color: #727374;" +
-                        "-fx-border-width: 2px;" +
-                        "-fx-border-radius: 15px;" +
-                        "-fx-text-fill:  #727374;");
+        Style.btnOnMoseExitedWithBorder ( btnCancel );
     }
 
     @FXML
     void btnOrderOnMouseEntered(MouseEvent event) {
-        btnOrder.setStyle(
-                "-fx-background-color: #1DBC5D;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-text-fill:  #FFFFFF;");
+        Style.btnOnMouseEntered ( btnOrder );
     }
 
     @FXML
     void btnOrderOnMouseExited(MouseEvent event) {
-        btnOrder.setStyle(
-                "-fx-background-color: #139547;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-text-fill:  #FFFFFF;");
+        Style.btnOnMouseExited ( btnOrder );
     }
 
     @Override

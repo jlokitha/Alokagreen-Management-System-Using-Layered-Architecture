@@ -12,6 +12,7 @@ import lk.lokitha.alokagreen.bo.custom.ProfileBO;
 import lk.lokitha.alokagreen.bo.custom.impl.ProfileBOImpl;
 import lk.lokitha.alokagreen.util.Navigation;
 import lk.lokitha.alokagreen.util.Regex;
+import lk.lokitha.alokagreen.util.Style;
 
 import java.io.IOException;
 import java.net.URL;
@@ -99,24 +100,12 @@ public class DeleteUserFormController implements Initializable {
 
     @FXML
     void btnCancelOnMouseEntered(MouseEvent event) {
-        btnCancel.setStyle(
-                "-fx-background-color: #EEEEEE;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-border-color: #727374;" +
-                        "-fx-border-width: 2px;" +
-                        "-fx-border-radius: 15px;" +
-                        "-fx-text-fill:  #727374;");
+        Style.btnOnMouseEnteredWithBorder2 ( btnCancel );
     }
 
     @FXML
     void btnCancelOnMouseExited(MouseEvent event) {
-        btnCancel.setStyle(
-                "-fx-background-color: #FFFFFF;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-border-color: #727374;" +
-                        "-fx-border-width: 2px;" +
-                        "-fx-border-radius: 15px;" +
-                        "-fx-text-fill:  #727374;");
+        Style.btnOnMoseExitedWithBorder ( btnCancel );
     }
 
     @Override
@@ -125,16 +114,10 @@ public class DeleteUserFormController implements Initializable {
     }
 
     public void btnDeleteOnMouseEntered(MouseEvent mouseEvent) {
-        btnDelete.setStyle(
-                "-fx-background-color: #ff6a6a;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-text-fill:  #FFFFFF;");
+        Style.btnDeleteOnMouseEntered ( btnDelete );
     }
 
     public void btnDeleteOnMouseExited(MouseEvent mouseEvent) {
-                btnDelete.setStyle(
-                "-fx-background-color:  #f44930;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-text-fill:  #FFFFFF;");
+        Style.btnDeleteOnMouseExited ( btnDelete );
     }
 }

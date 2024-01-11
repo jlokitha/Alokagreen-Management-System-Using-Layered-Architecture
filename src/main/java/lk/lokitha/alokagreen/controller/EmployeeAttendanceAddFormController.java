@@ -14,6 +14,7 @@ import lk.lokitha.alokagreen.bo.custom.AttendanceBO;
 import lk.lokitha.alokagreen.bo.custom.impl.AttendanceBOImpl;
 import lk.lokitha.alokagreen.dto.EmployeeAttendanceDto;
 import lk.lokitha.alokagreen.util.Navigation;
+import lk.lokitha.alokagreen.util.Style;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -88,40 +89,22 @@ public class EmployeeAttendanceAddFormController implements Initializable {
 
     @FXML
     void btnAddOnMouseEntered(MouseEvent event) {
-        btnAdd.setStyle(
-                "-fx-background-color: #1DBC5D;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-text-fill:  #FFFFFF;");
+        Style.btnOnMouseEntered ( btnAdd );
     }
 
     @FXML
     void btnAddOnMouseExited(MouseEvent event) {
-        btnAdd.setStyle(
-                "-fx-background-color: #139547;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-text-fill:  #FFFFFF;");
+        Style.btnOnMouseExited ( btnAdd );
     }
 
     @FXML
     void btnCancelOnMouseEntered(MouseEvent event) {
-        btnCancel.setStyle(
-                "-fx-background-color: #C7FFDE;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-border-color: #139547;" +
-                        "-fx-border-width: 2px;" +
-                        "-fx-border-radius: 15px;" +
-                        "-fx-text-fill:  #139547;");
+        Style.btnOnMoseEnteredWithBorder ( btnCancel );
     }
 
     @FXML
     void btnCancelOnMouseExited(MouseEvent event) {
-        btnCancel.setStyle(
-                "-fx-background-color: #FFFFFF;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-border-color: #727374;" +
-                        "-fx-border-width: 2px;" +
-                        "-fx-border-radius: 15px;" +
-                        "-fx-text-fill:  #727374;");
+        Style.btnOnMoseExitedWithBorder ( btnCancel );
     }
 
     @Override
