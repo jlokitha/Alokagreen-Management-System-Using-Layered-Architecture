@@ -4,7 +4,6 @@ import com.jfoenix.controls.JFXButton;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 
 public class Style {
     public static void btnOnMouseExited( JFXButton btn) {
@@ -149,5 +148,49 @@ public class Style {
                         "-fx-border-radius: 15px;" +
                         "-fx-text-fill: #f44949;"
         );
+    }
+
+    public static void btnUnselectedProfile(ImageView imgProfile) {
+        imgProfile.setImage(new Image("/assets/icon/profile_default.png"));
+    }
+
+    public static void btnSelectedProfile(ImageView imgProfile) {
+        imgProfile.setImage(new Image("/assets/icon/profile_green.png"));
+    }
+
+    public static void btnUnselected(JFXButton button, ImageView imageView, String path, Label label) {
+        button.setStyle(
+                "-fx-background-color: #FFFFFF;" +
+                        "-fx-background-radius: 20px;");
+        label.setStyle(
+                "-fx-text-fill:  #727374;");
+        imageView.setImage(new Image("/assets/icon/" + path));
+    }
+
+    public static void btnSelectedLogOut(JFXButton btnLogOut, Label lblLogout, ImageView imgLogOut) {
+        btnLogOut.setStyle(
+                "-fx-background-color: #FFC4C4;" +
+                        "-fx-background-radius: 20px;");
+        lblLogout.setStyle(
+                "-fx-text-fill: #FD3535;");
+        imgLogOut.setImage(new Image("/assets/icon/logout_red.png"));
+    }
+
+    public static void btnHover(JFXButton button, ImageView imageView, String path, Label label) {
+        button.setStyle(
+                "-fx-background-color: #EEEEEE;" +
+                        "-fx-background-radius: 20px;");
+        label.setStyle(
+                "-fx-text-fill:  #727374;");
+        imageView.setImage(new Image("/assets/icon/" + path));
+    }
+
+    public static void btnSelected(JFXButton button, ImageView imageView, String path, Label label) {
+        button.setStyle(
+                "-fx-background-color: #C7FFDE;" +
+                        "-fx-background-radius: 20px;");
+        label.setStyle(
+                "-fx-text-fill:  #139547;");
+        imageView.setImage(new Image("/assets/icon/" + path));
     }
 }

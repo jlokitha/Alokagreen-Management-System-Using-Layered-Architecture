@@ -19,10 +19,7 @@ import lk.lokitha.alokagreen.bo.BOFactory;
 import lk.lokitha.alokagreen.bo.custom.SupplierOrderBO;
 import lk.lokitha.alokagreen.bo.custom.impl.SupplierOrderBOImpl;
 import lk.lokitha.alokagreen.dto.SupplierOrderDto;
-import lk.lokitha.alokagreen.util.DateTime;
-import lk.lokitha.alokagreen.util.Navigation;
-import lk.lokitha.alokagreen.util.NewId;
-import lk.lokitha.alokagreen.util.Regex;
+import lk.lokitha.alokagreen.util.*;
 
 import java.io.IOException;
 import java.net.URL;
@@ -259,60 +256,6 @@ public class SupplierOrderAddFormController implements Initializable {
         imgAddSupplier.setImage(new Image("/assets/icon/in_order_add.png"));
     }
 
-    @FXML
-    void btnAddItemOnMouseEntered(MouseEvent event) {
-        btnAddItem.setStyle(
-                "-fx-background-color: #1DBC5D;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-text-fill:  #FFFFFF;");
-    }
-
-    @FXML
-    void btnAddItemOnMouseExited(MouseEvent event) {
-        btnAddItem.setStyle(
-                "-fx-background-color: #139547;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-text-fill:  #FFFFFF;");
-    }
-
-    @FXML
-    void btnCancelOnMouseEntered(MouseEvent event) {
-        btnCancel.setStyle(
-                "-fx-background-color: #C7FFDE;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-border-color: #139547;" +
-                        "-fx-border-width: 2px;" +
-                        "-fx-border-radius: 15px;" +
-                        "-fx-text-fill:  #139547;");
-    }
-
-    @FXML
-    void btnCancelOnMouseExited(MouseEvent event) {
-        btnCancel.setStyle(
-                "-fx-background-color: #FFFFFF;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-border-color: #727374;" +
-                        "-fx-border-width: 2px;" +
-                        "-fx-border-radius: 15px;" +
-                        "-fx-text-fill:  #727374;");
-    }
-
-    @FXML
-    void btnOrderOnMouseEntered(MouseEvent event) {
-        btnOrder.setStyle(
-                "-fx-background-color: #1DBC5D;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-text-fill:  #FFFFFF;");
-    }
-
-    @FXML
-    void btnOrderOnMouseExited(MouseEvent event) {
-        btnOrder.setStyle(
-                "-fx-background-color: #139547;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-text-fill:  #FFFFFF;");
-    }
-
     public boolean validateItem() {
 
         if (cmbMDesc.getSelectionModel().getSelectedItem() == null) {
@@ -403,6 +346,36 @@ public class SupplierOrderAddFormController implements Initializable {
 
     public static SupplierOrderAddFormController getInstance() {
         return controller;
+    }
+
+    @FXML
+    void btnAddItemOnMouseEntered(MouseEvent event) {
+        Style.btnOnMouseEntered ( btnAddItem );
+    }
+
+    @FXML
+    void btnAddItemOnMouseExited(MouseEvent event) {
+        Style.btnOnMouseExited ( btnAddItem );
+    }
+
+    @FXML
+    void btnCancelOnMouseEntered(MouseEvent event) {
+        Style.btnOnMouseEnteredWithBorder ( btnCancel );
+    }
+
+    @FXML
+    void btnCancelOnMouseExited(MouseEvent event) {
+        Style.btnOnMouseExitedWithBorder ( btnCancel );
+    }
+
+    @FXML
+    void btnOrderOnMouseEntered(MouseEvent event) {
+        Style.btnOnMouseEntered ( btnOrder );
+    }
+
+    @FXML
+    void btnOrderOnMouseExited(MouseEvent event) {
+        Style.btnOnMouseExited ( btnOrder );
     }
 
     @Override

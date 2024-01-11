@@ -17,6 +17,7 @@ import lk.lokitha.alokagreen.bo.BOFactory;
 import lk.lokitha.alokagreen.bo.custom.DashboardBO;
 import lk.lokitha.alokagreen.bo.custom.impl.DashboardBOImpl;
 import lk.lokitha.alokagreen.util.Navigation;
+import lk.lokitha.alokagreen.util.Style;
 
 import java.io.IOException;
 import java.net.URL;
@@ -143,7 +144,7 @@ public class GlobalFormController implements Initializable {
         unSelected();
 
         try {
-            btnSelected(btnDashBoard,imgDashboard,"dashboard_green.png",lblDashboard);
+            Style.btnSelected(btnDashBoard,imgDashboard,"dashboard_green.png",lblDashboard);
             Navigation.switchPaging("DashboardForm.fxml");
             dashboard = true;
         } catch (IOException e) {
@@ -165,7 +166,7 @@ public class GlobalFormController implements Initializable {
         unSelected();
 
         try {
-            btnSelected(btnCustomer,imgCustomer,"customer_green.png",lblCustomer);
+            Style.btnSelected(btnCustomer,imgCustomer,"customer_green.png",lblCustomer);
             Navigation.switchPaging("CustomerManageForm.fxml");
             customer = true;
         } catch (IOException e) {
@@ -178,7 +179,7 @@ public class GlobalFormController implements Initializable {
         unSelected();
 
         try {
-            btnSelected(btnEmployee,imgEmployee,"employee_green.png", lblEmployee);
+            Style.btnSelected(btnEmployee,imgEmployee,"employee_green.png", lblEmployee);
             Navigation.switchPaging("EmployeeManageForm.fxml");
             employee = true;
         } catch (IOException e) {
@@ -191,7 +192,7 @@ public class GlobalFormController implements Initializable {
         unSelected();
 
         try {
-            btnSelected(btnItem, imgItem, "item_green.png", lblItem);
+            Style.btnSelected(btnItem, imgItem, "item_green.png", lblItem);
             Navigation.switchPaging("ProductListManageForm.fxml");
             item = true;
         } catch (IOException e) {
@@ -215,7 +216,7 @@ public class GlobalFormController implements Initializable {
         unSelected();
 
         try {
-            btnSelected(btnOrder,imgOrder,"order_green.png", lblOrder);
+            Style.btnSelected(btnOrder,imgOrder,"order_green.png", lblOrder);
             Navigation.switchPaging("CustomerOrderManageForm.fxml");
             order = true;
         } catch (IOException e) {
@@ -228,7 +229,7 @@ public class GlobalFormController implements Initializable {
         unSelected();
 
         try {
-            btnSelected(btnStock,imgStock,"stock_green.png", lblStock);
+            Style.btnSelected(btnStock,imgStock,"stock_green.png", lblStock);
             Navigation.switchPaging("ProductStockManageForm.fxml");
             stock = true;
         } catch (IOException e) {
@@ -241,7 +242,7 @@ public class GlobalFormController implements Initializable {
         unSelected();
 
         try {
-            btnSelected(btnSupplier,imgSupplier,"supplier_green.png", lblSupplier);
+            Style.btnSelected(btnSupplier,imgSupplier,"supplier_green.png", lblSupplier);
             Navigation.switchPaging("SupplierManageForm.fxml");
             supplier = true;
         } catch (IOException e) {
@@ -252,94 +253,94 @@ public class GlobalFormController implements Initializable {
     @FXML
     void btnDashboardOnMouseEntered(MouseEvent event) {
         if ( !dashboard ) {
-            btnHover(btnDashBoard,imgDashboard,"dashboard.png",lblDashboard);
+            Style.btnHover(btnDashBoard,imgDashboard,"dashboard.png",lblDashboard);
         }
     }
 
     @FXML
     void btnDashboardOnMouseExited(MouseEvent event) {
         if ( !dashboard ) {
-            btnUnselected(btnDashBoard, imgDashboard, "dashboard.png", lblDashboard);
+            Style.btnUnselected(btnDashBoard, imgDashboard, "dashboard.png", lblDashboard);
         }
     }
 
     @FXML
     void btnEmployeeOnMouseEntered(MouseEvent event) {
         if ( !employee ) {
-            btnHover(btnEmployee,imgEmployee,"employee.png", lblEmployee);
+            Style.btnHover(btnEmployee,imgEmployee,"employee.png", lblEmployee);
         }
     }
 
     @FXML
     void btnEmployeeOnMouseExited(MouseEvent event) {
         if ( !employee ) {
-            btnUnselected(btnEmployee, imgEmployee, "employee.png", lblEmployee);
+            Style.btnUnselected(btnEmployee, imgEmployee, "employee.png", lblEmployee);
         }
     }
 
     @FXML
     void btnItemOnMouseEntered(MouseEvent event) {
         if ( !item ) {
-            btnHover(btnItem, imgItem, "item.png", lblItem);
+            Style.btnHover(btnItem, imgItem, "item.png", lblItem);
         }
     }
 
     @FXML
     void btnItemOnMouseExited(MouseEvent event) {
         if ( !item ) {
-            btnUnselected(btnItem, imgItem, "item.png", lblItem);
+            Style.btnUnselected(btnItem, imgItem, "item.png", lblItem);
         }
     }
 
     @FXML
     void btnLogOutOnMouseEntered(MouseEvent event) {
-        btnSelectedLogOut();
+        Style.btnSelectedLogOut(btnLogOut, lblLogout, imgLogOut);
     }
 
     @FXML
     void btnLogOutOnMouseExited(MouseEvent event) {
-        btnUnselected(btnLogOut, imgLogOut, "log_out.png", lblLogout);
+        Style.btnUnselected(btnLogOut, imgLogOut, "log_out.png", lblLogout);
     }
 
     @FXML
     void btnSupplierOnMouseEntered(MouseEvent event) {
         if ( !supplier ) {
-            btnHover(btnSupplier,imgSupplier,"supplier.png", lblSupplier);
+            Style.btnHover(btnSupplier,imgSupplier,"supplier.png", lblSupplier);
         }
     }
 
     @FXML
     void btnSupplierOnMouseExited(MouseEvent event) {
         if ( !supplier ) {
-            btnUnselected(btnSupplier, imgSupplier, "supplier.png", lblSupplier);
+            Style.btnUnselected(btnSupplier, imgSupplier, "supplier.png", lblSupplier);
         }
     }
 
     @FXML
     void btnOrderedOnMouseEntered(MouseEvent event) {
         if ( !order ) {
-            btnHover(btnOrder,imgOrder,"order.png", lblOrder);
+            Style.btnHover(btnOrder,imgOrder,"order.png", lblOrder);
         }
     }
 
     @FXML
     void btnOrderedOnMouseExited(MouseEvent event) {
         if ( !order ) {
-            btnUnselected(btnOrder, imgOrder, "order.png", lblOrder);
+            Style.btnUnselected(btnOrder, imgOrder, "order.png", lblOrder);
         }
     }
 
     @FXML
     void btnStockOnMouseEntered(MouseEvent event) {
         if ( !stock ) {
-            btnHover(btnStock,imgStock,"stock.png", lblStock);
+            Style.btnHover(btnStock,imgStock,"stock.png", lblStock);
         }
     }
 
     @FXML
     void btnStockOnMouseExited(MouseEvent event) {
         if ( !stock ) {
-            btnUnselected(btnStock, imgStock, "stock.png", lblStock);
+            Style.btnUnselected(btnStock, imgStock, "stock.png", lblStock);
         }
     }
 
@@ -349,23 +350,24 @@ public class GlobalFormController implements Initializable {
         tooltip.setShowDelay(Duration.millis(150));
         btnProfile.setTooltip(tooltip);
 
-        btnSelectedProfile();
+        Style.btnSelectedProfile(imgProfile);
     }
 
     @FXML
     void btnProfileOnMouseExited(MouseEvent event) {
-        btnUnselectedProfile();
+        Style.btnUnselectedProfile(imgProfile);
     }
+
     @FXML
     void btnCustomerOnMouseEntered(MouseEvent mouseEvent) {
         if ( !customer ) {
-            btnHover(btnCustomer,imgCustomer,"customer.png",lblCustomer);
+            Style.btnHover(btnCustomer,imgCustomer,"customer.png",lblCustomer);
         }
     }
     @FXML
     void btnCustomerOnMouseExited(MouseEvent mouseEvent) {
         if ( !customer ) {
-            btnUnselected(btnCustomer, imgCustomer, "customer.png", lblCustomer);
+            Style.btnUnselected(btnCustomer, imgCustomer, "customer.png", lblCustomer);
         }
     }
 
@@ -461,56 +463,15 @@ public class GlobalFormController implements Initializable {
         }
     }
 
-    void btnSelected(JFXButton button, ImageView imageView, String path, Label label) {
-        button.setStyle(
-                "-fx-background-color: #C7FFDE;" +
-                        "-fx-background-radius: 20px;");
-        label.setStyle(
-                "-fx-text-fill:  #139547;");
-        imageView.setImage(new Image("/assets/icon/" + path));
-    }
-
-    void btnHover(JFXButton button, ImageView imageView, String path, Label label) {
-        button.setStyle(
-                "-fx-background-color: #EEEEEE;" +
-                        "-fx-background-radius: 20px;");
-        label.setStyle(
-                "-fx-text-fill:  #727374;");
-        imageView.setImage(new Image("/assets/icon/" + path));
-    }
-    void btnSelectedLogOut() {
-        btnLogOut.setStyle(
-                "-fx-background-color: #FFC4C4;" +
-                        "-fx-background-radius: 20px;");
-        lblLogout.setStyle(
-                "-fx-text-fill: #FD3535;");
-        imgLogOut.setImage(new Image("/assets/icon/logout_red.png"));
-    }
-
-    void btnSelectedProfile() {
-        imgProfile.setImage(new Image("/assets/icon/profile_green.png"));
-    }
-    void btnUnselected(JFXButton button, ImageView imageView, String path, Label label) {
-        button.setStyle(
-                "-fx-background-color: #FFFFFF;" +
-                        "-fx-background-radius: 20px;");
-        label.setStyle(
-                "-fx-text-fill:  #727374;");
-        imageView.setImage(new Image("/assets/icon/" + path));
-    }
-    void btnUnselectedProfile() {
-        imgProfile.setImage(new Image("/assets/icon/profile_default.png"));
-    }
-
     public void unSelected() {
-        btnUnselected(btnDashBoard, imgDashboard, "dashboard.png", lblDashboard);
-        btnUnselected(btnOrder, imgOrder, "order.png", lblOrder);
-        btnUnselected(btnEmployee, imgEmployee, "employee.png", lblEmployee);
-        btnUnselected(btnCustomer, imgCustomer, "customer.png", lblCustomer);
-        btnUnselected(btnSupplier, imgSupplier, "supplier.png", lblSupplier);
-        btnUnselected(btnStock, imgStock, "stock.png", lblStock);
-        btnUnselected(btnItem, imgItem, "item.png", lblItem);
-        btnUnselected(btnLogOut, imgLogOut, "log_out.png", lblLogout);
+        Style.btnUnselected(btnDashBoard, imgDashboard, "dashboard.png", lblDashboard);
+        Style.btnUnselected(btnOrder, imgOrder, "order.png", lblOrder);
+        Style.btnUnselected(btnEmployee, imgEmployee, "employee.png", lblEmployee);
+        Style.btnUnselected(btnCustomer, imgCustomer, "customer.png", lblCustomer);
+        Style.btnUnselected(btnSupplier, imgSupplier, "supplier.png", lblSupplier);
+        Style.btnUnselected(btnStock, imgStock, "stock.png", lblStock);
+        Style.btnUnselected(btnItem, imgItem, "item.png", lblItem);
+        Style.btnUnselected(btnLogOut, imgLogOut, "log_out.png", lblLogout);
 
         dashboard = false;
         order = false;
