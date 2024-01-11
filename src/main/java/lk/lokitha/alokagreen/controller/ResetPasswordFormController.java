@@ -12,6 +12,7 @@ import lk.lokitha.alokagreen.bo.custom.SignInBO;
 import lk.lokitha.alokagreen.bo.custom.impl.SignInBOImpl;
 import lk.lokitha.alokagreen.util.Navigation;
 import lk.lokitha.alokagreen.util.Regex;
+import lk.lokitha.alokagreen.util.Style;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -117,39 +118,21 @@ public class ResetPasswordFormController {
 
     @FXML
     public void btnConfirmOnMouseEntered(MouseEvent mouseEvent) {
-        btnConfirm.setStyle(
-                "-fx-background-color: #1DBC5D;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-text-fill:  #FFFFFF;");
+        Style.btnOnMouseExited ( btnConfirm );
     }
 
     @FXML
     public void btnConfirmOnMouseExited(MouseEvent mouseEvent) {
-        btnConfirm.setStyle(
-                "-fx-background-color: #139547;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-text-fill:  #FFFFFF;");
+        Style.btnOnMouseExited ( btnConfirm );
     }
 
     @FXML
     public void btnCancelOnMouseEntered(MouseEvent mouseEvent) {
-        btnCancel.setStyle(
-                "-fx-background-color: #C7FFDE;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-border-color: #139547;" +
-                        "-fx-border-width: 2px;" +
-                        "-fx-border-radius: 15px;" +
-                        "-fx-text-fill:  #139547;");
+        Style.btnOnMouseEnteredWithBorder ( btnCancel );
     }
 
     @FXML
     public void btnCancelOnMouseExited(MouseEvent mouseEvent) {
-        btnCancel.setStyle(
-                "-fx-background-color: #FFFFFF;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-border-color: #727374;" +
-                        "-fx-border-width: 2px;" +
-                        "-fx-border-radius: 15px;" +
-                        "-fx-text-fill:  #727374;");
+        Style.btnOnMouseExitedWithBorder ( btnCancel );
     }
 }

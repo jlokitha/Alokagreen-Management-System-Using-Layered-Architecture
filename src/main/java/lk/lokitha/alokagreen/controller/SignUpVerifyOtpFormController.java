@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import lk.lokitha.alokagreen.util.Navigation;
 import lk.lokitha.alokagreen.util.Regex;
+import lk.lokitha.alokagreen.util.Style;
 
 import java.io.IOException;
 
@@ -69,40 +70,22 @@ public class SignUpVerifyOtpFormController {
 
     @FXML
     public void btnVerifyOnMouseEntered(MouseEvent mouseEvent) {
-        btnVerify.setStyle(
-                "-fx-background-color: #1DBC5D;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-text-fill:  #FFFFFF;");
+        Style.btnOnMouseEntered ( btnVerify );
     }
 
     @FXML
     public void btnVerifyOnMouseExited(MouseEvent mouseEvent) {
-        btnVerify.setStyle(
-                "-fx-background-color: #139547;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-text-fill:  #FFFFFF;");
+        Style.btnOnMouseExited ( btnVerify );
     }
 
     @FXML
     public void btnBackOMouseEntered(MouseEvent mouseEvent) {
-        btnBack.setStyle(
-                "-fx-background-color: #C7FFDE;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-border-color: #139547;" +
-                        "-fx-border-width: 2px;" +
-                        "-fx-border-radius: 15px;" +
-                        "-fx-text-fill:  #139547;");
+        Style.btnOnMouseEnteredWithBorder ( btnBack );
     }
 
     @FXML
     public void btnBackOMouseExited(MouseEvent mouseEvent) {
-        btnBack.setStyle(
-                "-fx-background-color: #FFFFFF;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-border-color: #727374;" +
-                        "-fx-border-width: 2px;" +
-                        "-fx-border-radius: 15px;" +
-                        "-fx-text-fill:  #727374;");
+        Style.btnOnMouseExitedWithBorder ( btnBack );
     }
 
     @FXML

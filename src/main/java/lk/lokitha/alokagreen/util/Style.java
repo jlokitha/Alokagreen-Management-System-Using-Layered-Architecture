@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 
 public class Style {
     public static void btnOnMouseExited( JFXButton btn) {
@@ -22,7 +23,7 @@ public class Style {
         );
     }
 
-    public static void btnOnMoseEnteredWithBorder ( JFXButton btn ) {
+    public static void btnOnMouseEnteredWithBorder ( JFXButton btn ) {
         btn.setStyle(
                 "-fx-background-color: #C7FFDE;" +
                         "-fx-background-radius: 15px;" +
@@ -43,7 +44,7 @@ public class Style {
                         "-fx-text-fill:  #727374;");
     }
 
-    public static void btnOnMoseExitedWithBorder ( JFXButton btn) {
+    public static void btnOnMouseExitedWithBorder ( JFXButton btn) {
         btn.setStyle(
                 "-fx-background-color: #FFFFFF;" +
                         "-fx-background-radius: 15px;" +
@@ -114,6 +115,39 @@ public class Style {
                 "-fx-background-color:  #f44930;" +
                         "-fx-background-radius: 15px;" +
                         "-fx-text-fill:  #FFFFFF;"
+        );
+    }
+
+    public static void btnDeleteOnMouseEntered( JFXButton btn, Label lbl, ImageView img) {
+        btn.setStyle(
+                "-fx-background-color: #FFE0E0;" +
+                        "-fx-background-radius: 20px;" +
+                        "-fx-border-color: #FD3535;" +
+                        "-fx-border-radius: 20px;");
+        lbl.setStyle(
+                "-fx-text-fill:  #FD3535;");
+        img.setImage(new Image("/assets/icon/delete_red.png"));
+    }
+
+    public static void btnDeleteOnMouseEnteredWithBorder( JFXButton btn) {
+        btn.setStyle(
+                "-fx-background-color: #FFC4C4;" +
+                        "-fx-background-radius: 15px;" +
+                        "-fx-border-color: #f44949;" +
+                        "-fx-border-width: 2px;" +
+                        "-fx-border-radius: 15px;" +
+                        "-fx-text-fill: #f44949;"
+        );
+    }
+
+    public static void btnDeleteOnMouseExitedWithBorder(JFXButton btn) {
+        btn.setStyle(
+                "-fx-background-color: #FFFFFF;" +
+                        "-fx-background-radius: 15px;" +
+                        "-fx-border-color: #f44949;" +
+                        "-fx-border-width: 2px;" +
+                        "-fx-border-radius: 15px;" +
+                        "-fx-text-fill: #f44949;"
         );
     }
 }

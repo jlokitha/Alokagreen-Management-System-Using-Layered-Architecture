@@ -15,6 +15,7 @@ import lk.lokitha.alokagreen.bo.BOFactory;
 import lk.lokitha.alokagreen.bo.custom.MaterialBO;
 import lk.lokitha.alokagreen.bo.custom.impl.MaterialBOImpl;
 import lk.lokitha.alokagreen.util.Navigation;
+import lk.lokitha.alokagreen.util.Style;
 
 import java.io.IOException;
 import java.net.URL;
@@ -90,26 +91,12 @@ public class MaterialListManageFormController implements Initializable {
 
     @FXML
     void btnAddOnMouseEntered(MouseEvent event) {
-        btnAdd.setStyle(
-                "-fx-background-color: #C7FFDE;" +
-                        "-fx-background-radius: 20px;" +
-                        "-fx-border-color: #139547;" +
-                        "-fx-border-radius: 20px;");
-        lblAdd.setStyle(
-                "-fx-text-fill:  #139547;");
-        imgAdd.setImage(new Image("/assets/icon/add_green.png"));
+        Style.btnOnMouseEntered ( btnAdd, lblAdd, imgAdd );
     }
 
     @FXML
     void btnAddOnMouseExited(MouseEvent event) {
-        btnAdd.setStyle(
-                "-fx-background-color: #FFFFFF;" +
-                        "-fx-background-radius: 20px;" +
-                        "-fx-border-color: #727374;" +
-                        "-fx-border-radius: 20px;");
-        lblAdd.setStyle(
-                "-fx-text-fill:  #727374;");
-        imgAdd.setImage(new Image("/assets/icon/add.png"));
+        Style.btnOnMouseExited ( btnAdd, lblAdd, imgAdd );
     }
 
     @Override

@@ -48,7 +48,7 @@ public class CustomerViewFormController implements Initializable {
 
     @FXML
     void btnCancelOnMouseEntered(MouseEvent event) {
-        Style.btnOnMoseEnteredWithBorder ( btnCancel );
+        Style.btnOnMouseEnteredWithBorder ( btnCancel );
     }
 
     @FXML

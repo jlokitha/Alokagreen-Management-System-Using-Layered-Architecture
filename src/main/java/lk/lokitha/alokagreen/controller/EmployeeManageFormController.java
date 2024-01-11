@@ -17,6 +17,7 @@ import lk.lokitha.alokagreen.bo.BOFactory;
 import lk.lokitha.alokagreen.bo.custom.EmployeeBO;
 import lk.lokitha.alokagreen.bo.custom.impl.EmployeeBOImpl;
 import lk.lokitha.alokagreen.util.Navigation;
+import lk.lokitha.alokagreen.util.Style;
 
 import java.io.IOException;
 import java.net.URL;
@@ -139,50 +140,22 @@ public class EmployeeManageFormController implements Initializable {
 
     @FXML
     void btnDeleteOnMouseEntered(MouseEvent event) {
-        btnDelete.setStyle(
-                "-fx-background-color: #FFE0E0;" +
-                        "-fx-background-radius: 20px;" +
-                        "-fx-border-color: #FD3535;" +
-                        "-fx-border-radius: 20px;");
-        lblDelete.setStyle(
-                "-fx-text-fill:  #FD3535;");
-        imgDelete.setImage(new Image("/assets/icon/delete_red.png"));
+        Style.btnDeleteOnMouseEntered ( btnDelete, lblDelete, imgDelete );
     }
 
     @FXML
     void btnDeleteOnMouseExited(MouseEvent event) {
-        btnDelete.setStyle(
-                "-fx-background-color: #FFFFFF;" +
-                        "-fx-background-radius: 20px;" +
-                        "-fx-border-color: #727374;" +
-                        "-fx-border-radius: 20px;");
-        lblDelete.setStyle(
-                "-fx-text-fill:  #727374;");
-        imgDelete.setImage(new Image("/assets/icon/delete.png"));
+        Style.btnOnMouseExited ( btnDelete, lblDelete, imgDelete );
     }
 
     @FXML
     void btnAddOnMouseEntered(MouseEvent event) {
-        btnAdd.setStyle(
-                "-fx-background-color: #C7FFDE;" +
-                        "-fx-background-radius: 20px;" +
-                        "-fx-border-color: #139547;" +
-                        "-fx-border-radius: 20px;");
-        lblAdd.setStyle(
-                "-fx-text-fill:  #139547;");
-        imgAdd.setImage(new Image("/assets/icon/add_green.png"));
+        Style.btnOnMouseEntered ( btnAdd, lblAdd, imgAdd );
     }
 
     @FXML
     void btnAddOnMouseExited(MouseEvent event) {
-        btnAdd.setStyle(
-                "-fx-background-color: #FFFFFF;" +
-                        "-fx-background-radius: 20px;" +
-                        "-fx-border-color: #727374;" +
-                        "-fx-border-radius: 20px;");
-        lblAdd.setStyle(
-                "-fx-text-fill:  #727374;");
-        imgAdd.setImage(new Image("/assets/icon/add.png"));
+        Style.btnOnMouseExited ( btnAdd, lblAdd, imgAdd );
     }
 
     @Override

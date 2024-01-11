@@ -15,6 +15,7 @@ import lk.lokitha.alokagreen.bo.custom.impl.ProductStockBOImpl;
 import lk.lokitha.alokagreen.dto.ProductStockDto;
 import lk.lokitha.alokagreen.util.Navigation;
 import lk.lokitha.alokagreen.util.Regex;
+import lk.lokitha.alokagreen.util.Style;
 import lombok.SneakyThrows;
 
 import java.net.URL;
@@ -233,40 +234,22 @@ public class ProductStockUpdateFormController implements Initializable {
 
     @FXML
     void btnUpdateOnMouseEntered(MouseEvent event) {
-        btnUpdate.setStyle(
-                "-fx-background-color: #1DBC5D;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-text-fill:  #FFFFFF;");
+        Style.btnOnMouseEntered ( btnUpdate );
     }
 
     @FXML
     void btnUpdateOnMouseExited(MouseEvent event) {
-        btnUpdate.setStyle(
-                "-fx-background-color: #139547;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-text-fill:  #FFFFFF;");
+        Style.btnOnMouseExited ( btnUpdate );
     }
 
     @FXML
     void btnCancelOnMouseEntered(MouseEvent event) {
-        btnCancel.setStyle(
-                "-fx-background-color: #C7FFDE;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-border-color: #139547;" +
-                        "-fx-border-width: 2px;" +
-                        "-fx-border-radius: 15px;" +
-                        "-fx-text-fill:  #139547;");
+        Style.btnOnMouseEnteredWithBorder ( btnCancel );
     }
 
     @FXML
     void btnCancelOnMouseExited(MouseEvent event) {
-        btnCancel.setStyle(
-                "-fx-background-color: #FFFFFF;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-border-color: #727374;" +
-                        "-fx-border-width: 2px;" +
-                        "-fx-border-radius: 15px;" +
-                        "-fx-text-fill:  #727374;");
+        Style.btnOnMouseExitedWithBorder ( btnCancel );
     }
 
     public void setProductDesc() {

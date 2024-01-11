@@ -116,18 +116,12 @@ public class EmployeeVerificationFormController {
 
     @FXML
     void btnRequestOnMouseEntered(MouseEvent event) {
-        btnRequest.setStyle(
-                "-fx-background-color: #1DBC5D;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-text-fill:  #FFFFFF;");
+        Style.btnOnMouseEntered ( btnRequest );
     }
 
     @FXML
     void btnRequestOnMouseExited(MouseEvent event) {
-        btnRequest.setStyle(
-                "-fx-background-color: #139547;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-text-fill:  #FFFFFF;");
+        Style.btnOnMouseExited ( btnRequest );
     }
 
     @FXML

@@ -105,7 +105,7 @@ public class DeleteUserFormController implements Initializable {
 
     @FXML
     void btnCancelOnMouseExited(MouseEvent event) {
-        Style.btnOnMoseExitedWithBorder ( btnCancel );
+        Style.btnOnMouseExitedWithBorder ( btnCancel );
     }
 
     @Override

@@ -19,6 +19,7 @@ import lk.lokitha.alokagreen.bo.custom.SignInBO;
 import lk.lokitha.alokagreen.bo.custom.impl.SignInBOImpl;
 import lk.lokitha.alokagreen.util.Navigation;
 import lk.lokitha.alokagreen.util.Regex;
+import lk.lokitha.alokagreen.util.Style;
 
 public class SignInFormController {
     @FXML
@@ -140,17 +141,11 @@ public class SignInFormController {
 
     @FXML
     public void btnLogInOnMouseEnter(MouseEvent mouseEvent) {
-        btnLogIn.setStyle(
-                "-fx-background-color: #1DBC5D;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-text-fill:  #FFFFFF;");
+        Style.btnOnMouseEntered ( btnLogIn );
     }
     @FXML
     public void btnLogInOnMouseExited(MouseEvent mouseEvent) {
-        btnLogIn.setStyle(
-                "-fx-background-color: #139547;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-text-fill:  #FFFFFF;");
+        Style.btnOnMouseExited ( btnLogIn );
     }
 
     @FXML

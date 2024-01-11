@@ -11,6 +11,7 @@ import lk.lokitha.alokagreen.bo.custom.SalaryBO;
 import lk.lokitha.alokagreen.bo.custom.impl.SalaryBOImpl;
 import lk.lokitha.alokagreen.dto.EmployeeSalaryDto;
 import lk.lokitha.alokagreen.util.Navigation;
+import lk.lokitha.alokagreen.util.Style;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -50,24 +51,12 @@ public class EmployeeSalaryViewFormController implements Initializable {
 
     @FXML
     void btnCancelOnMouseEntered(MouseEvent event) {
-        btnCancel.setStyle(
-                "-fx-background-color: #C7FFDE;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-border-color: #139547;" +
-                        "-fx-border-width: 2px;" +
-                        "-fx-border-radius: 15px;" +
-                        "-fx-text-fill:  #139547;");
+        Style.btnOnMouseEnteredWithBorder ( btnCancel );
     }
 
     @FXML
     void btnCancelOnMouseExited(MouseEvent event) {
-        btnCancel.setStyle(
-                "-fx-background-color: #FFFFFF;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-border-color: #139547;" +
-                        "-fx-border-width: 2px;" +
-                        "-fx-border-radius: 15px;" +
-                        "-fx-text-fill:  #139547;");
+        Style.btnOnMouseExitedWithBorder ( btnCancel );
     }
 
     @Override

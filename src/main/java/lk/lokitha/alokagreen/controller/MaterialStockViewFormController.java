@@ -11,6 +11,7 @@ import lk.lokitha.alokagreen.bo.custom.MaterialStockBO;
 import lk.lokitha.alokagreen.bo.custom.impl.MaterialStockBOImpl;
 import lk.lokitha.alokagreen.dto.MaterialStockDto;
 import lk.lokitha.alokagreen.util.Navigation;
+import lk.lokitha.alokagreen.util.Style;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -97,23 +98,11 @@ public class MaterialStockViewFormController implements Initializable {
 
     @FXML
     public void btnCancelOnMouseEntered(MouseEvent mouseEvent) {
-        btnCancel.setStyle(
-                "-fx-background-color: #C7FFDE;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-border-color: #139547;" +
-                        "-fx-border-width: 2px;" +
-                        "-fx-border-radius: 15px;" +
-                        "-fx-text-fill:  #139547;");
+        Style.btnOnMouseEnteredWithBorder ( btnCancel );
     }
 
     @FXML
     public void btnCancelOnMouseExited(MouseEvent mouseEvent) {
-        btnCancel.setStyle(
-                "-fx-background-color: #FFFFFF;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-border-color: #727374;" +
-                        "-fx-border-width: 2px;" +
-                        "-fx-border-radius: 15px;" +
-                        "-fx-text-fill:  #727374;");
+        Style.btnOnMouseExitedWithBorder ( btnCancel );
     }
 }

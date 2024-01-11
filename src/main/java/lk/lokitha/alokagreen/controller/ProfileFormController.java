@@ -13,6 +13,7 @@ import lk.lokitha.alokagreen.bo.custom.ProfileBO;
 import lk.lokitha.alokagreen.bo.custom.impl.ProfileBOImpl;
 import lk.lokitha.alokagreen.dto.EmployeeDto;
 import lk.lokitha.alokagreen.util.Navigation;
+import lk.lokitha.alokagreen.util.Style;
 
 import java.io.IOException;
 import java.net.URL;
@@ -97,45 +98,21 @@ public class ProfileFormController implements Initializable {
 
     @FXML
     public void btnDeleteOnMouseEntered(MouseEvent mouseEvent) {
-        btnDelete.setStyle(
-                "-fx-background-color: #FFC4C4;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-border-color: #f44949;" +
-                        "-fx-border-width: 2px;" +
-                        "-fx-border-radius: 15px;" +
-                        "-fx-text-fill: #f44949;");
+        Style.btnDeleteOnMouseEnteredWithBorder ( btnDelete );
     }
 
     @FXML
     public void btnDeleteOnMouseExited(MouseEvent mouseEvent) {
-        btnDelete.setStyle(
-                "-fx-background-color: #FFFFFF;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-border-color: #f44949;" +
-                        "-fx-border-width: 2px;" +
-                        "-fx-border-radius: 15px;" +
-                        "-fx-text-fill: #f44949;");
+        Style.btnDeleteOnMouseExitedWithBorder ( btnDelete );
     }
 
     @FXML
     public void btnResetOnMouseEntered(MouseEvent mouseEvent) {
-        btnReset.setStyle(
-                "-fx-background-color: #C7FFDE;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-border-color: #139547;" +
-                        "-fx-border-width: 2px;" +
-                        "-fx-border-radius: 15px;" +
-                        "-fx-text-fill:  #139547;");
+        Style.btnOnMouseEnteredWithBorder ( btnReset );
     }
 
     @FXML
     public void btnResetOnMouseExited(MouseEvent mouseEvent) {
-        btnReset.setStyle(
-                "-fx-background-color: #FFFFFF;" +
-                        "-fx-background-radius: 15px;" +
-                        "-fx-border-color: #139547;" +
-                        "-fx-border-width: 2px;" +
-                        "-fx-border-radius: 15px;" +
-                        "-fx-text-fill:  #139547;");
+        Style.btnOnMouseExitedWithBorder2 ( btnReset );
     }
 }

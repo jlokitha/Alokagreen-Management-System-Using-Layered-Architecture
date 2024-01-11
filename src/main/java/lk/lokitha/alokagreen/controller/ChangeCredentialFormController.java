@@ -172,11 +172,11 @@ public class ChangeCredentialFormController {
 
     @FXML
     public void btnCancelOnMoseEntered(MouseEvent mouseEvent) {
-        Style.btnOnMoseEnteredWithBorder ( btnCancel );
+        Style.btnOnMouseEnteredWithBorder ( btnCancel );
     }
 
     @FXML
     public void btnCancelOnMoseExited(MouseEvent mouseEvent) {
-        Style.btnOnMoseExitedWithBorder ( btnCancel );
+        Style.btnOnMouseExitedWithBorder ( btnCancel );
     }
 }
